@@ -1,0 +1,1 @@
+# quicksim-siqad-plugin
