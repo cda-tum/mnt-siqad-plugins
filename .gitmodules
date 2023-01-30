@@ -1,3 +1,6 @@
 [submodule "fiction"]
 	path = fiction
 	url = https://github.com/marcelwa/fiction.git
+[submodule "siqadconn"]
+	path = siqadconn
+	url = https://github.com/siqad/siqadconn.git
