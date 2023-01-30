@@ -1,0 +1,3 @@
+[submodule "fiction"]
+	path = fiction
+	url = https://github.com/marcelwa/fiction.git
