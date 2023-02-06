@@ -18,30 +18,31 @@
 #include <utility>
 
 using namespace fiction;
-
-namespace phys {
+using namespace phys;
 
     class QuickSimInterface {
     public:
         //! Constructure for SimAnnealInterface. Set defer_var_loading to true if
         //! you don't want simulation parameters to be loaded immediately from
         //! SiQADConn.
-        QuickSimInterface(std::string const& t_in_path, std::string const& t_out_path,
-                          std::string const& t_ext_pots_path, int t_ext_pots_step, bool verbose = false)
-                : in_path(t_in_path), out_path((t_out_path)), ext_pots_path((t_ext_pots_path)),
-                  ext_pots_step(t_ext_pots_step) {
+        QuickSimInterface(std::string t_in_path, std::string t_out_path,
+                          std::string t_ext_pots_path, int t_ext_pots_step, bool verbose = false,
+                          int log_l = Logger::MSG)
+                : log_level{log_l}, in_path(std::move(t_in_path)), out_path(std::move(t_out_path)),
+                  ext_pots_path(std::move(t_ext_pots_path)) {
             sqconn = new SiQADConnector(std::string("QuickSim"), in_path, out_path, verbose);
             initialize_chargelyt();
         }
 
 
-        void runSimulation() {
+        int runSimulation() {
             quicksim_stats<sidb_cell_clk_lyt_siqad> quicksimstats{};
             quicksim<sidb_cell_clk_lyt_siqad>(charge_layout, sim_params, &quicksimstats);
             sim_results = quicksimstats;
+            return EXIT_SUCCESS;
         }
 
-        void writeSimResults(bool only_suggested_gs, bool qubo_energy) {
+        void writeSimResults() {
             // create the vector of strings for the db locations
             auto data = charge_layout.get_all_sidb_location_in_nm();
             std::vector<std::pair<std::string, std::string>> dbl_data(data.size());
@@ -79,7 +80,7 @@ namespace phys {
 
         void initialize_chargelyt() {
             sidb_cell_clk_lyt_siqad lyt{};
-            Logger log(saglobal::log_level);
+            Logger log(log_level);
 
 
             // grab all physical locations
@@ -107,14 +108,13 @@ namespace phys {
         SiQADConnector *sqconn = nullptr;
 
         // variables
+        int log_level;
         std::string in_path;
         std::string out_path;
         std::string ext_pots_path;
-        int ext_pots_step;
         charge_distribution_surface<sidb_cell_clk_lyt_siqad> charge_layout{};
         quicksim_stats<sidb_cell_clk_lyt_siqad> sim_results{};
         quicksim_params sim_params{};
     };
-}
 
 #endif //QUICKSIM_SIQAD_PLUGIN_INTERFACE_H

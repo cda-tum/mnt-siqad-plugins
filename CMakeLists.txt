@@ -11,8 +11,9 @@ add_executable(quicksim-siqad-plugin src/main.cpp)
 
 set(QUICKSIM_SOURCES
         src/main.ccp
-        src/global.cc
         src/interface.h
+        src/timer.h
+        src/logger.h
         )
 
 include_directories(libs/siqadconn/)
@@ -30,5 +31,3 @@ include_directories(${Boost_INCLUDE_DIR})
 
 add_dependencies(quicksim-siqad-plugin siqadconn)
 
-#target_link_libraries(quicksim-siqad-plugin siqadconn)
-#target_link_libraries(quicksim-siqad-plugin siqadconn ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
