@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Available path/command replacements:
+@INTERP@        : Interpreter command/path (cannot be used in the interpreter field).
+@PYTHON@        : Use a Python interpreter command/path provided by SiQAD (either from the default settings or the user's overriden choice).
+@BINPATH@       : Path to the binary or script path to the engine (cannot be used in the bin_path field).
+@PHYSENGPATH@   : Path to the directory containing this *.physeng file.
+@PROBLEMPATH@   : Path to the problem file describing the simulation problem and parameters.
+@RESULTPATH@    : Path to the result file that will be read by SiQAD after the simulation is complete.
+@JOBTMP@        : Temporary path for this simulation job to store generated files.
+These replacements are done on the following fields:
+interpreter, bin_path, command
+-->
+
+<physeng>
+    <name>QuickSim</name>
+    <version>1.0</version>
+    <description></description>
+    <services>ElectronGroundState</services>
+    <bin_path>quicksim</bin_path> 
+    <commands>
+        <!-- Default command. -->
+        <command label="Default">
+            <program>@BINPATH@</program>
+            <arg>@PROBLEMPATH@</arg>
+            <arg>@RESULTPATH@</arg>
+        </command>
+        <!-- Import potentials from PoisSolver. -->
+        <command label="Import Potentials">
+            <program>@BINPATH@</program>
+            <arg>@PROBLEMPATH@</arg>
+            <arg>@RESULTPATH@</arg>
+            <arg>--ext-pots</arg>
+            <arg>@JOBTMP@/db_pots.json</arg>
+        </command>
+    </commands>
+    <!-- Python dependencies file path, relative to the directory containing this physeng file. -->
+    <dep_path></dep_path>
+    <!-- Simulation parameters, read into SiQAD as a property map. -->
+    <sim_params preserve_order="true">
+        <iteration_steps>
+            <T>int</T>
+            <val>100</val>
+            <label>Iteration steps</label>
+            <tip>The number of simulation repetitions.</tip>
+        </iteration_steps>
+        <num_instances>
+        </num_instances>
+        <eps_r>
+            <T>float</T>
+            <val>5.6</val>
+            <dp>2</dp>
+            <label>Relative permittivity</label>
+            <tip>Surface relative permittivity.</tip>
+        </eps_r>
+        <muzm>
+            <T>float</T>
+            <val>-0.25</val>
+            <dp>2</dp>
+            <label>mu (Isolated E_{(0/-)} - E_{Fermi})</label>
+            <tip>The global Fermi level on the surface, lower value brings more electrons to the surface.</tip>
+        </muzm>
+        <debye_length>
+            <T>float</T>
+            <val>5</val>
+            <label>Screening distance (nm)</label>
+            <tip>Thomas-Fermi screening distance.</tip>
+        </debye_length>
+    </sim_params>
+</physeng>

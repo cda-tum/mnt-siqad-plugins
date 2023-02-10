@@ -99,8 +99,10 @@ using namespace phys;
             params.mu = std::stod(sqconn->getParameter("muzm"));
             params.epsilon_r = std::stod(sqconn->getParameter("eps_r"));
             params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
+            auto iteration_steps = static_cast<uint64_t>(std::stod(sqconn->getParameter("iteration_steps")));
+            auto alpha = std::stod(sqconn->getParameter("alpha"));
             log.echo() << "Retrieval from SiQADConn complete." << std::endl;
-            sim_params = quicksim_params{params};
+            sim_params = quicksim_params{params, iteration_steps, alpha};
             charge_layout = charge_distribution_surface<sidb_cell_clk_lyt_siqad>(lyt);
         }
 
