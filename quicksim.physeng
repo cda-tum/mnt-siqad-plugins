@@ -49,7 +49,7 @@ interpreter, bin_path, command
          <T>double</T>
          <val>0.7</val>
          <label>alpha</label>
-         <tip>if no solution is found, reduce alpha.</tip>
+         <tip>no solution is found -> reduce alpha.</tip>
         </alpha>
         <eps_r>
             <T>float</T>
