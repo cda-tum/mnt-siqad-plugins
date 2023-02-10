@@ -18,7 +18,7 @@ interpreter, bin_path, command
     <version>1.0</version>
     <description></description>
     <services>ElectronGroundState</services>
-    <bin_path>quicksim</bin_path> 
+    <bin_path>quicksim</bin_path>
     <commands>
         <!-- Default command. -->
         <command label="Default">
@@ -43,10 +43,14 @@ interpreter, bin_path, command
             <T>int</T>
             <val>100</val>
             <label>Iteration steps</label>
-            <tip>The number of simulation repetitions.</tip>
+            <tip>The number of simulation repetitions. Can be increased to increase simulation accuracy.</tip>
         </iteration_steps>
-        <num_instances>
-        </num_instances>
+        <alpha>
+         <T>double</T>
+         <val>0.7</val>
+         <label>alpha</label>
+         <tip>if no solution is found, reduce alpha.</tip>
+        </alpha>
         <eps_r>
             <T>float</T>
             <val>5.6</val>
