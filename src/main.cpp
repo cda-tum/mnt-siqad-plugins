@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     int ext_pots_step=0;
     bool verbose=false;
     unsigned long cml_i=0;
-    int log_level = Logger::MSG;
+    int log_level = Logger::DBG;
     while (cml_i < cml_args.size()) {
         if (cml_args[cml_i] == "--debug") {
             // show additional debug information

@@ -17,6 +17,11 @@
 #include <string>
 #include <utility>
 
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_proxy.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
 using namespace fiction;
 using namespace phys;
 
@@ -34,6 +39,10 @@ using namespace phys;
             initialize_chargelyt();
         }
 
+        ~QuickSimInterface()
+        {
+            delete sqconn;
+        }
 
         int runSimulation() {
             quicksim_stats<sidb_cell_clk_lyt_siqad> quicksimstats{};
@@ -57,7 +66,7 @@ using namespace phys;
             std::vector<std::vector<std::string>> db_dist_data;
 
 
-            for (auto &it: energy_occ_distribution) {
+            for (const auto &it: energy_occ_distribution) {
                 for (const auto &lyt: sim_results.valid_lyts) {
                     if (std::abs(it.first - lyt.get_system_energy()) / std::abs(lyt.get_system_energy()) < physical_constants::POP_STABILITY_ERR) {
                         std::vector<std::string> db_dist;
@@ -96,14 +105,15 @@ using namespace phys;
             sidb_simulation_parameters params{2};
 
             // variables: physical
-            params.mu = std::stod(sqconn->getParameter("muzm"));
-            params.epsilon_r = std::stod(sqconn->getParameter("eps_r"));
-            params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
-            auto iteration_steps = static_cast<uint64_t>(std::stod(sqconn->getParameter("iteration_steps")));
-            auto alpha = std::stod(sqconn->getParameter("alpha"));
-            log.echo() << "Retrieval from SiQADConn complete." << std::endl;
-            sim_params = quicksim_params{params, iteration_steps, alpha};
-            charge_layout = charge_distribution_surface<sidb_cell_clk_lyt_siqad>(lyt);
+           auto mu = std::stod(sqconn->getParameter("muzm"));
+            //params.mu = std::stod(sqconn->getParameter("muzm"));
+//            params.epsilon_r = std::stod(sqconn->getParameter("eps_r"));
+//            params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
+//            auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
+//            auto alpha = 0.8; //= std::stod(sqconn->getParameter("alpha"));
+//            log.echo() << "Retrieval from SiQADConn complete." << std::endl;
+            //sim_params = quicksim_params{params, iteration_steps, alpha};
+            charge_layout = charge_distribution_surface<sidb_cell_clk_lyt_siqad>(lyt, params);
         }
 
         // Instances
