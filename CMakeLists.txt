@@ -1,46 +1,51 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.13)
 
-project(quicksim)
+project(quicksim-siqad-plugin
+        VERSION 1.0
+        LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
-add_subdirectory(libs/fiction/)
 
+# Load standard project settings
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/StandardProjectSettings.cmake)
 
-if (WIN32)
-    set(Boost_USE_STATIC_LIBS ON)
-endif()
+# Include libraries
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs)
 
-find_package(Boost COMPONENTS random REQUIRED)
+# QuickSim source files
+set(QUICKSIM_SOURCES ${PROJECT_SOURCE_DIR}/src/main.cpp)
 
-include_directories(
-        .
-        src
-        ${Boost_INCLUDE_DIR}
-)
-
-set(QUICKSIM_SOURCES
-        src/main.cpp
-        )
-
+# Define the quicksim executable
 add_executable(quicksim ${QUICKSIM_SOURCES})
-
-# Add the submodules as subdirectories
-target_link_libraries(quicksim libfiction)
-include_directories(libs/siqadconn/)
+# Link against the dependencies
+target_link_libraries(quicksim dependencies)
 
 
-option(SIQAD_PLUGIN_TEST "Build plugin tests" OFF)
-if (SIQAD_PLUGIN_TEST)
+# Build tests
+option(QUICKSIM_TEST "Build QuickSim plugin tests" OFF)
+if (QUICKSIM_TEST)
     enable_testing()
-    message(STATUS "Building fiction tests")
+    message(STATUS "Building QuickSim tests")
     add_subdirectory(test)
 endif ()
 
 
-if(DEFINED SIQAD_PLUGINS_ROOT)
+# SiQAD installation
+if (DEFINED SIQAD_PLUGINS_ROOT)
     set(QUICKSIM_INSTALL_DIR "${SIQAD_PLUGINS_ROOT}/quicksim")
-elseif(CMAKE_BUILD_TYPE MATCHES Debug)
+elseif (CMAKE_BUILD_TYPE MATCHES Debug)
     set(QUICKSIM_INSTALL_DIR "debug")
-else()
+else ()
     set(QUICKSIM_INSTALL_DIR "release")
-ENDIF()
+endif ()
+
+
+add_custom_command(
+        TARGET quicksim POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_SOURCE_DIR}/quicksim.physeng
+        ${CMAKE_CURRENT_BINARY_DIR})
+
+install(TARGETS quicksim RUNTIME DESTINATION ${QUICKSIM_INSTALL_DIR})
+install(FILES quicksim.physeng DESTINATION ${QUICKSIM_INSTALL_DIR})
+

@@ -5,8 +5,8 @@
 #ifndef QUICKSIM_SIQAD_PLUGIN_INTERFACE_H
 #define QUICKSIM_SIQAD_PLUGIN_INTERFACE_H
 
-#include "src/siqadconn.h"
-#include "src/siqadconn.cc"
+#include "siqadconn.h"
+#include "siqadconn.cc"
 #include "logger.h"
 #include <fiction/layouts/cell_level_layout.hpp>
 #include <fiction/technology/charge_distribution_surface.hpp>
@@ -27,9 +27,7 @@ using namespace phys;
 
 class QuickSimInterface {
 public:
-    //! Constructure for SimAnnealInterface. Set defer_var_loading to true if
-    //! you don't want simulation parameters to be loaded immediately from
-    //! SiQADConn.
+    //! Constructor for QuickSimInterface
     QuickSimInterface(std::string t_in_path, std::string t_out_path,
                       std::string t_ext_pots_path, int t_ext_pots_step, bool verbose = true,
                       int log_l = Logger::MSG)
