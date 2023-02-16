@@ -44,6 +44,3 @@ elseif(CMAKE_BUILD_TYPE MATCHES Debug)
 else()
     set(QUICKSIM_INSTALL_DIR "release")
 ENDIF()
-
-
-

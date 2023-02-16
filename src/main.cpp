@@ -11,8 +11,7 @@
 using namespace phys;
 using namespace saglobal;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     std::cout << "Physeng invoked" << std::endl;
     std::string if_name;
     std::string of_name;
@@ -29,15 +28,15 @@ int main(int argc, char *argv[])
         of_name = argv[2];
 
         // store the rest of the arguments
-        for (int i=3; i<argc; i++) {
+        for (int i = 3; i < argc; i++) {
             cml_args.emplace_back(argv[i]);
         }
     }
 
-    int ext_pots_step=0;
-    bool verbose=false;
+    int ext_pots_step = 0;
+    bool verbose = false;
     auto log_level = Logger::DBG;
-    unsigned long cml_i=0;
+    unsigned long cml_i = 0;
     while (cml_i < cml_args.size()) {
         if (cml_args[cml_i] == "--debug") {
             // show additional debug information
@@ -77,4 +76,3 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 }
-
