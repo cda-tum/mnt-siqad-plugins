@@ -34,11 +34,10 @@ int main(int argc, char *argv[])
         }
     }
 
-    // parse additional arguments
     int ext_pots_step=0;
     bool verbose=false;
+    auto log_level = Logger::DBG;
     unsigned long cml_i=0;
-    int log_level = Logger::DBG;
     while (cml_i < cml_args.size()) {
         if (cml_args[cml_i] == "--debug") {
             // show additional debug information
@@ -46,7 +45,7 @@ int main(int argc, char *argv[])
             verbose = true;
             log_level = Logger::DBG;
         } else {
-            throw std::invalid_argument("Unrecognized command-line argument" + cml_args[cml_i]);
+            throw "Unrecognized command-line argument: " + cml_args[cml_i];
         }
         cml_i++;
     }
