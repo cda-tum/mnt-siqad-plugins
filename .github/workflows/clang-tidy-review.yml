@@ -25,13 +25,10 @@ jobs:
           cmake_command: >
             cmake . -B build
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-            -DFICTION_CLI=ON
-            -DFICTION_TEST=ON
-            -DFICTION_EXPERIMENTS=ON
-            -DMOCKTURTLE_EXAMPLES=OFF
+            -DQUICKSIM_TEST=ON
           build_dir: build
           config_file: '.clang-tidy'
-          exclude: 'libs/*, docs/*, benchmarks/*, bib/*, */catch2/*.hpp'
+          exclude: 'libs/*'
           split_workflow: true
 
       - name: Make sure that the review file exists
