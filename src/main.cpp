@@ -2,55 +2,56 @@
 // Created by Jan Drewniok on 31.01.23.
 //
 
-#include "timer.h"
 #include "interface.h"
-#include <unordered_map>
+#include "timer.h"
+
 #include <iostream>
 #include <string>
+#include <unordered_map>
 
 using namespace phys;
 using namespace saglobal;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[])
+{
     std::cout << "Physeng invoked" << std::endl;
-    std::string if_name;
-    std::string of_name;
-    std::string ext_pots_name;
-    std::vector<std::string> cml_args;
+    std::string              ext_pots_name;
+    const std::vector<std::string> cml_args(argv, argv + argc);
+
 
     std::cout << "*** Argument Parsing ***" << std::endl;
 
-    if (argc < 3) {
-        throw std::invalid_argument("Less arguments than excepted.");
-    } else {
-        // argv[0] is the binary
-        if_name = argv[1];
-        of_name = argv[2];
-
-        // store the rest of the arguments
-        for (int i = 3; i < argc; i++) {
-            cml_args.emplace_back(argv[i]);
-        }
+    if (argc < 3)
+    {
+        std::cerr << "Error: Too few arguments. Expected input and output file names.\n";
+        return 1;
     }
 
-    int ext_pots_step = 0;
-    bool verbose = false;
-    auto log_level = Logger::DBG;
-    unsigned long cml_i = 0;
-    while (cml_i < cml_args.size()) {
-        if (cml_args[cml_i] == "--debug") {
+    const std::string if_name = argv[1];
+    const std::string of_name = argv[2];
+
+
+    int      ext_pots_step = 0;
+    bool     verbose       = false;
+    auto     log_level     = Logger::DBG;
+    uint64_t cml_i         = 0;
+    while (cml_i < cml_args.size())
+    {
+        if (cml_args[cml_i] == "--debug")
+        {
             // show additional debug information
             std::cout << "--debug: Showing additional outputs." << std::endl;
-            verbose = true;
+            verbose   = true;
             log_level = Logger::DBG;
-        } else {
-            throw "Unrecognized command-line argument: " + cml_args[cml_i];
+        }
+        else
+        {
+            std::cout << "Unrecognized command-line argument: " + cml_args[cml_i] << std::endl;
         }
         cml_i++;
     }
 
     Logger log(log_level);
-
 
     Stopwatch stopwatch;
 
