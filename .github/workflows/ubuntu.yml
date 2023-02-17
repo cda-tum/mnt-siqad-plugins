@@ -82,17 +82,5 @@ jobs:
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: ctest -C ${{matrix.build_type}} --verbose
 
-      - name: Build Boost
-        id: boost
-        uses: egor-tensin/build-boost@v1
-        with:
-          version: 1.71.0
-          libraries: filesystem program_options system
-          platform: x64
-          configuration: Release
-
-      - name: Show paths
-        run: |
-          printf 'Boost has been unpacked to: %s\n' '${{ steps.boost.outputs.root }}'
-          printf 'Libraries can be found here: %s\n' '${{ steps.boost.outputs.librarydir }}'
-        shell: bash
+      - name: Install Boost library
+        run: sudo apt-get install libboost-all-dev
