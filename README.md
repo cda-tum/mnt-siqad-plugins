@@ -5,7 +5,7 @@ Since positively charged SiDBs are not yet used for logic, this algorithm is a 2
 
 #### General information:
 - Multithreading is still under development and hence, [SimAnneal](https://github.com/siqad/simanneal-sidb.git) must be run with ```instance count = 1 ```when comparing performance.
-- Quicksim enables the tuning of simulation parameters: ``iterations steps`` and ``alpha.``For gate layouts, the default values are sufficient. If no solution is found, the number of iteration steps can be increased and alpha can be reduced.
+- QuickSim enables the tuning of simulation parameters: ``iterations steps`` and ``alpha.``For gate layouts, the default values are sufficient. If no solution is found, the number of iteration steps can be increased and alpha can be reduced.
 - Only physically valid charge configurations are returned.
 
 ## Quick Start
