@@ -5,24 +5,25 @@
 #ifndef QUICKSIM_SIQAD_PLUGIN_TIMER_H
 #define QUICKSIM_SIQAD_PLUGIN_TIMER_H
 
-#include <map>
-#include <string>
-#include <chrono>
-#include <ctime>
-#include <vector>
-#include <sstream>
-#include <iomanip>
-
 #include "logger.h"
 
-namespace saglobal {
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <map>
+#include <sstream>
+#include <string>
+#include <vector>
 
-    using HDClock = std::chrono::high_resolution_clock;
+namespace saglobal
+{
 
-class Stopwatch {
+using HDClock = std::chrono::high_resolution_clock;
 
-public:
+class Stopwatch
+{
 
+  public:
     //! Constructor.
     Stopwatch() = default;
 
@@ -30,8 +31,8 @@ public:
     void start()
     {
         start_count++;
-        t_start =  HDClock::now();
-        c_start = std::clock();
+        t_start       = HDClock::now();
+        c_start       = std::clock();
         timer_running = true;
     }
 
@@ -45,28 +46,26 @@ public:
         timer_running = false;
     }
 
-    void printStopwatch(int const &log_level) const
+    void printStopwatch(int const& log_level) const
     {
         std::stringstream ss;
 
         ss << std::fixed << std::setprecision(2) << std::endl;
 
         // Wall time
-        ss << "\tWall time: "
-           << t_accum << " ms";
-        if (start_count > 1) {
-            ss << " across " << start_count << " runs, avg "
-               << t_accum / start_count << " ms";
+        ss << "\tWall time: " << t_accum << " ms";
+        if (start_count > 1)
+        {
+            ss << " across " << start_count << " runs, avg " << t_accum / start_count << " ms";
         }
         ss << std::endl;
 
         // CPU time
         double cpu_time_ms = 1000.0 * static_cast<double>(c_accum) / CLOCKS_PER_SEC;
-        ss << "\tCPU time: "
-           << cpu_time_ms << " ms";
-        if (start_count > 1) {
-            ss << " across " << start_count << " runs, avg "
-               << cpu_time_ms / start_count << " ms";
+        ss << "\tCPU time: " << cpu_time_ms << " ms";
+        if (start_count > 1)
+        {
+            ss << " across " << start_count << " runs, avg " << cpu_time_ms / start_count << " ms";
         }
         ss << std::endl;
 
@@ -74,17 +73,16 @@ public:
         log.echo() << ss.str() << std::endl;
     }
 
-private:
-
+  private:
     // VARIABLES
-    int start_count{};              //! Start/resume count for calculating average time.
-    double t_accum{};               //! Accumulated wall time.
-    std::clock_t c_accum{};         //! Accumulated CPU time.
-    HDClock::time_point t_start{};  //! Last start/resume wall time.
-    std::clock_t c_start{};         //! Last start/resume CPU time.
-    bool timer_running{};           //! Indicate whether the timer is running.
+    int                 start_count{};    //! Start/resume count for calculating average time.
+    double              t_accum{};        //! Accumulated wall time.
+    std::clock_t        c_accum{};        //! Accumulated CPU time.
+    HDClock::time_point t_start{};        //! Last start/resume wall time.
+    std::clock_t        c_start{};        //! Last start/resume CPU time.
+    bool                timer_running{};  //! Indicate whether the timer is running.
 };
 
-} // namespace saglog
+}  // namespace saglobal
 
-#endif //QUICKSIM_SIQAD_PLUGIN_TIMER_H
+#endif  // QUICKSIM_SIQAD_PLUGIN_TIMER_H

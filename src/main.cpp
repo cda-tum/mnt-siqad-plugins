@@ -15,9 +15,8 @@ using namespace saglobal;
 int main(int argc, char* argv[])
 {
     std::cout << "Physeng invoked" << std::endl;
-    std::string              ext_pots_name;
+    std::string                    ext_pots_name;
     const std::vector<std::string> cml_args(argv, argv + argc);
-
 
     std::cout << "*** Argument Parsing ***" << std::endl;
 
@@ -30,10 +29,9 @@ int main(int argc, char* argv[])
     const std::string if_name = argv[1];
     const std::string of_name = argv[2];
 
-
-    bool     verbose       = false;
-    auto     log_level     = Logger::DBG;
-    uint64_t cml_i         = 0;
+    bool     verbose   = false;
+    auto     log_level = Logger::DBG;
+    uint64_t cml_i     = 0;
     while (cml_i < cml_args.size())
     {
         if (cml_args[cml_i] == "--debug")
