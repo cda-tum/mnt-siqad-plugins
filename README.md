@@ -36,7 +36,7 @@ cd build
 make install
 ```
 
-> Binary should be located in ```build``` .To test the binary, copy *sim_problem_0.xml* from ``` test ``` and *quicksim.physeng* and put it in ```build```.
+> Binary should be located in ```build``` .To test the binary, copy *sim_problem_0.xml* from ``` test ``` and put it in ```build```.
 > Start first simulation with example:
 
 ```bash
