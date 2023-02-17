@@ -36,7 +36,7 @@ cd build
 make install
 ```
 
-> Binary should be located in```build```.To test the binary, copy *sim_problem_0.xml* from```test```and *quicksim.physeng* and put it in```build```.
+> Binary should be located in ```build``` .To test the binary, copy *sim_problem_0.xml* from ``` test ``` and *quicksim.physeng* and put it in ```build```.
 > Start first simulation with example:
 
 ```bash
@@ -48,7 +48,7 @@ cd build
 
 ### Using QuickSim in the SiQAD-GUI
 
-> First step is to build [SiQAD](https://github.com/siqad/siqad). Afterwards, put the binary *quicksim* and *quicksim.physeng* from```quicksim-siqad-plugin/build```in```build/siqad/plugins/quicksim```.
+> First step is to build [SiQAD](https://github.com/siqad/siqad). Afterwards, put the binary *quicksim* and *quicksim.physeng* from ```quicksim-siqad-plugin/build``` in ```build/siqad/plugins/quicksim```.
 
-> SiQAD can be executed and```QuickSim```is available in the Engine list.
+> SiQAD can be executed and ```QuickSim``` is available in the Engine list.
 
