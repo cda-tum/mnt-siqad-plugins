@@ -24,8 +24,6 @@ defaults:
   run:
     shell: bash
 
-env:
-  Z3_VERSION: 4.10.0
 
 jobs:
   build_and_test:
@@ -62,28 +60,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: '${{matrix.os}}-${{matrix.compiler}}-${{matrix.build_type}}'
-          variant: ccache
-          save: true
-          max-size: 10G
-
-      - name: Install pip packages
-        uses: BSFishy/pip-action@v1
-        with:
-          requirements: ${{github.workspace}}/libs/mugen/requirements.txt
-
-      - name: Setup Z3 Solver
-        id: z3
-        uses: cda-tum/setup-z3@v1
-        with:
-          version: ${{env.Z3_VERSION}}
-          platform: linux
-          architecture: x64
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
