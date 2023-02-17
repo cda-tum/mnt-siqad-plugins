@@ -2,18 +2,18 @@
 
 QuickSim is an accurate *and* efficient physical simulation algorithm for determining the charge distribution of atomic *Silicon Dangling Bond (SiDB)* assemblies.
 Since positively charged SiDBs are not yet used for logic, this algorithm is a 2-state simulation and neglects positively charged SiDBs, which is a reasonable assumption for SiDB assemblies without adjacent SiDBs.
-
+Comment: Multithreading is still under development and hence, SimAnneal has to be executed with ```instance count = -1 ``` when comparing runtimes.
 ## Compilation
 
 ### Compiling C++ Binaries with CMake
 
-First, boost has to be installed *(e.g. mac: brew install boost)*.
+First, boost must be installed *(e.g. mac: brew install boost)*.
 
 ```bash
 mkdir build && cd build
 ```
 
-Run CMake:
+Run CMake (Debug modus reduces performance):
 
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./release ..
