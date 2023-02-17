@@ -5,6 +5,7 @@
 #include "interface.h"
 
 #include <catch2/catch_template_test_macros.hpp>
+
 #include <filesystem>
 
 TEST_CASE("Test if reading, simulating, and creating a result-file works", "[interface]")
