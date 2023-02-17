@@ -31,7 +31,6 @@ int main(int argc, char* argv[])
     const std::string of_name = argv[2];
 
 
-    int      ext_pots_step = 0;
     bool     verbose       = false;
     auto     log_level     = Logger::DBG;
     uint64_t cml_i         = 0;
@@ -61,15 +60,15 @@ int main(int argc, char* argv[])
 
     log.echo() << "\n*** Initiate QuickSim interface ***" << std::endl;
     log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
-    QuickSimInterface interface(if_name, of_name, ext_pots_name, ext_pots_step, verbose);
+    quick_sim_interface interface(if_name, of_name, verbose);
 
     log.echo() << "\n*** Invoke simulation ***" << std::endl;
     stopwatch.start();
-    interface.runSimulation();
+    interface.run_simulation();
     stopwatch.end();
 
     log.echo() << "\n*** Write simulation results ***" << std::endl;
-    interface.writeSimResults();
+    interface.write_sim_results();
 
     log.echo() << "\n*** Quicksim Complete ***" << std::endl;
 

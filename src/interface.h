@@ -25,28 +25,26 @@
 using namespace fiction;
 using namespace phys;
 
-class QuickSimInterface {
+class quick_sim_interface {
 public:
     //! Constructor for QuickSimInterface
-    QuickSimInterface(std::string t_in_path, std::string t_out_path,
-                      std::string t_ext_pots_path, int t_ext_pots_step, bool verbose = true,
+    quick_sim_interface(std::string t_in_path, std::string t_out_path, bool verbose = true,
                       int log_l = Logger::MSG)
-            : log_level{log_l}, in_path(std::move(t_in_path)), out_path(std::move(t_out_path)),
-              ext_pots_path(std::move(t_ext_pots_path)) {
+            : log_level{log_l}, in_path(std::move(t_in_path)), out_path(std::move(t_out_path)) {
         sqconn = new SiQADConnector(std::string("QuickSim"), in_path, out_path, verbose);
         initialize_layout_fiction();
     }
 
-    ~QuickSimInterface() {
+    ~quick_sim_interface() {
         delete sqconn;
     }
 
-    int runSimulation() {
+    int run_simulation() {
         quicksim<sidb_cell_clk_lyt_siqad>(layout, sim_par, &sim_results);
         return EXIT_SUCCESS;
     }
 
-    void writeSimResults() {
+    void write_sim_results() {
         // create the vector of strings for the db locations
         auto data = sim_results.valid_lyts[0].get_all_sidb_location_in_nm();
         std::vector<std::pair<std::string, std::string>> dbl_data(data.size());
@@ -68,7 +66,7 @@ public:
                             charge_configuration_to_string(lyt.get_all_sidb_charges()));                      // config
                     db_dist.push_back(std::to_string(lyt.get_system_energy()));  // energy
                     db_dist.push_back(std::to_string(deg));      // occurance freq
-                    db_dist.push_back(std::to_string(true));  // metastability
+                    db_dist.push_back(std::to_string(1));  // metastability
                     db_dist.emplace_back("3");             // 2-state (GUI still does not work for 2)
                     db_dist_data.push_back(db_dist);
                     break;
@@ -77,6 +75,11 @@ public:
         }
         sqconn->setExport("db_charge", db_dist_data);
         sqconn->writeResultsXml();
+    }
+
+    [[nodiscard]] quicksim_params get_quicksim_params() const
+    {
+        return sim_par;
     }
 
 
@@ -116,7 +119,6 @@ private:
     int log_level;
     std::string in_path;
     std::string out_path;
-    std::string ext_pots_path;
     sidb_cell_clk_lyt_siqad layout{};
     quicksim_stats<sidb_cell_clk_lyt_siqad> sim_results{};
     quicksim_params sim_par{};

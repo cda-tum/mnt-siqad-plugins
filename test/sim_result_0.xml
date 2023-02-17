@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sim_out>
+    <eng_info>
+        <engine>QuickSim</engine>
+        <version>TBD</version>
+        <return_code>0</return_code>
+        <timestamp>Thu Feb 16 13:09:06 2023</timestamp>
+        <time_elapsed_s>0.002920</time_elapsed_s>
+    </eng_info>
+    <sim_params>
+        <alpha>0.8</alpha>
+        <debye_length>5</debye_length>
+        <eps_r>5.599999904632568</eps_r>
+        <iteration_steps>70</iteration_steps>
+        <muzm>-0.25</muzm>
+    </sim_params>
+    <physloc>
+        <dbdot x="215.040000" y="176.640000"/>
+        <dbdot x="203.520000" y="163.530000"/>
+        <dbdot x="241.920000" y="163.530000"/>
+        <dbdot x="192.000000" y="184.320000"/>
+        <dbdot x="230.400000" y="176.640000"/>
+        <dbdot x="218.880000" y="186.570000"/>
+        <dbdot x="222.720000" y="155.850000"/>
+    </physloc>
+    <elec_dist>
+        <dist energy="0.500218" count="164" physically_valid="1" state_count="2">0---0--</dist>
+    </elec_dist>
+</sim_out>

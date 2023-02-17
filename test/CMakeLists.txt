@@ -1,5 +1,6 @@
 include_directories(.)
 file(GLOB_RECURSE FILENAMES *.cpp)
+add_definitions(-DEXPERIMENTS_PATH="${CMAKE_CURRENT_SOURCE_DIR}")
 
 foreach (FILE IN LISTS FILENAMES)
     get_filename_component(NAME ${FILE} NAME_WE)
