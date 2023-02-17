@@ -82,6 +82,11 @@ public:
         return sim_par;
     }
 
+    [[nodiscard]] quicksim_stats<sidb_cell_clk_lyt_siqad> get_simulation_results() const
+    {
+        return sim_results;
+    }
+
 
 private:
 
@@ -104,7 +109,7 @@ private:
 
         // variables: physical
         params.mu = std::stod(sqconn->getParameter("muzm"));
-        params.epsilon_r = std::stod(sqconn->getParameter("eps_r"));
+        params.epsilon_r = std::round(std::stod(sqconn->getParameter("eps_r"))*100)/100;  // round to two digits
         params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
         auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
         auto alpha = std::stod(sqconn->getParameter("alpha"));
