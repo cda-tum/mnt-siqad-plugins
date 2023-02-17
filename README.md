@@ -18,7 +18,7 @@ git clone --recursive https://github.com/cda-tum/quicksim-siqad-plugin.git
 
 ## The CLI
 
-> Inside the newly cloned `quicksim-siqad-plugin` folder, trigger the build process:
+> Inside the newly cloned `quicksim-siqad-plugin` folder, create a build folder:
 
 ```bash
 mkdir build 
