@@ -22,7 +22,7 @@ algorithm available inside the [SiQAD](https://github.com/siqad/siqad) GUI.
 
 ## Quick Start
 
-All you need is a `git` client, `cmake`, and a modern C++ compiler.
+All you need is a `git` client, `cmake`, the [`Boost`](https://www.boost.org/) libraries, and a modern C++ compiler.
 
 ### Building the Plugin
 
