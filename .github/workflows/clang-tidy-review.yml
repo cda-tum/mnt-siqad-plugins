@@ -13,6 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install libraries
+        run: >
+          sudo apt-get update &&
+          sudo apt-get install -yq 
+          libboost-all-dev
+          libtbb-dev
+
       - name: Clone Repository
         uses: actions/checkout@v3
         with:
