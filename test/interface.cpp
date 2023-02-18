@@ -15,8 +15,7 @@
 TEST_CASE("Test if reading, simulating, and creating a result-file works", "[interface]")
 {
     quicksim_interface interface {
-        fmt::format("{}/sim_problem_0.xml", EXPERIMENTS_PATH), fmt::format("{}/sim_result_0.xml", EXPERIMENTS_PATH),
-            false
+        fmt::format("{}/sim_problem_0.xml", TEST_PATH), fmt::format("{}/sim_result_0.xml", TEST_PATH), false
     };
 
     CHECK(interface.get_quicksim_params().phys_params.lambda_tf == 5);
@@ -46,5 +45,5 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works", "[int
 
     interface.write_sim_results();
 
-    CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", EXPERIMENTS_PATH)));
+    CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_PATH)));
 }
