@@ -29,8 +29,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-20.04, ubuntu-22.04 ]
-        #compiler: [ g++-9, g++-10, clang++-10, clang++-11, clang++-12 ]
-        compiler: [ clang++-12 ]
+        compiler: [ g++-9, g++-10, clang++-10, clang++-11, clang++-12 ]
         build_type: [ Debug, Release ]
         exclude:
           - os: ubuntu-22.04
@@ -41,7 +40,12 @@ jobs:
 
     steps:
       - name: Install libraries and the respective compiler
-        run: sudo apt-get update && sudo apt-get install -yq libboost-all-dev libtbb-dev ${{matrix.compiler}}
+        run: >
+          sudo apt-get update &&
+          sudo apt-get install -yq 
+          libboost-all-dev
+          libtbb-dev
+          ${{matrix.compiler}}
 
       - name: Clone Repository
         uses: actions/checkout@v3
