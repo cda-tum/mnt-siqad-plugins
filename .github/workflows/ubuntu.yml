@@ -24,7 +24,6 @@ defaults:
   run:
     shell: bash
 
-
 jobs:
   build_and_test:
     strategy:
@@ -36,30 +35,18 @@ jobs:
         exclude:
           - os: ubuntu-22.04
             compiler: clang++-10
-        include:
-          - os: ubuntu-20.04
-            compiler: g++-10
-            build_type: Release
-            cppstandard: -DQUICKSIM-SIQAD-PLUGIN_CXX_STANDARD=20
-            cppname: C++20
 
-    name: ${{matrix.os}} with ${{matrix.compiler}} (${{matrix.build_type}} mode) ${{matrix.cppname}}
+    name: ${{matrix.os}} with ${{matrix.compiler}} (${{matrix.build_type}} mode)
     runs-on: ${{matrix.os}}
 
     steps:
       - name: Install libraries and the respective compiler
-        run: sudo apt-get update && sudo apt-get install -yq libtbb-dev ${{matrix.compiler}}
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9.x'
+        run: sudo apt-get update && sudo apt-get install -yq libboost-all-dev libtbb-dev ${{matrix.compiler}}
 
       - name: Clone Repository
         uses: actions/checkout@v3
         with:
           submodules: recursive
-
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
@@ -67,7 +54,7 @@ jobs:
       - name: Configure CMake
         working-directory: ${{github.workspace}}/build
         run: >
-          cmake ${{github.workspace}} ${{matrix.cppstandard}}
+          cmake ${{github.workspace}}
           -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
           -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           -DQUICKSIM_TEST=ON
@@ -81,6 +68,3 @@ jobs:
         # Execute tests defined by the CMake configuration.
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: ctest -C ${{matrix.build_type}} --verbose
-
-      - name: Install Boost library
-        run: sudo apt-get install libboost-all-dev
