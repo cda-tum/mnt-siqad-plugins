@@ -1,5 +1,7 @@
 # QuickSim Plugin for SiQAD
 
+[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/ubuntu.yml?label=Ubtunu&logo=ubuntu&style=flat-square)](https://github.com/marcelwa/fiction/actions/workflows/ubuntu.yml)
+
 *QuickSim* is an accurate *and* efficient physical simulation algorithm for determining the charge distribution of
 atomic *Silicon Dangling Bond (SiDB)* assemblies. Since positively charged SiDBs are not yet used for logic, this
 algorithm is a 2-state simulation and neglects positively charged SiDBs, which is a reasonable assumption for SiDB
