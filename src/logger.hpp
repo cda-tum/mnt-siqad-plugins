@@ -1,13 +1,13 @@
 
-#ifndef _LOGGER_H_
-#define _LOGGER_H_
+#ifndef QUICKSIM_SIQAD_PLUGIN_LOGGER_HPP
+#define QUICKSIM_SIQAD_PLUGIN_LOGGER_HPP
 
 #include <iostream>
 #include <ostream>
 #include <streambuf>
 
 // null buffer for the null stream, does nothing on overflow request
-class NullBuff : public std::streambuf
+class null_buff : public std::streambuf
 {
   public:
     int overflow(int c) final
@@ -17,16 +17,16 @@ class NullBuff : public std::streambuf
 };
 
 // ostream type object which does nothing
-class nostream : public std::ostream
+class no_stream : public std::ostream
 {
   public:
-    nostream() : std::ostream(&nobuff) {}
+    no_stream() : std::ostream(&nobuff) {}
 
   private:
-    NullBuff nobuff;
+    null_buff nobuff{};
 };
 
-class Logger
+class logger
 {
   public:
     enum
@@ -37,7 +37,7 @@ class Logger
         DBG
     };
 
-    explicit Logger(int verbosity = 0, std::ostream& os = std::cout) : verbosity(verbosity), os(os) {}
+    explicit logger(int verbosity = 0, std::ostream& os = std::cout) : verbosity(verbosity), os(os) {}
 
     std::ostream& debug()
     {
@@ -60,9 +60,9 @@ class Logger
     }
 
   private:
-    int           verbosity;
+    const int     verbosity{};
     std::ostream& os;
-    nostream      nos;
+    no_stream     nos{};
 };
 
-#endif
+#endif  // QUICKSIM_SIQAD_PLUGIN_LOGGER_HPP
