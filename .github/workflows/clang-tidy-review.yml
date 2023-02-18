@@ -13,13 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install libraries
-        run: >
-          sudo apt-get update &&
-          sudo apt-get install -yq 
-          libboost-all-dev
-          libtbb-dev
-
       - name: Clone Repository
         uses: actions/checkout@v3
         with:
@@ -29,6 +22,7 @@ jobs:
         uses: ZedThree/clang-tidy-review@v0.10.1
         id: review
         with:
+          apt_packages: 'libboost-all-dev,libtbb-dev'
           cmake_command: >
             cmake . -B build
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
