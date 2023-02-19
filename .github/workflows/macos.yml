@@ -33,8 +33,8 @@ jobs:
         compiler: [ g++-11, clang++ ]
         build_type: [ Debug, Release ]
         include:
-#          - compiler: clang++
-#            ccompiler: clang
+          - compiler: clang++
+            ccompiler: clang
           - compiler: g++-11
             ccompiler: gcc
           - os: macos-11
@@ -65,8 +65,8 @@ jobs:
       - name: Install libraries and the respective compiler
         run: >
           brew update &&
-          brew install boost tbb &&
-          brew install ${{matrix.compiler}}
+          brew install boost tbb 
+#          brew install ${{matrix.compiler}}
 
       - name: Clone Repository
         uses: actions/checkout@v3
