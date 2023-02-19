@@ -46,16 +46,11 @@ jobs:
     runs-on: ${{matrix.os}}
 
     steps:
-      - name: Install chocolatey
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force;
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
-          Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-        shell: powershell
+      - name: Install Scoop
+        run: powershell -Command "Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')"
 
-      - name: Install boost and tbb
-        run: choco install boost tbb
-        shell: powershell
+      - name: Install Boost and TBB
+        run: scoop install boost tbb
 
       - name: Clone Repository
         uses: actions/checkout@v3
