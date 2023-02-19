@@ -65,7 +65,7 @@ jobs:
       - name: Install libraries and the respective compiler
         run: >
           brew update &&
-          brew install boost tbb
+          brew install boost tbb &&
           brew install ${{matrix.compiler}}
 
       - name: Clone Repository
