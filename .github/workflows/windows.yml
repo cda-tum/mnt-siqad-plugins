@@ -1,0 +1,91 @@
+name: Windows CI
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths:
+      - '**/*.hpp'
+      - '**/*.cpp'
+      - '**/*.cmake'
+      - '**/CMakeLists.txt'
+      - 'libs/**'
+      - '.github/workflows/windows.yml'
+  pull_request:
+    branches: [ 'main' ]
+    paths:
+      - '**/*.hpp'
+      - '**/*.cpp'
+      - '**/*.cmake'
+      - '**/CMakeLists.txt'
+      - 'libs/**'
+      - '.github/workflows/windows.yml'
+
+defaults:
+  run:
+    shell: pwsh  # use pwsh as directory handling does not seem to work with bash
+
+jobs:
+  build_and_test:
+    strategy:
+      matrix:
+        os: [ windows-2019, windows-2022 ]
+        toolset: [ v142, v143, ClangCL ]
+        build_type: [ Debug, Release ]
+        include:
+          - os: windows-2019
+            env: 'Visual Studio 16 2019'
+          - os: windows-2022
+            env: 'Visual Studio 17 2022'
+        exclude:
+          - os: windows-2019
+            toolset: v143
+          - os: windows-2022
+            toolset: v142
+
+    name: ${{matrix.os}} with ${{matrix.env}} and ${{matrix.toolset}} toolset (${{matrix.build_type}} mode)
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - name: Install chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
+          Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+        shell: powershell
+
+      - name: Install boost and tbb
+        run: choco install boost tbb
+        shell: powershell
+
+      - name: Clone Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: '${{matrix.os}}-${{matrix.toolset}}-${{matrix.build_type}}'
+          variant: ccache
+          save: true
+          max-size: 10G
+
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{github.workspace}}\build
+
+      - name: Configure CMake
+        working-directory: ${{github.workspace}}\build
+        run: >
+          cmake ${{github.workspace}} -G "${{matrix.env}}" -A x64 -T ${{matrix.toolset}}
+          -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
+          -DQUICKSIM_TEST=ON
+
+      - name: Build quicksim-siqad-plugin
+        working-directory: ${{github.workspace}}\build
+        run: cmake --build . --config ${{matrix.build_type}} -j2
+
+      - name: Test
+        working-directory: ${{github.workspace}}\build
+        # Execute tests defined by the CMake configuration.
+        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+        run: ctest -C ${{matrix.build_type}} --verbose
