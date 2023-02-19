@@ -57,6 +57,11 @@ jobs:
     runs-on: ${{matrix.os}}
 
     steps:
+
+      - name: Install Homebrew
+        run: >
+          /bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/blob/master/install.sh)"
+
       - name: Install libraries and the respective compiler
         run: >
           brew update &&
