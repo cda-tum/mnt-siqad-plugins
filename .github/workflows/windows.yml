@@ -51,8 +51,11 @@ jobs:
           Set-ExecutionPolicy Bypass -Scope Process -Force;
           [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
+      - name: Upgrade Chocolatey
+        run: choco upgrade chocolatey -y
+
       - name: Install Boost and TBB
-        run: choco install boost tbb -y
+        run: choco install boost tbb --source=https://chocolatey.org/api/v2/
 
       - name: Clone Repository
         uses: actions/checkout@v3
