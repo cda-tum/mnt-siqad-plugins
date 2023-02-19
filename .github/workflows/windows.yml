@@ -55,7 +55,7 @@ jobs:
         run: choco upgrade chocolatey -y
 
       - name: Install Boost and TBB
-        run: choco install boost tbb --source=https://chocolatey.org/api/v2/
+        run: choco install boost tbb
 
       - name: Clone Repository
         uses: actions/checkout@v3
