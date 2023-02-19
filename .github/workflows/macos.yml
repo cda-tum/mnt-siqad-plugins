@@ -68,6 +68,10 @@ jobs:
           brew install boost tbb &&
           brew install ${{matrix.compiler}}
 
+      - name: Install Clang compiler
+        if: matrix.compiler == 'clang++'
+        run: brew install llvm
+
       - name: Clone Repository
         uses: actions/checkout@v3
         with:
