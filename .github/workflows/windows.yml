@@ -46,15 +46,13 @@ jobs:
     runs-on: ${{matrix.os}}
 
     steps:
-      - name: Install vcpkg
+      - name: Install Chocolatey
         run: |
-            git clone https://github.com/microsoft/vcpkg.git
-            cd vcpkg
-            bootstrap-vcpkg.bat
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
       - name: Install Boost and TBB
-        run: |
-            ./vcpkg/vcpkg.exe install boost:x64-windows tbb:x64-windows
+        run: choco install boost tbb -y
 
       - name: Clone Repository
         uses: actions/checkout@v3
