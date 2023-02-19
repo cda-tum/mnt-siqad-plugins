@@ -46,11 +46,15 @@ jobs:
     runs-on: ${{matrix.os}}
 
     steps:
-      - name: Install Scoop
-        run: powershell -Command "Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')"
+      - name: Install vcpkg
+        run: |
+            git clone https://github.com/microsoft/vcpkg.git
+            cd vcpkg
+            bootstrap-vcpkg.bat
 
       - name: Install Boost and TBB
-        run: scoop install boost tbb
+        run: |
+            ./vcpkg/vcpkg.exe install boost:x64-windows tbb:x64-windows
 
       - name: Clone Repository
         uses: actions/checkout@v3
