@@ -51,6 +51,12 @@ interpreter, bin_path, command
          <label>alpha</label>
          <tip>no solution is found -> reduce alpha.</tip>
         </alpha>
+        <num_threads>
+                 <T>int</T>
+                 <val>1</val>
+                 <label>Instance count</label>
+                 <tip>The number of SimAnneal instances used in multithreading. If left at -1, a number is automatically selected based on the used engine.</tip>
+                </num_threads>
         <eps_r>
             <T>float</T>
             <val>5.6</val>
