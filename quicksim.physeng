@@ -43,7 +43,7 @@ interpreter, bin_path, command
             <T>int</T>
             <val>100</val>
             <label>Iteration steps</label>
-            <tip>The number of simulation repetitions. Can be increased to increase simulation accuracy.</tip>
+            <tip>The number of simulation repetitions - can be increased to increase simulation accuracy.</tip>
         </iteration_steps>
         <alpha>
          <T>double</T>
