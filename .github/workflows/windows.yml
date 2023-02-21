@@ -38,12 +38,9 @@ jobs:
           - os: windows-2022
             env: 'Visual Studio 17 2022'
           - toolset: v142
-            boost_toolset: msvc
+            boost_platform: 2019
           - toolset: v143
-            boost_toolset: msvc
             boost_platform: 2022
-          - toolset: ClangCL
-            boost_toolset: clang
         exclude:
           - os: windows-2019
             toolset: v143
@@ -60,7 +57,7 @@ jobs:
         with:
           boost_version: 1.78.0
           platform_version: ${{matrix.boost_platform}}
-          toolset: ${{matrix.boost_toolset}}
+          toolset: msvc
           cache: true
 
       - name: Clone Repository
