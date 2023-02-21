@@ -1,6 +1,8 @@
 # QuickSim Plugin for SiQAD
 
-[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/ubuntu.yml?label=Ubtunu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/ubuntu.yml)
+[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/ubuntu.yml)
+[![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/macos.yml)
+[![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/windows.yml)
 
 *QuickSim* is an accurate *and* efficient physical simulation algorithm for determining the charge distribution of
 atomic *Silicon Dangling Bond (SiDB)* assemblies. Since positively charged SiDBs are not yet used for logic, this
@@ -46,7 +48,7 @@ Make sure you have [SiQAD](https://github.com/siqad/siqad) installed and the Qui
 
 Navigate to `<PATH-TO-SIQAD>/plugins/` and create a new folder called `quicksim`.
 
-Move the `quicksim` binary and the `quicksim.physeng` file from `quicksim-siqad-plugin/build` to the newly
-created`siqad/plugins/quicksim/`.
+Move the `quicksim` binary and the `quicksim.physeng` file from `quicksim-siqad-plugin/build/` to the newly
+created`siqad/plugins/quicksim/` and restart SiQAD.
 
-Restart SiQAD. QuickSim is now available in the engine list.
+QuickSim is now available in the engine list.
