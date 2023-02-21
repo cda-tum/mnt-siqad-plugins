@@ -54,8 +54,8 @@ jobs:
       - name: Upgrade Chocolatey
         run: choco upgrade chocolatey -y
 
-      - name: Install Boost and TBB
-        run: choco install boost tbb
+      - name: Install Boost
+        run: choco install boost
 
       - name: Clone Repository
         uses: actions/checkout@v3
