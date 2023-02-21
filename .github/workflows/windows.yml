@@ -46,6 +46,9 @@ jobs:
     runs-on: ${{matrix.os}}
 
     steps:
+      - name: Add Chocolatey source
+        run: choco source add -n=chocolatey -s=https://chocolatey.org/api/v2/
+
       - name: Install Chocolatey
         run: |
           Set-ExecutionPolicy Bypass -Scope Process -Force;
