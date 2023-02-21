@@ -46,19 +46,19 @@ jobs:
     runs-on: ${{matrix.os}}
 
     steps:
-      - name: Add Chocolatey source
-        run: choco source add -n=chocolatey -s=https://chocolatey.org/api/v2/
-
       - name: Install Chocolatey
         run: |
           Set-ExecutionPolicy Bypass -Scope Process -Force;
           [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
+      - name: Add Chocolatey source
+        run: choco source add -n=chocolatey -s=https://chocolatey.org/api/v2/
+
       - name: Upgrade Chocolatey
         run: choco upgrade chocolatey -y
 
       - name: Install Boost and TBB
-        run: choco install boost tbb
+        run: choco install boost --version=1.76.0 tbb --version=2021.4
 
       - name: Clone Repository
         uses: actions/checkout@v3
