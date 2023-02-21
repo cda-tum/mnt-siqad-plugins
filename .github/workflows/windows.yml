@@ -82,7 +82,7 @@ jobs:
           cmake ${{github.workspace}} -G "${{matrix.env}}" -A x64 -T ${{matrix.toolset}}
           -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           -DQUICKSIM_TEST=ON
-          -DBoost_INCLUDE_DIR=${{github.workspace}}
+          -DBOOST_ROOT=${{github.workspace}}\boost
 
       - name: Build quicksim-siqad-plugin
         working-directory: ${{github.workspace}}\build
