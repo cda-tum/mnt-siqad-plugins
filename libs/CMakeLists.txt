@@ -25,9 +25,10 @@ endif ()
 find_package(Boost REQUIRED)
 if (Boost_FOUND)
     message(STATUS "Boost library has been found")
+
+    # Link against Boost
+    target_include_directories(dependencies SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
+    target_link_libraries(dependencies INTERFACE ${Boost_LIBRARY_DIRS})
 else ()
     message(FATAL_ERROR "Could not find Boost")
 endif ()
-
-# Link against Boost
-target_include_directories(dependencies SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
