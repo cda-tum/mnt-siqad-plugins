@@ -53,7 +53,7 @@ interpreter, bin_path, command
         </alpha>
         <num_threads>
                  <T>int</T>
-                 <val>1</val>
+                 <val>-1</val>
                  <label>Instance count</label>
                  <tip>The number of QuickSim instances used in multithreading. If left at -1, a number is automatically selected based on the used engine.</tip>
                 </num_threads>

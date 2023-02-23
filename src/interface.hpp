@@ -130,13 +130,13 @@ class quicksim_interface
 
         const auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
         const auto alpha           = std::stod(sqconn->getParameter("alpha"));
-        if (const auto number_threads  = std::stod(sqconn->getParameter("num_threads")); number_threads < 0)
+        if (const auto number_threads  = static_cast<int64_t>(std::stod(sqconn->getParameter("num_threads"))); number_threads < 0)
         {
-            sim_par = fiction::quicksim_params{params, iteration_steps, alpha, number_threads};
+            sim_par = fiction::quicksim_params{params, iteration_steps, alpha};
         }
         else
         {
-            sim_par = fiction::quicksim_params{params, iteration_steps, alpha};
+            sim_par = fiction::quicksim_params{params, iteration_steps, alpha, static_cast<uint64_t>(number_threads)};
         }
 
         log.echo() << "Retrieval from SiQADConn complete." << std::endl;
