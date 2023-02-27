@@ -16,11 +16,6 @@ if (QUICKSIM_TEST)
     add_subdirectory(Catch2/)
 endif ()
 
-# Include Boost
-if (WIN32)
-    set(Boost_USE_STATIC_LIBS ON)
-endif ()
-
 # Require the Boost package
 find_package(Boost REQUIRED)
 if (Boost_FOUND)
