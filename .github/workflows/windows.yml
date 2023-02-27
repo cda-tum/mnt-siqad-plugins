@@ -60,9 +60,9 @@ jobs:
 
       - name: Test for Boost directories
         run: |
-          ls -la ${{steps.install-boost.outputs.BOOST_ROOT}}\include
-          ls -la ${{steps.install-boost.outputs.BOOST_ROOT}}\include\boost
-          ls -la ${{steps.install-boost.outputs.BOOST_ROOT}}\lib
+          Get-ChildItem -Path ${{steps.install-boost.outputs.BOOST_ROOT}}\include
+          Get-ChildItem -Path ${{steps.install-boost.outputs.BOOST_ROOT}}\include\boost
+          Get-ChildItem -Path ${{steps.install-boost.outputs.BOOST_ROOT}}\lib
 
       - name: Clone Repository
         uses: actions/checkout@v3
