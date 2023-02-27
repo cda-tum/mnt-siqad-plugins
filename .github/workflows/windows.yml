@@ -38,9 +38,6 @@ jobs:
             boost_platform: 2019
           - os: windows-2022
             env: 'Visual Studio 17 2022'
-          - toolset: v142
-            boost_platform: 2019
-          - toolset: v143
             boost_platform: 2022
         exclude:
           - os: windows-2019
