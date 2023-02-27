@@ -19,13 +19,12 @@ endif ()
 set(Boost_DEBUG 1)
 
 # Require the Boost package
-find_package(Boost REQUIRED)
+find_package(Boost COMPONENTS container)
 if (Boost_FOUND)
-    message(STATUS "Boost library has been found")
+    message(STATUS "Boost libraries have been found: ${Boost_VERSION}")
 
     # Link against Boost
     target_include_directories(dependencies SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
-    target_link_libraries(dependencies INTERFACE ${Boost_LIBRARY_DIRS})
 else ()
     message(FATAL_ERROR "Could not find Boost")
 endif ()
