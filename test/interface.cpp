@@ -5,8 +5,11 @@
 #include "interface.hpp"
 
 #include <catch2/catch_template_test_macros.hpp>
+
 #include <fiction/types.hpp>
+
 #include <fmt/format.h>
+
 #include <filesystem>
 #include <thread>
 
