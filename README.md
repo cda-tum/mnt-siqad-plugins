@@ -14,9 +14,6 @@ algorithm available inside the [SiQAD](https://github.com/siqad/siqad) GUI.
 
 #### General information:
 
-- QuickSim's multithreading support is still under development and hence, when comparing QuickSim's performance
-  against [SimAnneal](https://github.com/siqad/simanneal-sidb.git),
-  `instance count = 1` must be set for fair comparisons.
 - QuickSim enables the tuning of simulation parameters: `iteration steps` and `alpha`. For gate layouts, there should be
   no need to adjust the default values. If no solution is found, however, `iteration steps` can be increased
   or `alpha` reduced to enable high-effort simulation.
