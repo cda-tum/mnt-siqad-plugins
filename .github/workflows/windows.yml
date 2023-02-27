@@ -90,8 +90,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           -DQUICKSIM_TEST=ON
           -DBoost_ADDITIONAL_VERSIONS=1.80.0
-        env:
-          BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+          -DBOOST_ROOT=${{steps.install-boost.outputs.BOOST_ROOT}}
 
       - name: Build quicksim-siqad-plugin
         working-directory: ${{github.workspace}}\build
