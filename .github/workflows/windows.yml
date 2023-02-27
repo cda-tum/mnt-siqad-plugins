@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Install Boost
-        uses: MarkusJx/install-boost@v2.4.1
+        uses: MarkusJx/install-boost@v2.4.4
         id: install-boost
         with:
           boost_version: 1.80.0
