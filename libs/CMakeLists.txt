@@ -19,7 +19,7 @@ endif ()
 set(Boost_DEBUG 1)
 
 # Require the Boost package
-find_package(Boost COMPONENTS container)
+find_package(Boost)
 if (Boost_FOUND)
     message(STATUS "Boost libraries have been found: ${Boost_VERSION}")
 
