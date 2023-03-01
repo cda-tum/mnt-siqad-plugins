@@ -52,9 +52,8 @@ jobs:
         with:
           boost_version: 1.80.0
           platform_version: ${{matrix.boost_platform}}
-          toolset: msvc
           cache: true
-          arch: x86
+
 
 #      - name: Test for Boost directories
 #        run: |
@@ -86,6 +85,7 @@ jobs:
           cmake ${{github.workspace}} -G "${{matrix.env}}" -A x64 -T ${{matrix.toolset}}
           -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           -DQUICKSIM_TEST=ON
+        env:
           -DBOOST_ROOT=${{steps.install-boost.outputs.BOOST_ROOT}}
           -DBOOST_INCLUDEDIR=${{steps.install-boost.outputs.BOOST_ROOT}}\include
           -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}\include
