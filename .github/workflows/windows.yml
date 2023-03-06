@@ -24,7 +24,6 @@ on:
 jobs:
   build_and_test:
     strategy:
-      fail-fast: false
       matrix:
         os: [ windows-2019, windows-2022 ]
         toolset: [ v142, v143, ClangCL ]

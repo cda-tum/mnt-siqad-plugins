@@ -16,8 +16,6 @@ if (QUICKSIM_TEST)
     add_subdirectory(Catch2/)
 endif ()
 
-set(Boost_DEBUG 1)
-
 # Require the Boost package
 find_package(Boost 1.70.0 REQUIRED)
 if (Boost_FOUND)
