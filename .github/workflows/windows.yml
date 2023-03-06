@@ -46,6 +46,11 @@ jobs:
     runs-on: ${{matrix.os}}
 
     steps:
+      - name: Clone Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
       - name: Install Boost
         uses: MarkusJx/install-boost@v2.4.4
         id: install-boost
@@ -62,11 +67,6 @@ jobs:
 #          cat ${{steps.install-boost.outputs.BOOST_ROOT}}\include\boost\version.hpp
 #          ls -la Get-ChildItem -Path ${{steps.install-boost.outputs.BOOST_ROOT}}\include\boost-1_80\boost
 #          ls -la Get-ChildItem -Path ${{steps.install-boost.outputs.BOOST_ROOT}}\lib
-
-      - name: Clone Repository
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
 
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -85,9 +85,7 @@ jobs:
           cmake ${{github.workspace}} -G "${{matrix.env}}" -A x64 -T ${{matrix.toolset}}
           -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           -DQUICKSIM_TEST=ON
-          -DBOOST_INCLUDEDIR=${{steps.install-boost.outputs.BOOST_ROOT}}\include
-          -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}\include
-          -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}\lib
+          -DBoost_USE_STATIC_RUNTIME=OFF
         env:
           BOOST_ROOT: ${{steps.install-boost.outputs.BOOST_ROOT}}
 
