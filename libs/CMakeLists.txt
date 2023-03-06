@@ -24,7 +24,6 @@ if (Boost_FOUND)
     message(STATUS "Boost libraries have been found: ${Boost_VERSION}")
 
     # Link against Boost
-#    target_include_directories(dependencies SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
     target_link_libraries(dependencies INTERFACE Boost::boost)
 else ()
     message(FATAL_ERROR "Could not find Boost")

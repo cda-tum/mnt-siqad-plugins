@@ -58,15 +58,8 @@ jobs:
           boost_version: 1.80.0
           platform_version: ${{matrix.boost_platform}}
           cache: true
-
-
-#      - name: Test for Boost directories
-#        run: |
-#          ls -la ${{steps.install-boost.outputs.BOOST_ROOT}}\include
-#          ls -la ${{steps.install-boost.outputs.BOOST_ROOT}}\include\boost
-#          cat ${{steps.install-boost.outputs.BOOST_ROOT}}\include\boost\version.hpp
-#          ls -la Get-ChildItem -Path ${{steps.install-boost.outputs.BOOST_ROOT}}\include\boost-1_80\boost
-#          ls -la Get-ChildItem -Path ${{steps.install-boost.outputs.BOOST_ROOT}}\lib
+          toolset: msvc
+          arch: x86
 
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -85,10 +78,8 @@ jobs:
           cmake ${{github.workspace}} -G "${{matrix.env}}" -A x64 -T ${{matrix.toolset}}
           -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           -DQUICKSIM_TEST=ON
-          -DBoost_USE_STATIC_RUNTIME=OFF
         env:
           BOOST_ROOT: ${{steps.install-boost.outputs.BOOST_ROOT}}
-
 
       - name: Build quicksim-siqad-plugin
         working-directory: ${{github.workspace}}\build
