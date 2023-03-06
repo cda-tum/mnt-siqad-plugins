@@ -88,7 +88,7 @@ class quicksim_interface
         sqconn->writeResultsXml();
     }
 
-    [[nodiscard]] fiction::quicksim_params get_quicksim_params() const noexcept
+    [[nodiscard]] fiction::quicksim_params& get_quicksim_params() noexcept
     {
         return sim_par;
     }
