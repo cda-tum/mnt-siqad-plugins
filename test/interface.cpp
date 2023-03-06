@@ -11,6 +11,7 @@
 #include <fmt/format.h>
 
 #include <filesystem>
+#include <thread>
 
 TEST_CASE("Test if reading, simulating, and creating a result-file works", "[interface]")
 {
@@ -22,6 +23,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works", "[int
     CHECK(qs_interface.get_quicksim_params().phys_params.mu == -.25);
     CHECK(qs_interface.get_quicksim_params().interation_steps == 70);
     CHECK(qs_interface.get_quicksim_params().alpha == 0.8);
+    CHECK(qs_interface.get_quicksim_params().number_threads == std::thread::hardware_concurrency());
 
     CHECK(qs_interface.run_simulation() == 0);
     CHECK(!qs_interface.get_simulation_results().valid_lyts.empty());
