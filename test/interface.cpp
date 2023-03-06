@@ -14,9 +14,8 @@
 
 TEST_CASE("Test if reading, simulating, and creating a result-file works", "[interface]")
 {
-    quicksim_interface interface {
-        fmt::format("{}/sim_problem_0.xml", TEST_PATH), fmt::format("{}/sim_result_0.xml", TEST_PATH), false
-    };
+    quicksim_interface interface(fmt::format("{}/sim_problem_0.xml", TEST_PATH),
+                                 fmt::format("{}/sim_result_0.xml", TEST_PATH), false);
 
     CHECK(interface.get_quicksim_params().phys_params.lambda_tf == 5);
     CHECK(interface.get_quicksim_params().phys_params.epsilon_r == 5.6);
