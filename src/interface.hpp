@@ -16,6 +16,8 @@
 #include <fiction/traits.hpp>
 #include <fiction/types.hpp>
 
+#include <fmt/format.h>
+
 #include <cmath>
 #include <cstdlib>
 #include <map>
@@ -88,7 +90,7 @@ class quicksim_interface
         sqconn->writeResultsXml();
     }
 
-    [[nodiscard]] fiction::quicksim_params get_quicksim_params() const noexcept
+    [[nodiscard]] fiction::quicksim_params& get_quicksim_params() noexcept
     {
         return sim_par;
     }
@@ -118,30 +120,39 @@ class quicksim_interface
 
             layout.assign_cell_type({db->n, db->m, db->l}, fiction::sidb_cell_clk_lyt_siqad::cell_type::NORMAL);
 
-            log.debug() << "DB loc: x=" << db_locs.back().first << ", y=" << db_locs.back().second << std::endl;
+            log.debug() << fmt::format("DB loc: x={}, y={}", db_locs.back().first, db_locs.back().second) << std::endl;
         }
 
         fiction::sidb_simulation_parameters params{2};
 
-        // variables: physical
-        params.mu        = std::stod(sqconn->getParameter("muzm"));
-        params.epsilon_r = std::round(std::stod(sqconn->getParameter("eps_r")) * 100) / 100;  // round to two digits
-        params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
-
-        const auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
-        const auto alpha           = std::stod(sqconn->getParameter("alpha"));
-        // Initialize sim_par with default values
-        sim_par = fiction::quicksim_params{params, iteration_steps, alpha};
-
-        // Check if number_threads is negative
-        if (const auto number_threads = static_cast<int64_t>(std::stod(sqconn->getParameter("num_threads")));
-            number_threads >= 0)
+        try
         {
-            // Update sim_par with number_threads
-            sim_par.number_threads = static_cast<uint64_t>(number_threads);
-        }
+            // variables: physical
+            params.mu        = std::stod(sqconn->getParameter("muzm"));
+            params.epsilon_r = std::round(std::stod(sqconn->getParameter("eps_r")) * 100) / 100;  // round to two digits
+            params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
 
-        log.echo() << "Retrieval from SiQADConn complete." << std::endl;
+            const auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
+            const auto alpha           = std::stod(sqconn->getParameter("alpha"));
+
+            // prevent number of threads to be negative
+            if (const auto number_threads = static_cast<int64_t>(std::stod(sqconn->getParameter("num_threads")));
+                number_threads >= 0)
+            {
+                // Update sim_par with number_threads
+                sim_par.number_threads = static_cast<uint64_t>(number_threads);
+            }
+
+            log.echo() << "Retrieval from SiQADConn complete." << std::endl;
+
+            sim_par = fiction::quicksim_params{params, iteration_steps, alpha};
+        }
+        catch (...)
+        {
+            log.critical() << "Could not retrieve all parameters from SiQADConn." << std::endl;
+
+            throw;
+        }
     }
 
     // Instances

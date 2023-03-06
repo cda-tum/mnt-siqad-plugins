@@ -16,18 +16,13 @@ if (QUICKSIM_TEST)
     add_subdirectory(Catch2/)
 endif ()
 
-# Include Boost
-if (WIN32)
-    set(Boost_USE_STATIC_LIBS ON)
-endif ()
-
 # Require the Boost package
-find_package(Boost REQUIRED)
+find_package(Boost 1.70.0 REQUIRED)
 if (Boost_FOUND)
-    message(STATUS "Boost library has been found")
+    message(STATUS "Boost libraries have been found: ${Boost_VERSION}")
+
+    # Link against Boost
+    target_link_libraries(dependencies INTERFACE Boost::boost)
 else ()
     message(FATAL_ERROR "Could not find Boost")
 endif ()
-
-# Link against Boost
-target_include_directories(dependencies SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
