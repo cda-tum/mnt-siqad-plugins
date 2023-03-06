@@ -57,17 +57,17 @@ int main(int argc, char* argv[])
 
     log.echo() << "\n*** Initiate QuickSim interface ***" << std::endl;
     log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
-    auto interface = quicksim_interface{if_name, of_name, verbose};
+    auto qs_interface = quicksim_interface{if_name, of_name, verbose};
 
     log.echo() << "\n*** Invoke simulation ***" << std::endl;
     stopwatch.start();
-    interface.run_simulation();
+    qs_interface.run_simulation();
     stopwatch.end();
 
     log.echo() << "\n*** Write simulation results ***" << std::endl;
-    interface.write_sim_results();
+    qs_interface.write_sim_results();
 
-    log.echo() << "\n*** Quicksim Complete ***" << std::endl;
+    log.echo() << "\n*** QuickSim Complete ***" << std::endl;
 
     stopwatch.print_stopwatch(log_level);
 
