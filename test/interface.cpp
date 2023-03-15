@@ -25,7 +25,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works", "[int
     CHECK(qs_interface.get_quicksim_params().alpha == 0.8);
     CHECK(qs_interface.get_quicksim_params().number_threads == std::thread::hardware_concurrency());
 
-    CHECK(qs_interface.run_simulation() == 0);
+    REQUIRE(qs_interface.run_simulation() == 0);
     REQUIRE(!qs_interface.get_simulation_results().valid_lyts.empty());
     const auto& charge_lyt_first = qs_interface.get_simulation_results().valid_lyts[0];
     CHECK(charge_lyt_first.num_cells() == 7);
