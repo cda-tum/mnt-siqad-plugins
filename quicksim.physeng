@@ -57,6 +57,12 @@ interpreter, bin_path, command
                  <label>Instance count</label>
                  <tip>The number of QuickSim instances used in multithreading. If left at -1, a number is automatically selected based on the used engine.</tip>
                 </num_threads>
+                        <autofail>
+                            <T>int</T>
+                            <val>30</val>
+                            <label>Auto-fail DB count (read hover tip)</label>
+                            <tip>Accurate simulation results are not guaranteed for more DBs</tip>
+                        </autofail>
         <eps_r>
             <T>float</T>
             <val>5.6</val>

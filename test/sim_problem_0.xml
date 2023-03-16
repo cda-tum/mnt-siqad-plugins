@@ -9,6 +9,7 @@
     <sim_params>
         <alpha>0.8</alpha>
         <debye_length>5</debye_length>
+        <autofail>30</autofail>
         <eps_r>5.599999904632568</eps_r>
         <iteration_steps>70</iteration_steps>
         <num_threads>-1</num_threads>
