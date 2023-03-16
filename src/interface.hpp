@@ -43,7 +43,10 @@ class quicksim_interface
 
     int run_simulation()
     {
-        fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, sim_par, &sim_results);
+        while (sim_results.valid_lyts.empty())
+        {
+            fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, sim_par, &sim_results);
+        }
 
         return EXIT_SUCCESS;
     }
@@ -51,7 +54,7 @@ class quicksim_interface
     void write_sim_results()
     {
         // create the vector of strings for the db locations
-        const auto data = sim_results.valid_lyts[0].get_all_sidb_location_in_nm();
+        const auto data = sim_results.valid_lyts.front().get_all_sidb_location_in_nm();
 
         std::vector<std::pair<std::string, std::string>> dbl_data{};
         dbl_data.reserve(data.size());
@@ -107,6 +110,16 @@ class quicksim_interface
         return sim_results;
     }
 
+    [[nodiscard]] uint64_t get_auto_fail() const
+    {
+        return auto_fail;
+    }
+
+    [[nodiscard]] uint64_t get_cell_num() const
+    {
+        return layout.num_cells();
+    }
+
   private:
     void initialize_fiction_layout()
     {
@@ -135,9 +148,12 @@ class quicksim_interface
         try
         {
             // variables: physical
-            params.mu        = std::stod(sqconn->getParameter("muzm"));
+            params.mu = std::stod(sqconn->getParameter("muzm"));
+
             params.epsilon_r = std::round(std::stod(sqconn->getParameter("eps_r")) * 100) / 100;  // round to two digits
             params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
+
+            auto_fail = std::stoi(sqconn->getParameter("autofail"));
 
             const auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
             const auto alpha           = std::stod(sqconn->getParameter("alpha"));
@@ -157,7 +173,6 @@ class quicksim_interface
         catch (...)
         {
             log.critical() << "Could not retrieve all parameters from SiQADConn." << std::endl;
-
             throw;
         }
     }
@@ -166,6 +181,7 @@ class quicksim_interface
     std::unique_ptr<SiQADConnector> sqconn = nullptr;
 
     // variables
+    uint64_t                                                  auto_fail;
     const int                                                 log_level;
     const std::string_view                                    in_path;
     const std::string_view                                    out_path;

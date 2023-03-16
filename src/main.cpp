@@ -59,6 +59,12 @@ int main(int argc, char* argv[])
     log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
     auto qs_interface = quicksim_interface{if_name, of_name, verbose};
 
+    if (qs_interface.get_auto_fail() < qs_interface.get_cell_num())
+    {
+        log.warning() << "Problem size > autofail threshold, exiting." << std::endl;
+        return EXIT_FAILURE;
+    }
+
     log.echo() << "\n*** Invoke simulation ***" << std::endl;
     stopwatch.start();
     qs_interface.run_simulation();
