@@ -9,6 +9,7 @@
 #include "siqadconn.cc"
 #include "siqadconn.h"
 
+#include <fiction/algorithms/simulation/sidb/exhaustive_ground_state_simulation.hpp>
 #include <fiction/algorithms/simulation/sidb/quicksim.hpp>
 #include <fiction/algorithms/simulation/sidb/sidb_simulation_parameters.hpp>
 #include <fiction/layouts/cell_level_layout.hpp>
@@ -43,10 +44,11 @@ class quicksim_interface
 
     int run_simulation()
     {
-        while (sim_results.valid_lyts.empty())
-        {
-            fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, sim_par, &sim_results);
-        }
+        //        while (sim_results.valid_lyts.empty())
+        //        {
+        fiction::exhaustive_ground_state_simulation<fiction::sidb_cell_clk_lyt_siqad>(layout, sim_par.phys_params,
+                                                                                      &sim_results);
+        //       }
 
         return EXIT_SUCCESS;
     }
@@ -100,12 +102,12 @@ class quicksim_interface
         sqconn->writeResultsXml();
     }
 
-    [[nodiscard]] fiction::quicksim_params& get_quicksim_params() noexcept
+    [[nodiscard]] fiction::sidb_simulation_parameters& get_quicksim_params() noexcept
     {
-        return sim_par;
+        return sim_par.phys_params;
     }
 
-    [[nodiscard]] fiction::quicksim_stats<fiction::sidb_cell_clk_lyt_siqad> get_simulation_results() const noexcept
+    [[nodiscard]] fiction::exgs_stats<fiction::sidb_cell_clk_lyt_siqad> get_simulation_results() const noexcept
     {
         return sim_results;
     }
@@ -151,7 +153,7 @@ class quicksim_interface
             params.mu = std::stod(sqconn->getParameter("muzm"));
 
             params.epsilon_r = std::round(std::stod(sqconn->getParameter("eps_r")) * 100) / 100;  // round to two digits
-            params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
+            params.lambda_tf = std::stod(sqconn->getParameter("debye_length")) * 1E-9;
 
             auto_fail = std::stoi(sqconn->getParameter("autofail"));
 
@@ -187,7 +189,7 @@ class quicksim_interface
     const std::string_view                                    out_path;
     fiction::sidb_cell_clk_lyt_siqad                          layout{};
     fiction::quicksim_params                                  sim_par{};
-    fiction::quicksim_stats<fiction::sidb_cell_clk_lyt_siqad> sim_results{};
+    fiction::exgs_stats<fiction::sidb_cell_clk_lyt_siqad>     sim_results{};
 };
 
 #endif  // QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP

@@ -15,15 +15,12 @@
 
 TEST_CASE("Test if reading, simulating, and creating a result-file works", "[interface]")
 {
-    auto qs_interface = quicksim_interface{fmt::format("{}/sim_problem_0.xml", TEST_PATH),
-                                           fmt::format("{}/sim_result_0.xml", TEST_PATH), false};
+    auto qs_interface = quicksim_interface{fmt::format("{}/sim_problem_1.xml", TEST_PATH),
+                                           fmt::format("{}/sim_result_1.xml", TEST_PATH), false};
 
-    CHECK(qs_interface.get_quicksim_params().phys_params.lambda_tf == 5);
-    CHECK(qs_interface.get_quicksim_params().phys_params.epsilon_r == 5.6);
-    CHECK(qs_interface.get_quicksim_params().phys_params.mu == -.25);
-    CHECK(qs_interface.get_quicksim_params().interation_steps == 70);
-    CHECK(qs_interface.get_quicksim_params().alpha == 0.8);
-    CHECK(qs_interface.get_quicksim_params().number_threads == std::thread::hardware_concurrency());
+    CHECK(qs_interface.get_quicksim_params().lambda_tf == 5);
+    CHECK(qs_interface.get_quicksim_params().epsilon_r == 5.6);
+    CHECK(qs_interface.get_quicksim_params().mu == -.25);
 
     REQUIRE(qs_interface.run_simulation() == 0);
     REQUIRE(!qs_interface.get_simulation_results().valid_lyts.empty());
