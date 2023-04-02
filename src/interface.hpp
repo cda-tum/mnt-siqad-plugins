@@ -44,11 +44,9 @@ class quicksim_interface
 
     int run_simulation()
     {
-        //        while (sim_results.valid_lyts.empty())
-        //        {
+
         fiction::exhaustive_ground_state_simulation<fiction::sidb_cell_clk_lyt_siqad>(layout, sim_par.phys_params,
                                                                                       &sim_results);
-        //       }
 
         return EXIT_SUCCESS;
     }
@@ -82,8 +80,8 @@ class quicksim_interface
         //        {
         for (const auto& lyt : sim_results.valid_lyts)
         {
-            lyt.charge_distribution_to_index();
-            //                if (lyt.get_charge_index().first == index)
+            // lyt.charge_distribution_to_index();
+            //                 if (lyt.get_charge_index().first == index)
             //                {
             db_dist_data.push_back({{
                 fiction::charge_configuration_to_string(lyt.get_all_sidb_charges()),  // config
@@ -144,13 +142,10 @@ class quicksim_interface
             log.debug() << fmt::format("DB loc: x={}, y={}", db_locs.back().first, db_locs.back().second) << std::endl;
         }
 
-        fiction::sidb_simulation_parameters params{2};
-
         try
         {
             // variables: physical
-            params.mu = std::stod(sqconn->getParameter("muzm"));
-
+            fiction::sidb_simulation_parameters params{2, std::stod(sqconn->getParameter("muzm"))};
             params.epsilon_r = std::round(std::stod(sqconn->getParameter("eps_r")) * 100) / 100;  // round to two digits
             params.lambda_tf = std::stod(sqconn->getParameter("debye_length")) * 1E-9;
 

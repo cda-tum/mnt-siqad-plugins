@@ -15,7 +15,7 @@
 
 TEST_CASE("Test if reading, simulating, and creating a result-file works", "[interface]")
 {
-    auto qs_interface = quicksim_interface{fmt::format("{}/sim_problem_0.xml", TEST_PATH),
+    auto qs_interface = quicksim_interface{fmt::format("{}/sim_problem_1.xml", TEST_PATH),
                                            fmt::format("{}/sim_result_0.xml", TEST_PATH), false};
 
     CHECK(qs_interface.get_quicksim_params().lambda_tf == 5);
