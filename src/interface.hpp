@@ -151,7 +151,7 @@ class quicksim_interface
             params.mu = std::stod(sqconn->getParameter("muzm"));
 
             params.epsilon_r = std::round(std::stod(sqconn->getParameter("eps_r")) * 100) / 100;  // round to two digits
-            params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
+            params.lambda_tf = std::stod(sqconn->getParameter("debye_length")) * 1E-9;
 
             auto_fail = std::stoi(sqconn->getParameter("autofail"));
 
