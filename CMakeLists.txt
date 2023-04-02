@@ -13,39 +13,39 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/StandardProjectSettings.cmake)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs)
 
 # QuickSim source files
-set(QUICKSIM_SOURCES ${PROJECT_SOURCE_DIR}/src/main.cpp)
+set(QUICKEXACT_SOURCES ${PROJECT_SOURCE_DIR}/src/main.cpp)
 
 # Define the quicksim executable
-add_executable(quicksim ${QUICKSIM_SOURCES})
+add_executable(quickexact ${QUICKEXACT_SOURCES})
 # Link against the dependencies
-target_link_libraries(quicksim dependencies)
+target_link_libraries(quickexact dependencies)
 
 
 # Build tests
-option(QUICKSIM_TEST "Build QuickSim plugin tests" OFF)
-if (QUICKSIM_TEST)
+option(QUICKEXACT_TEST "Build QuickSim plugin tests" OFF)
+if (QUICKEXACT_TEST)
     enable_testing()
-    message(STATUS "Building QuickSim tests")
+    message(STATUS "Building QuickEXACT tests")
     add_subdirectory(test)
 endif ()
 
 
 # SiQAD installation
 if (DEFINED SIQAD_PLUGINS_ROOT)
-    set(QUICKSIM_INSTALL_DIR "${SIQAD_PLUGINS_ROOT}/quicksim")
+    set(QUICKEXACT_INSTALL_DIR "${SIQAD_PLUGINS_ROOT}/quickexact")
 elseif (CMAKE_BUILD_TYPE MATCHES Debug)
-    set(QUICKSIM_INSTALL_DIR "debug")
+    set(QUICKEXACT_INSTALL_DIR "debug")
 else ()
-    set(QUICKSIM_INSTALL_DIR "release")
+    set(QUICKEXACT_INSTALL_DIR "release")
 endif ()
 
 
 add_custom_command(
-        TARGET quicksim POST_BUILD
+        TARGET quickexact POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIR}/quicksim.physeng
+        ${CMAKE_CURRENT_SOURCE_DIR}/quickexact.physeng
         ${CMAKE_CURRENT_BINARY_DIR})
 
-install(TARGETS quicksim RUNTIME DESTINATION ${QUICKSIM_INSTALL_DIR})
-install(FILES quicksim.physeng DESTINATION ${QUICKSIM_INSTALL_DIR})
+install(TARGETS quickexact RUNTIME DESTINATION ${QUICKEXACT_INSTALL_DIR})
+install(FILES quickexact.physeng DESTINATION ${QUICKEXACT_INSTALL_DIR})
 

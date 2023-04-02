@@ -151,20 +151,9 @@ class quicksim_interface
 
             auto_fail = std::stoi(sqconn->getParameter("autofail"));
 
-            const auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
-            const auto alpha           = std::stod(sqconn->getParameter("alpha"));
-
-            // prevent number of threads to be negative
-            if (const auto number_threads = static_cast<int64_t>(std::stod(sqconn->getParameter("num_threads")));
-                number_threads >= 0)
-            {
-                // Update sim_par with number_threads
-                sim_par.number_threads = static_cast<uint64_t>(number_threads);
-            }
-
             log.echo() << "Retrieval from SiQADConn complete." << std::endl;
 
-            sim_par = fiction::quicksim_params{params, iteration_steps, alpha};
+            sim_par = fiction::quicksim_params{params};
         }
         catch (...)
         {

@@ -12,7 +12,7 @@ target_link_libraries(dependencies INTERFACE libfiction)
 target_include_directories(dependencies SYSTEM INTERFACE siqadconn/src/)
 
 # Include Catch2
-if (QUICKSIM_TEST)
+if (QUICKEXACT_TEST)
     add_subdirectory(Catch2/)
 endif ()
 
