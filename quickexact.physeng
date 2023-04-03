@@ -65,16 +65,5 @@ interpreter, bin_path, command
             <label>Screening distance (nm)</label>
             <tip>Thomas-Fermi screening distance.</tip>
         </debye_length>
-        <scope>
-                <T>string</T>
-                <val>ground</val>
-                <label>Result scope</label>
-                <tip>Types of results to include.</tip>
-                <value_selection type="ComboBox">
-                    <ground>Ground states only</ground>
-                    <valid>All metastable</valid>
-                    <all>All results</all>
-            </value_selection>
-        </scope>
     </sim_params>
 </physeng>
