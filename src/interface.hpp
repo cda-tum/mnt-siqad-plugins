@@ -15,6 +15,7 @@
 #include <fiction/technology/charge_distribution_surface.hpp>
 #include <fiction/traits.hpp>
 #include <fiction/types.hpp>
+#include <fiction/utils/math_utils.hpp>
 
 #include <fmt/format.h>
 
@@ -54,14 +55,14 @@ class quicksim_interface
     void write_sim_results()
     {
         // create the vector of strings for the db locations
-        const auto data = sim_results.valid_lyts.front().get_all_sidb_location_in_nm();
+        const auto data = sim_results.valid_lyts.front().get_all_sidb_locations_in_nm();
 
         std::vector<std::pair<std::string, std::string>> dbl_data{};
         dbl_data.reserve(data.size());
 
         for (const auto& d : data)
         {
-            dbl_data.emplace_back(std::to_string(d.first * 10E9), std::to_string(d.second * 10E9));
+            dbl_data.emplace_back(std::to_string(d.first * 10), std::to_string(d.second * 10));
         }
 
         sqconn->setExport("db_loc", dbl_data);
@@ -150,8 +151,9 @@ class quicksim_interface
             // variables: physical
             params.mu = std::stod(sqconn->getParameter("muzm"));
 
-            params.epsilon_r = std::round(std::stod(sqconn->getParameter("eps_r")) * 100) / 100;  // round to two digits
-            params.lambda_tf = std::stod(sqconn->getParameter("debye_length")) * 1E-9;
+            params.epsilon_r =
+                fiction::round_to_n_decimal_places(std::stod(sqconn->getParameter("eps_r")), 2);  // round to two digits
+            params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
 
             auto_fail = std::stoi(sqconn->getParameter("autofail"));
 
