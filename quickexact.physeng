@@ -65,5 +65,11 @@ interpreter, bin_path, command
             <label>Screening distance (nm)</label>
             <tip>Thomas-Fermi screening distance.</tip>
         </debye_length>
+        <autodetection>
+            <T>int</T>
+            <val>1</val>
+            <label>state autodetecion (1 == on)</label>
+            <tip>test</tip>
+        </autodetection>
     </sim_params>
 </physeng>

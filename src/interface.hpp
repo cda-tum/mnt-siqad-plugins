@@ -16,6 +16,7 @@
 #include <fiction/technology/charge_distribution_surface.hpp>
 #include <fiction/traits.hpp>
 #include <fiction/types.hpp>
+#include <fiction/utils/math_utils.hpp>
 
 #include <fmt/format.h>
 
@@ -60,7 +61,7 @@ class quicksim_interface
 
         for (const auto& d : data)
         {
-            dbl_data.emplace_back(std::to_string(d.first * 10E9), std::to_string(d.second * 10E9));
+            dbl_data.emplace_back(std::to_string(d.first * 10), std::to_string(d.second * 10));
         }
 
         sqconn->setExport("db_loc", dbl_data);
@@ -98,9 +99,9 @@ class quicksim_interface
         sqconn->writeResultsXml();
     }
 
-    [[nodiscard]] fiction::sidb_simulation_parameters& get_quicksim_params() noexcept
+    [[nodiscard]] fiction::sidb_simulation_parameters& get_physical_params() noexcept
     {
-        return sim_par.phys_params;
+        return params_all.physical_parameters;
     }
 
     [[nodiscard]] fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad>
@@ -145,15 +146,25 @@ class quicksim_interface
         try
         {
             // variables: physical
-            fiction::sidb_simulation_parameters params{2, std::stod(sqconn->getParameter("muzm"))};
-            params.epsilon_r = std::round(std::stod(sqconn->getParameter("eps_r")) * 100) / 100;  // round to two digits
-            params.lambda_tf = std::stod(sqconn->getParameter("debye_length")) * 1E-9;
+            fiction::sidb_simulation_parameters params{};
+            params.mu = std::stod(sqconn->getParameter("muzm"));
+
+            params.epsilon_r =
+                fiction::round_to_n_decimal_places(std::stod(sqconn->getParameter("eps_r")), 2);  // round to two digits
+            params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
 
             auto_fail = std::stoi(sqconn->getParameter("autofail"));
 
+            params_all.physical_parameters = params;
+            if (std::stoi(sqconn->getParameter("autodetection")) == 1)
+            {
+                params_all.base_number_detection = fiction::automatic_base_number_detection::ON;
+            }
+            else
+            {
+                params_all.base_number_detection = fiction::automatic_base_number_detection::OFF;
+            }
             log.echo() << "Retrieval from SiQADConn complete." << std::endl;
-
-            sim_par = fiction::quicksim_params{params};
         }
         catch (...)
         {
@@ -171,7 +182,6 @@ class quicksim_interface
     const std::string_view                                            in_path;
     const std::string_view                                            out_path;
     fiction::sidb_cell_clk_lyt_siqad                                  layout{};
-    fiction::quicksim_params                                          sim_par{};
     fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> sim_results{};
     fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>      params_all{};
 };
