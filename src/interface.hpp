@@ -9,7 +9,7 @@
 #include "siqadconn.cc"
 #include "siqadconn.h"
 
-#include <fiction/algorithms/simulation/sidb/exhaustive_ground_state_simulation.hpp>
+#include <fiction/algorithms/simulation/sidb/quickexact.hpp>
 #include <fiction/algorithms/simulation/sidb/quicksim.hpp>
 #include <fiction/algorithms/simulation/sidb/sidb_simulation_parameters.hpp>
 #include <fiction/layouts/cell_level_layout.hpp>
@@ -45,8 +45,7 @@ class quicksim_interface
     int run_simulation()
     {
 
-        fiction::exhaustive_ground_state_simulation<fiction::sidb_cell_clk_lyt_siqad>(layout, sim_par.phys_params,
-                                                                                      &sim_results);
+        sim_results = fiction::quickexact<fiction::sidb_cell_clk_lyt_siqad>(layout, params_all);
 
         return EXIT_SUCCESS;
     }
@@ -54,7 +53,7 @@ class quicksim_interface
     void write_sim_results()
     {
         // create the vector of strings for the db locations
-        const auto data = sim_results.valid_lyts.front().get_all_sidb_location_in_nm();
+        const auto data = sim_results.charge_distributions.front().get_all_sidb_locations_in_nm();
 
         std::vector<std::pair<std::string, std::string>> dbl_data{};
         dbl_data.reserve(data.size());
@@ -67,7 +66,7 @@ class quicksim_interface
         sqconn->setExport("db_loc", dbl_data);
 
         std::vector<std::vector<std::string>> db_dist_data{};
-        db_dist_data.reserve(sim_results.valid_lyts.size());
+        db_dist_data.reserve(sim_results.charge_distributions.size());
         //
         //        std::set<uint64_t> unique_index{};
         //        for (const auto& lyt : sim_results.valid_lyts)
@@ -78,7 +77,7 @@ class quicksim_interface
 
         //        for (const auto& index : unique_index)
         //        {
-        for (const auto& lyt : sim_results.valid_lyts)
+        for (const auto& lyt : sim_results.charge_distributions)
         {
             // lyt.charge_distribution_to_index();
             //                 if (lyt.get_charge_index().first == index)
@@ -104,7 +103,8 @@ class quicksim_interface
         return sim_par.phys_params;
     }
 
-    [[nodiscard]] fiction::exgs_stats<fiction::sidb_cell_clk_lyt_siqad> get_simulation_results() const noexcept
+    [[nodiscard]] fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad>
+    get_simulation_results() const noexcept
     {
         return sim_results;
     }
@@ -166,13 +166,14 @@ class quicksim_interface
     std::unique_ptr<SiQADConnector> sqconn = nullptr;
 
     // variables
-    uint64_t                                                  auto_fail;
-    const int                                                 log_level;
-    const std::string_view                                    in_path;
-    const std::string_view                                    out_path;
-    fiction::sidb_cell_clk_lyt_siqad                          layout{};
-    fiction::quicksim_params                                  sim_par{};
-    fiction::exgs_stats<fiction::sidb_cell_clk_lyt_siqad>     sim_results{};
+    uint64_t                                                          auto_fail;
+    const int                                                         log_level;
+    const std::string_view                                            in_path;
+    const std::string_view                                            out_path;
+    fiction::sidb_cell_clk_lyt_siqad                                  layout{};
+    fiction::quicksim_params                                          sim_par{};
+    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> sim_results{};
+    fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>      params_all{};
 };
 
 #endif  // QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP
