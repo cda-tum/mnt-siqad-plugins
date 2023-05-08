@@ -20,7 +20,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works", "[int
                                            fmt::format("{}/sim_result_0.xml", TEST_PATH), false};
 
     CHECK_THAT(qs_interface.get_quicksim_params().phys_params.lambda_tf,
-               Catch::Matchers::WithinAbs(5 * 10E-9, fiction::physical_constants::POP_STABILITY_ERR));
+               Catch::Matchers::WithinAbs(5, fiction::physical_constants::POP_STABILITY_ERR));
     CHECK(qs_interface.get_quicksim_params().phys_params.epsilon_r == 5.6);
     CHECK(qs_interface.get_quicksim_params().phys_params.mu == -.25);
     CHECK(qs_interface.get_quicksim_params().interation_steps == 70);
