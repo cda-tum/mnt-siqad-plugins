@@ -5,6 +5,13 @@
 [![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/windows.yml)
 [![arXiv](https://img.shields.io/static/v1?label=arXiv&message=2303.03422&color=informational&style=flat-square)](http://arxiv.org/abs/2303.03422)
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/_static/mnt_light.svg" width="60%">
+    <img src="docs/_static/mnt_dark.svg" width="60%">
+  </picture>
+</p>
+
 *QuickSim* is an accurate *and* efficient physical simulation algorithm for determining the charge distribution of
 atomic *Silicon Dangling Bond (SiDB)* assemblies. Since positively charged SiDBs are not yet used for logic, this
 algorithm is a 2-state simulation and neglects positively charged SiDBs, which is a reasonable assumption for SiDB
