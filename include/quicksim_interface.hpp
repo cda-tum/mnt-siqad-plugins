@@ -2,8 +2,8 @@
 // Created by Jan Drewniok on 31.01.23.
 //
 
-#ifndef QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP
-#define QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP
+#ifndef CDA_TUM_SIQAD_PLUGINS_QUICKSIM_INTERFACE_HPP
+#define CDA_TUM_SIQAD_PLUGINS_QUICKSIM_INTERFACE_HPP
 
 #include "logger.hpp"
 #include "siqadconn.cc"
@@ -192,4 +192,4 @@ class quicksim_interface
     fiction::quicksim_stats<fiction::sidb_cell_clk_lyt_siqad> sim_results{};
 };
 
-#endif  // QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP
+#endif  // CDA_TUM_SIQAD_PLUGINS_QUICKSIM_INTERFACE_HPP

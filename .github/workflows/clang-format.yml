@@ -32,15 +32,15 @@ jobs:
       - name: Run ClangFormat
         uses: DoozyX/clang-format-lint-action@v0.15
         with:
-          source: 'src test'
-          exclude: 'lib'
+          source: 'include plugins test'
+          exclude: 'libs'
           extensions: 'hpp,cpp'
           clangFormatVersion: 15
           inplace: True
 
       - uses: EndBug/add-and-commit@v9
         with:
-          add: 'src test'
+          add: 'include plugins test'
           commit: '--signoff'
           message: ':art: ClangFormat changes'
           author_name: ClangFormat

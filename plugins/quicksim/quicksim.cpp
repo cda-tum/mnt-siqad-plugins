@@ -2,7 +2,7 @@
 // Created by Jan Drewniok on 31.01.23.
 //
 
-#include "interface.hpp"
+#include "quicksim_interface.hpp"
 #include "timer.hpp"
 
 #include <fmt/format.h>
@@ -14,7 +14,7 @@
 
 int main(int argc, char* argv[])
 {
-    std::cout << "Physeng invoked" << std::endl;
+    std::cout << "QuickSim invoked" << std::endl;
 
     const std::vector<std::string_view> cml_args(argv, argv + argc);
 
