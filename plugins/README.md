@@ -13,4 +13,5 @@ The folder name, source file name and configuration file name must be identical!
 
 For instance if you want to create a plugin called `myplugin`, you must create a folder called `myplugin` and add a file
 called `myplugin.cpp` and `myplugin.physeng`.
+
 ---
