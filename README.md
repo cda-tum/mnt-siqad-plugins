@@ -62,9 +62,11 @@ QuickSim is now available in the engine list.
 
 If you use __QuickSim__ in your work, we would appreciate it if you cite the following publication:
 
-[@INPROCEEDINGS{drewniok2023quicksimIEEE,
+```bibtex
+@INPROCEEDINGS{drewniok2023quicksimIEEE,
   title={{\emph{QuickSim}: Efficient \emph{and} Accurate Physical Simulation of Silicon Dangling Bond Logic}},
   author={Drewniok, Jan and Walter, Marcel and Ng, Samuel Sze Hang and Walus, Konrad and Wille, Robert},
   booktitle={IEEE International Conference on Nanotechnology (IEEE-NANO)},
   year={2023},
-}]
+}
+```
