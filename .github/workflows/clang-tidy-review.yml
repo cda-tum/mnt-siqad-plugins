@@ -19,7 +19,7 @@ jobs:
           submodules: recursive
 
       - name: Review code with Clang-Tidy
-        uses: ZedThree/clang-tidy-review@v0.13.1
+        uses: ZedThree/clang-tidy-review@v0.13.2
         id: review
         with:
           apt_packages: 'libboost-all-dev,libtbb-dev'
