@@ -44,9 +44,9 @@ class quicksim_interface
 
     int run_simulation()
     {
-        while (sim_results.valid_lyts.empty())
+        while (sim_results.charge_distributions.empty())
         {
-            fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, sim_par, &sim_results);
+            sim_results = fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, sim_par);
         }
 
         return EXIT_SUCCESS;
@@ -55,7 +55,7 @@ class quicksim_interface
     void write_sim_results()
     {
         // create the vector of strings for the db locations
-        const auto data = sim_results.valid_lyts.front().get_all_sidb_locations_in_nm();
+        const auto data = sim_results.charge_distributions.front().get_all_sidb_locations_in_nm();
 
         std::vector<std::pair<std::string, std::string>> dbl_data{};
         dbl_data.reserve(data.size());
@@ -68,10 +68,10 @@ class quicksim_interface
         sqconn->setExport("db_loc", dbl_data);
 
         std::vector<std::vector<std::string>> db_dist_data{};
-        db_dist_data.reserve(sim_results.valid_lyts.size());
+        db_dist_data.reserve(sim_results.charge_distributions.size());
 
         std::set<uint64_t> unique_index{};
-        for (const auto& lyt : sim_results.valid_lyts)
+        for (const auto& lyt : sim_results.charge_distributions)
         {
             lyt.charge_distribution_to_index();
             unique_index.insert(lyt.get_charge_index().first);
@@ -79,7 +79,7 @@ class quicksim_interface
 
         for (const auto& index : unique_index)
         {
-            for (const auto& lyt : sim_results.valid_lyts)
+            for (const auto& lyt : sim_results.charge_distributions)
             {
                 lyt.charge_distribution_to_index();
                 if (lyt.get_charge_index().first == index)
@@ -106,7 +106,8 @@ class quicksim_interface
         return sim_par;
     }
 
-    [[nodiscard]] fiction::quicksim_stats<fiction::sidb_cell_clk_lyt_siqad> get_simulation_results() const noexcept
+    [[nodiscard]] fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad>
+    get_simulation_results() const noexcept
     {
         return sim_results;
     }
@@ -149,7 +150,7 @@ class quicksim_interface
         try
         {
             // variables: physical
-            params.mu = std::stod(sqconn->getParameter("muzm"));
+            params.mu_minus = std::stod(sqconn->getParameter("muzm"));
 
             params.epsilon_r =
                 fiction::round_to_n_decimal_places(std::stod(sqconn->getParameter("eps_r")), 2);  // round to two digits
@@ -183,13 +184,13 @@ class quicksim_interface
     std::unique_ptr<SiQADConnector> sqconn = nullptr;
 
     // variables
-    uint64_t                                                  auto_fail;
-    const int                                                 log_level;
-    const std::string_view                                    in_path;
-    const std::string_view                                    out_path;
-    fiction::sidb_cell_clk_lyt_siqad                          layout{};
-    fiction::quicksim_params                                  sim_par{};
-    fiction::quicksim_stats<fiction::sidb_cell_clk_lyt_siqad> sim_results{};
+    uint64_t                                                          auto_fail;
+    const int                                                         log_level;
+    const std::string_view                                            in_path;
+    const std::string_view                                            out_path;
+    fiction::sidb_cell_clk_lyt_siqad                                  layout{};
+    fiction::quicksim_params                                          sim_par{};
+    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> sim_results{};
 };
 
 #endif  // QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP
