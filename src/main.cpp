@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 
     log.echo() << "\n*** Initiate QuickSim interface ***" << std::endl;
     log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
-    auto qs_interface = quicksim_interface{if_name, of_name, verbose};
+    auto qs_interface = quickexact_interface{if_name, of_name, verbose};
 
     if (qs_interface.get_auto_fail() < qs_interface.get_cell_num())
     {

@@ -7,13 +7,11 @@
         <date>2023-02-15 15:30:39</date>
     </program>
     <sim_params>
-        <alpha>0.8</alpha>
         <debye_length>5</debye_length>
         <autofail>30</autofail>
         <eps_r>5.599999904632568</eps_r>
-        <iteration_steps>70</iteration_steps>
-        <num_threads>-1</num_threads>
         <muzm>-0.25</muzm>
+        <autodetection>1</autodetection>
     </sim_params>
     <!--GUI Flags-->
     <gui>
@@ -84,38 +82,20 @@
             </dbdot>
             <dbdot>
                 <layer_id>2</layer_id>
-                <latcoord n="53" m="21" l="1"/>
+                <latcoord n="51" m="24" l="0"/>
                 <physloc x="203.52" y="163.53"/>
                 <color>#ffc8c8c8</color>
             </dbdot>
             <dbdot>
                 <layer_id>2</layer_id>
-                <latcoord n="56" m="23" l="0"/>
+                <latcoord n="52" m="24" l="0"/>
                 <physloc x="215.04" y="176.64"/>
                 <color>#ffc8c8c8</color>
             </dbdot>
             <dbdot>
                 <layer_id>2</layer_id>
-                <latcoord n="57" m="24" l="1"/>
-                <physloc x="218.88" y="186.57"/>
-                <color>#ffc8c8c8</color>
-            </dbdot>
-            <dbdot>
-                <layer_id>2</layer_id>
-                <latcoord n="63" m="21" l="1"/>
-                <physloc x="241.92" y="163.53"/>
-                <color>#ffc8c8c8</color>
-            </dbdot>
-            <dbdot>
-                <layer_id>2</layer_id>
-                <latcoord n="58" m="20" l="1"/>
-                <physloc x="222.72" y="155.85"/>
-                <color>#ffc8c8c8</color>
-            </dbdot>
-            <dbdot>
-                <layer_id>2</layer_id>
-                <latcoord n="60" m="23" l="0"/>
-                <physloc x="230.4" y="176.64"/>
+                <latcoord n="53" m="24" l="0"/>
+                <physloc x="215.04" y="176.64"/>
                 <color>#ffc8c8c8</color>
             </dbdot>
         </layer>

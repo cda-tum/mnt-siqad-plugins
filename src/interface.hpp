@@ -10,7 +10,6 @@
 #include "siqadconn.h"
 
 #include <fiction/algorithms/simulation/sidb/quickexact.hpp>
-#include <fiction/algorithms/simulation/sidb/quicksim.hpp>
 #include <fiction/algorithms/simulation/sidb/sidb_simulation_parameters.hpp>
 #include <fiction/layouts/cell_level_layout.hpp>
 #include <fiction/technology/charge_distribution_surface.hpp>
@@ -28,17 +27,17 @@
 #include <string_view>
 #include <utility>
 
-class quicksim_interface
+class quickexact_interface
 {
   public:
     //! Constructor for QuickSimInterface
-    quicksim_interface(const std::string_view& t_in_path, const std::string_view& t_out_path, const bool verbose = true,
-                       const int log_l = logger::MSG) :
+    quickexact_interface(const std::string_view& t_in_path, const std::string_view& t_out_path,
+                         const bool verbose = true, const int log_l = logger::MSG) :
             log_level{log_l},
             in_path{t_in_path},
             out_path{t_out_path}
     {
-        sqconn = std::make_unique<SiQADConnector>("QuickSim", static_cast<std::string>(in_path),
+        sqconn = std::make_unique<SiQADConnector>("QuickExact", static_cast<std::string>(in_path),
                                                   static_cast<std::string>(out_path), verbose);
         initialize_fiction_layout();
     }
@@ -102,6 +101,11 @@ class quicksim_interface
     [[nodiscard]] fiction::sidb_simulation_parameters& get_physical_params() noexcept
     {
         return params_all.physical_parameters;
+    }
+
+    [[nodiscard]] fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>& get_quickexact_params() noexcept
+    {
+        return params_all;
     }
 
     [[nodiscard]] fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad>
