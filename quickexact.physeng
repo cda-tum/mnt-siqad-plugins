@@ -68,8 +68,8 @@ interpreter, bin_path, command
         <autodetection>
             <T>int</T>
             <val>1</val>
-            <label>state autodetecion (1 == on)</label>
-            <tip>test</tip>
+            <label>simulation base number autodetecion (1 if on)</label>
+            <tip>This mode allows to automatically detect if 3-state simulation is required</tip>
         </autodetection>
     </sim_params>
 </physeng>
