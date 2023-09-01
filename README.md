@@ -1,8 +1,8 @@
 # QuickSim Plugin for SiQAD
 
-[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/ubuntu.yml)
-[![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/macos.yml)
-[![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/windows.yml)
+[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/actions/workflows/ubuntu.yml)
+[![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/actions/workflows/macos.yml)
+[![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/actions/workflows/windows.yml)
 [![arXiv](https://img.shields.io/static/v1?label=arXiv&message=2303.03422&color=informational&style=flat-square)](http://arxiv.org/abs/2303.03422)
 
 <p align="center">
@@ -17,7 +17,7 @@ atomic *Silicon Dangling Bond (SiDB)* assemblies. Since positively charged SiDBs
 algorithm is a 2-state simulation and neglects positively charged SiDBs, which is a reasonable assumption for SiDB
 assemblies without closely spaced SiDBs.
 
-QuickSim is implemented on top of the [*fiction*](https://github.com/marcelwa/fiction/) framework. This plugin makes the
+QuickSim is implemented on top of the [*fiction*](https://github.com/cda-tum/fiction/) framework. This plugin makes the
 algorithm available inside the [SiQAD](https://github.com/siqad/siqad) GUI.
 
 #### General information:
@@ -36,10 +36,10 @@ All you need is a `git` client, `cmake`, the [`Boost`](https://www.boost.org/) l
 > Clone the repository and its submodules:
 
 ```bash
-git clone --recursive https://github.com/cda-tum/quicksim-siqad-plugin.git
+git clone --recursive https://github.com/cda-tum/mnt-siqad-plugins.git
 ```
 
-> Inside the newly cloned `quicksim-siqad-plugin` folder, trigger the build process:
+> Inside the newly cloned `quicksim-siqad-plugins` folder, trigger the build process:
 
 ```bash
 cmake . -B build
@@ -53,7 +53,7 @@ Make sure you have [SiQAD](https://github.com/siqad/siqad) installed and the Qui
 
 Navigate to `<PATH-TO-SIQAD>/plugins/` and create a new folder called `quicksim`.
 
-Move the `quicksim` binary and the `quicksim.physeng` file from `quicksim-siqad-plugin/build/` to the newly
+Move the `quicksim` binary and the `quicksim.physeng` file from `mnt-siqad-plugins/build/` to the newly
 created`siqad/plugins/quicksim/` and restart SiQAD.
 
 QuickSim is now available in the engine list.
