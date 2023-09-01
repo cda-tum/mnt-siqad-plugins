@@ -1,8 +1,8 @@
 # QuickSim Plugin for SiQAD
 
-[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/ubuntu.yml)
-[![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/macos.yml)
-[![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/windows.yml)
+[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugin/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugin/actions/workflows/ubuntu.yml)
+[![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugin/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugin/actions/workflows/macos.yml)
+[![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugin/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugin/actions/workflows/windows.yml)
 [![arXiv](https://img.shields.io/static/v1?label=arXiv&message=2303.03422&color=informational&style=flat-square)](http://arxiv.org/abs/2303.03422)
 
 <p align="center">
@@ -36,7 +36,7 @@ All you need is a `git` client, `cmake`, the [`Boost`](https://www.boost.org/) l
 > Clone the repository and its submodules:
 
 ```bash
-git clone --recursive https://github.com/cda-tum/quicksim-siqad-plugin.git
+git clone --recursive https://github.com/cda-tum/mnt-siqad-plugin.git
 ```
 
 > Inside the newly cloned `quicksim-siqad-plugin` folder, trigger the build process:
@@ -53,7 +53,7 @@ Make sure you have [SiQAD](https://github.com/siqad/siqad) installed and the Qui
 
 Navigate to `<PATH-TO-SIQAD>/plugins/` and create a new folder called `quicksim`.
 
-Move the `quicksim` binary and the `quicksim.physeng` file from `quicksim-siqad-plugin/build/` to the newly
+Move the `quicksim` binary and the `quicksim.physeng` file from `mnt-siqad-plugin/build/` to the newly
 created`siqad/plugins/quicksim/` and restart SiQAD.
 
 QuickSim is now available in the engine list.
