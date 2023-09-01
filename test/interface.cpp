@@ -20,7 +20,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works", "[int
 
     CHECK(qs_interface.get_physical_params().lambda_tf == 5);
     CHECK(qs_interface.get_physical_params().epsilon_r == 5.6);
-    CHECK(qs_interface.get_physical_params().mu == -.25);
+    CHECK(qs_interface.get_physical_params().mu_minus == -.25);
     CHECK(qs_interface.get_quickexact_params().base_number_detection == fiction::automatic_base_number_detection::ON);
 
     REQUIRE(qs_interface.run_simulation() == 0);

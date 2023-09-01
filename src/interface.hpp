@@ -151,7 +151,7 @@ class quickexact_interface
         {
             // variables: physical
             fiction::sidb_simulation_parameters params{};
-            params.mu = std::stod(sqconn->getParameter("muzm"));
+            params.mu_minus = std::stod(sqconn->getParameter("muzm"));
 
             params.epsilon_r =
                 fiction::round_to_n_decimal_places(std::stod(sqconn->getParameter("eps_r")), 2);  // round to two digits
