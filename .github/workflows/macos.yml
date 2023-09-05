@@ -73,6 +73,9 @@ jobs:
         with:
           xcode-version: "^13.2"
 
+      - name: Cleanup Homebrew Cache
+        run: brew cleanup
+
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
