@@ -2,8 +2,10 @@
 // Created by Jan Drewniok on 31.01.23.
 //
 
-#include "quicksim_interface.hpp"
+#include "siqad_plugin_interface.hpp"
 #include "timer.hpp"
+
+#include <fiction/algorithms/simulation/sidb/enum_class_exhaustive_algorithm.hpp>
 
 #include <fmt/format.h>
 
@@ -57,7 +59,8 @@ int main(int argc, char* argv[])
 
     log.echo() << "\n*** Initiate QuickSim interface ***" << std::endl;
     log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
-    auto qs_interface = quicksim_interface{if_name, of_name, verbose};
+    auto qs_interface =
+        siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::exhaustive_algorithm::EXGS};
 
     if (qs_interface.get_auto_fail() < qs_interface.get_cell_num())
     {
