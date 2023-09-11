@@ -63,7 +63,7 @@ jobs:
           brew install boost tbb
 
       - name: Clone Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
