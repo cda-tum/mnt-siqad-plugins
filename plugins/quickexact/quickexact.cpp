@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
     log.echo() << "\n*** Initiate QuickExact interface ***" << std::endl;
     log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
     auto qs_interface =
-        siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::exhaustive_algorithm::EXGS};
+        siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::exhaustive_algorithm::QUICKEXACT};
 
     if (qs_interface.get_auto_fail() < qs_interface.get_cell_num())
     {
