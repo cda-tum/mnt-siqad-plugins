@@ -80,21 +80,9 @@ class siqad_plugin_interface
 
         std::vector<std::vector<std::string>> db_dist_data{};
         db_dist_data.reserve(sim_results.charge_distributions.size());
-        //
-        //        std::set<uint64_t> unique_index{};
-        //        for (const auto& lyt : sim_results.valid_lyts)
-        //        {
-        //            lyt.charge_distribution_to_index();
-        //            unique_index.insert(lyt.get_charge_index().first);
-        //        }
 
-        //        for (const auto& index : unique_index)
-        //        {
         for (const auto& lyt : sim_results.charge_distributions)
         {
-            // lyt.charge_distribution_to_index();
-            //                 if (lyt.get_charge_index().first == index)
-            //                {
             db_dist_data.push_back({{
                 fiction::charge_configuration_to_string(lyt.get_all_sidb_charges()),  // config
                 std::to_string(lyt.get_system_energy()),                              // energy
@@ -102,8 +90,6 @@ class siqad_plugin_interface
                 "1",                                                                  // metastability
                 "3"  // 3-state (GUI still does not work for 2)
             }});
-            //  break;
-            //   }
         }
 
         sqconn->setExport("db_charge", db_dist_data);
@@ -119,6 +105,11 @@ class siqad_plugin_interface
     [[nodiscard]] fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>& get_quickexact_params() noexcept
     {
         return params_all;
+    }
+
+    [[nodiscard]] fiction::quicksim_params& get_quicksim_params() noexcept
+    {
+        return sim_par;
     }
 
     [[nodiscard]] fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad>
@@ -174,6 +165,7 @@ class siqad_plugin_interface
 
             if (simulation_engine == fiction::exhaustive_algorithm::QUICKEXACT)
             {
+                params.base                    = static_cast<uint8_t>(std::stoi(sqconn->getParameter("base_number")));
                 params_all.physical_parameters = params;
                 if (std::stoi(sqconn->getParameter("autodetection")) == 1)
                 {
