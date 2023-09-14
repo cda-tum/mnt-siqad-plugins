@@ -81,46 +81,29 @@ class siqad_plugin_interface
         std::vector<std::vector<std::string>> db_dist_data{};
         db_dist_data.reserve(sim_results.charge_distributions.size());
 
-        if (simulation_engine == fiction::exhaustive_algorithm::EXGS)
+        std::set<uint64_t> unique_index{};
+        for (auto& lyt : sim_results.charge_distributions)
         {
-            std::set<uint64_t> unique_index{};
+            lyt.charge_distribution_to_index_general();
+            unique_index.insert(lyt.get_charge_index_and_base().first);
+        }
+
+        for (const auto& index : unique_index)
+        {
             for (auto& lyt : sim_results.charge_distributions)
             {
                 lyt.charge_distribution_to_index_general();
-                unique_index.insert(lyt.get_charge_index_and_base().first);
-            }
-
-            for (const auto& index : unique_index)
-            {
-                for (auto& lyt : sim_results.charge_distributions)
+                if (lyt.get_charge_index_and_base().first == index)
                 {
-                    lyt.charge_distribution_to_index_general();
-                    if (lyt.get_charge_index_and_base().first == index)
-                    {
-                        db_dist_data.push_back({{
-                            fiction::charge_configuration_to_string(lyt.get_all_sidb_charges()),  // config
-                            std::to_string(lyt.get_system_energy()),                              // energy
-                            std::to_string(1),                                                    // occurrence freq
-                            "1",                                                                  // metastability
-                            "3"  // 3-state (GUI still does not work for 2)
-                        }});
-                        break;
-                    }
+                    db_dist_data.push_back({{
+                        fiction::charge_configuration_to_string(lyt.get_all_sidb_charges()),  // config
+                        std::to_string(lyt.get_system_energy()),                              // energy
+                        std::to_string(1),                                                    // occurrence freq
+                        "1",                                                                  // metastability
+                        "3"  // 3-state (GUI still does not work for 2)
+                    }});
+                    break;
                 }
-            }
-        }
-
-        else if (simulation_engine == fiction::exhaustive_algorithm::QUICKEXACT)
-        {
-            for (const auto& lyt : sim_results.charge_distributions)
-            {
-                db_dist_data.push_back({{
-                    fiction::charge_configuration_to_string(lyt.get_all_sidb_charges()),  // config
-                    std::to_string(lyt.get_system_energy()),                              // energy
-                    std::to_string(1),                                                    // occurrence freq
-                    "1",                                                                  // metastability
-                    "3"  // 3-state (GUI still does not work for 2)
-                }});
             }
         }
 
