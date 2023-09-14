@@ -79,3 +79,25 @@ directory to the newly created `siqad/plugins/quicksim/` and `siqad/plugins/quic
 restart SiQAD.
 
 *QuickExact* and *QuickSim* are now available in the engine list.
+
+## References
+
+If you use __QuickSim__ in your work, we would appreciate it if you cite the following publication:
+
+```bibtex
+@INPROCEEDINGS{10231266,
+  author={Drewniok, Jan and Walter, Marcel and Hang Ng, Samuel Sze and Walus, Konrad and Wille, Robert},
+  title={{\emph{QuickSim}: Efficient \emph{and} Accurate Physical Simulation of Silicon Dangling Bond Logic}},
+  year={2023},
+  pages={817-822},
+  doi={10.1109/NANO58406.2023.10231266}}
+
+@misc{drewniok2023need,
+  author={Drewniok, Jan and Walter, Marcel and Wille, Robert},
+  title={{The Need for Speed: Efficient Exact Simulation of Silicon Dangling Bond Logic}}, 
+  year={2023},
+  eprint={2308.04487},
+  archivePrefix={arXiv},
+  primaryClass={physics.app-ph}
+}
+```
