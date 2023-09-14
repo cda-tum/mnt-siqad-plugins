@@ -41,48 +41,52 @@ class siqad_plugin_interface
             out_path{t_out_path},
             simulation_engine{engine}
     {
-        sqconn = std::make_unique<SiQADConnector>("QuickExact", static_cast<std::string>(in_path),
+        sqconn = std::make_unique<SiQADConnector>("", static_cast<std::string>(in_path),
                                                   static_cast<std::string>(out_path), verbose);
         initialize_fiction_layout();
     }
 
+    // conduct physical simulation for given layout
     int run_simulation()
     {
         if (simulation_engine == fiction::exhaustive_algorithm::QUICKEXACT)
         {
-            sim_results = fiction::quickexact<fiction::sidb_cell_clk_lyt_siqad>(layout, params_all);
+            simulation_results = fiction::quickexact<fiction::sidb_cell_clk_lyt_siqad>(layout, quickexact_params);
         }
         else if (simulation_engine == fiction::exhaustive_algorithm::EXGS)
         {
-            while (sim_results.charge_distributions.empty())
+            std::size_t invocations = 0;
+            while (simulation_results.charge_distributions.empty() && invocations < 100)
             {
-                sim_results = fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, sim_par);
+                invocations += 1;
+                simulation_results = fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, quicksim_params);
             }
         }
 
         return EXIT_SUCCESS;
     }
 
-    void write_sim_results()
+    // simulation results are written to xml
+    void write_simulation_results()
     {
         // create the vector of strings for the db locations
-        const auto data = sim_results.charge_distributions.front().get_all_sidb_locations_in_nm();
+        const auto data = simulation_results.charge_distributions.front().get_all_sidb_locations_in_nm();
 
         std::vector<std::pair<std::string, std::string>> dbl_data{};
         dbl_data.reserve(data.size());
 
-        for (const auto& d : data)
+        for (const auto& [x, y] : data)
         {
-            dbl_data.emplace_back(std::to_string(d.first * 10), std::to_string(d.second * 10));
+            dbl_data.emplace_back(std::to_string(x * 10), std::to_string(y * 10));
         }
 
         sqconn->setExport("db_loc", dbl_data);
 
         std::vector<std::vector<std::string>> db_dist_data{};
-        db_dist_data.reserve(sim_results.charge_distributions.size());
+        db_dist_data.reserve(simulation_results.charge_distributions.size());
 
         std::set<uint64_t> unique_index{};
-        for (auto& lyt : sim_results.charge_distributions)
+        for (const auto& lyt : simulation_results.charge_distributions)
         {
             lyt.charge_distribution_to_index_general();
             unique_index.insert(lyt.get_charge_index_and_base().first);
@@ -90,7 +94,7 @@ class siqad_plugin_interface
 
         for (const auto& index : unique_index)
         {
-            for (auto& lyt : sim_results.charge_distributions)
+            for (const auto& lyt : simulation_results.charge_distributions)
             {
                 lyt.charge_distribution_to_index_general();
                 if (lyt.get_charge_index_and_base().first == index)
@@ -111,39 +115,40 @@ class siqad_plugin_interface
 
         sqconn->writeResultsXml();
     }
-
+    // get the physical parameters used for the simulation
     [[nodiscard]] fiction::sidb_simulation_parameters& get_physical_params() noexcept
     {
-        return params_all.physical_parameters;
+        return quickexact_params.physical_parameters;
     }
-
+    // get the quickexact parameter
     [[nodiscard]] fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>& get_quickexact_params() noexcept
     {
-        return params_all;
+        return quickexact_params;
     }
-
+    // get the quicksim parameter
     [[nodiscard]] fiction::quicksim_params& get_quicksim_params() noexcept
     {
-        return sim_par;
+        return quicksim_params;
     }
-
+    // get the simulation results
     [[nodiscard]] fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad>
     get_simulation_results() const noexcept
     {
-        return sim_results;
+        return simulation_results;
     }
-
+    // get number of SiDBs set at auto fail
     [[nodiscard]] uint64_t get_auto_fail() const
     {
         return auto_fail;
     }
-
+    // get the number of cells of the given layout
     [[nodiscard]] uint64_t get_cell_num() const
     {
         return layout.num_cells();
     }
 
   private:
+    // parameters are initialized and prepared for the simulation
     void initialize_fiction_layout()
     {
         logger log(log_level);
@@ -180,15 +185,15 @@ class siqad_plugin_interface
 
             if (simulation_engine == fiction::exhaustive_algorithm::QUICKEXACT)
             {
-                params.base                    = static_cast<uint8_t>(std::stoi(sqconn->getParameter("base_number")));
-                params_all.physical_parameters = params;
+                params.base = static_cast<uint8_t>(std::stoi(sqconn->getParameter("base_number")));
+                quickexact_params.physical_parameters = params;
                 if (std::stoi(sqconn->getParameter("autodetection")) == 1)
                 {
-                    params_all.base_number_detection = fiction::automatic_base_number_detection::ON;
+                    quickexact_params.base_number_detection = fiction::automatic_base_number_detection::ON;
                 }
                 else
                 {
-                    params_all.base_number_detection = fiction::automatic_base_number_detection::OFF;
+                    quickexact_params.base_number_detection = fiction::automatic_base_number_detection::OFF;
                 }
             }
             else if (simulation_engine == fiction::exhaustive_algorithm::EXGS)
@@ -200,10 +205,10 @@ class siqad_plugin_interface
                 if (const auto number_threads = static_cast<int64_t>(std::stod(sqconn->getParameter("num_threads")));
                     number_threads >= 0)
                 {
-                    // Update sim_par with number_threads
-                    sim_par.number_threads = static_cast<uint64_t>(number_threads);
+                    // Update quicksim_params with number_threads
+                    quicksim_params.number_threads = static_cast<uint64_t>(number_threads);
                 }
-                sim_par = fiction::quicksim_params{params, iteration_steps, alpha};
+                quicksim_params = fiction::quicksim_params{params, iteration_steps, alpha};
             }
             log.echo() << "Retrieval from SiQADConn complete." << std::endl;
         }
@@ -218,14 +223,14 @@ class siqad_plugin_interface
     std::unique_ptr<SiQADConnector> sqconn = nullptr;
 
     // variables
-    uint64_t                                                          auto_fail;
-    const int                                                         log_level;
-    const std::string_view                                            in_path;
-    const std::string_view                                            out_path;
+    uint64_t                                                          auto_fail{};
+    const int                                                         log_level{};
+    const std::string_view                                            in_path{};
+    const std::string_view                                            out_path{};
     fiction::sidb_cell_clk_lyt_siqad                                  layout{};
-    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> sim_results{};
-    fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>      params_all{};
-    fiction::quicksim_params                                          sim_par{};
+    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> simulation_results{};
+    fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>      quickexact_params{};
+    fiction::quicksim_params                                          quicksim_params{};
     fiction::exhaustive_algorithm                                     simulation_engine{};
 };
 

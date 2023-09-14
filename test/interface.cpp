@@ -48,7 +48,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
     CHECK(qs_interface.get_simulation_results().charge_distributions[0].get_cell_type({50, 24, 0}) ==
           fiction::sidb_cell_clk_lyt_siqad::cell_type::NORMAL);
 
-    qs_interface.write_sim_results();
+    qs_interface.write_simulation_results();
 
     CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_PATH)));
 }
@@ -86,7 +86,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
     CHECK(qs_interface.get_simulation_results().charge_distributions[0].get_cell_type({50, 24, 0}) ==
           fiction::sidb_cell_clk_lyt_siqad::cell_type::NORMAL);
 
-    qs_interface.write_sim_results();
+    qs_interface.write_simulation_results();
 
     CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_PATH)));
 }

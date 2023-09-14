@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
     stopwatch.end();
 
     log.echo() << "\n*** Write simulation results ***" << std::endl;
-    qs_interface.write_sim_results();
+    qs_interface.write_simulation_results();
 
     log.echo() << "\n*** QuickSim Complete ***" << std::endl;
 
