@@ -1,9 +1,10 @@
-# QuickSim Plugin for SiQAD
+# *Munich Nanotech Toolkit (MNT)* Plugin for SiQAD
 
 [![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/ubuntu.yml)
 [![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/macos.yml)
 [![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/windows.yml)
-[![arXiv](https://img.shields.io/static/v1?label=arXiv&message=2303.03422&color=informational&style=flat-square)](http://arxiv.org/abs/2303.03422)
+[![IEEEXplore](https://img.shields.io/static/v1?label=IEEEXplore&message=QuickSim&color=informational&style=flat-square)](https://ieeexplore.ieee.org/document/10231266)
+[![arXiv](https://img.shields.io/static/v1?label=arXiv&message=QuickExact&color=informational&style=flat-square)](https://arxiv.org/abs/2308.04487)
 
 <p align="center">
   <picture>
@@ -12,20 +13,39 @@
   </picture>
 </p>
 
-*QuickSim* is an accurate *and* efficient physical simulation algorithm for determining the charge distribution of
-atomic *Silicon Dangling Bond (SiDB)* assemblies. Since positively charged SiDBs are not yet used for logic, this
-algorithm is a 2-state simulation and neglects positively charged SiDBs, which is a reasonable assumption for SiDB
-assemblies without closely spaced SiDBs.
-
-QuickSim is implemented on top of the [*fiction*](https://github.com/marcelwa/fiction/) framework. This plugin makes the
-algorithm available inside the [SiQAD](https://github.com/siqad/siqad) GUI.
+This plugin provides two Physical Simulators for *Silicon Dangling Bond (SiDB)* Logic: __*QuickExact*__
+and __*QuickSim*__.
 
 #### General information:
 
-- QuickSim enables the tuning of simulation parameters: `iteration steps` and `alpha`. For gate layouts, there should be
+Both are implemented on top of the [*fiction*](https://github.com/cda-tum/fiction) framework. This plugin makes the
+simulators available inside the [SiQAD](https://github.com/siqad/siqad) GUI.
+
+##### *QuickExact*
+
+*QuickExact* is an exact simulator,
+i.e., it determines __all__ physically valid charge configurations of a given layout with __100 % accuracy__.
+
+- The parameter `simulation base number autodetection` determines whether the simulation should automatically assess and
+  set the required base number before starting. When set to `0` (off), this feature is disabled. However, when set to
+  `1` (on), the simulation evaluates the possibility of positively charged SiDBs occurring based on the provided
+  physical
+  parameters or the proximity of SiDBs. If there's a potential for positively charged SiDBs, the base number is
+  dynamically set to 3. Otherwise, it is set to 2. This ensures that the simulation consistently delivers correct
+  results.
+
+##### *QuickSim*
+
+*QuickSim* is an approximate 2-state simulator for determining the ground state of a given SiDB
+layout.
+
+- It enables the tuning of several simulation parameters: `iteration steps` and `alpha`. For gate layouts, there should
+  be
   no need to adjust the default values. If no solution is found, however, `iteration steps` can be increased
   or `alpha` reduced to enable high-effort simulation.
-- QuickSim returns physically valid charge configurations only.
+- The `Instance count` parameter gives control over the number of threads used for the simulation.
+  When set to `-1`, *QuickSim* maximizes computational resources by utilizing all available threads, optimizing
+  simulation efficiency.
 
 ## Quick Start
 
@@ -36,10 +56,10 @@ All you need is a `git` client, `cmake`, the [`Boost`](https://www.boost.org/) l
 > Clone the repository and its submodules:
 
 ```bash
-git clone --recursive https://github.com/cda-tum/quicksim-siqad-plugin.git
+git clone --recursive https://github.com/cda-tum/mnt-siqad-plugin.git
 ```
 
-> Inside the newly cloned `quicksim-siqad-plugin` folder, trigger the build process:
+> Inside the newly cloned `mnt-siqad-plugin` folder, trigger the build process:
 
 ```bash
 cmake . -B build
@@ -47,13 +67,15 @@ cd build
 cmake --build . -j4
 ```
 
-### Using QuickSim in the SiQAD GUI
+### Using *QuickExact* and *QuickSim* in the SiQAD GUI
 
-Make sure you have [SiQAD](https://github.com/siqad/siqad) installed and the QuickSim plugin compiled.
+Make sure you have [SiQAD](https://github.com/siqad/siqad) installed and the plugin compiled.
 
-Navigate to `<PATH-TO-SIQAD>/plugins/` and create a new folder called `quicksim`.
+Navigate to `<PATH-TO-SIQAD>/plugins/` and create a new folder called `quicksim` and `quickexact`.
 
-Move the `quicksim` binary and the `quicksim.physeng` file from `quicksim-siqad-plugin/build/` to the newly
-created`siqad/plugins/quicksim/` and restart SiQAD.
+Move the `quicksim` and `quickexact` binaries along with their respective `.physeng` files from
+the `mnt-siqad-plugin/build/`
+directory to the newly created `siqad/plugins/quicksim/` and `siqad/plugins/quickexact/` directories. Once completed,
+restart SiQAD.
 
-QuickSim is now available in the engine list.
+*QuickExact* and *QuickSim* are now available in the engine list.
