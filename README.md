@@ -82,7 +82,7 @@ restart SiQAD.
 
 ## References
 
-If you use __QuickSim__ in your work, we would appreciate it if you cite the following publication:
+If you use *QuickExact* or *QuickSim* in your work, we would appreciate it if you cite the following publication:
 
 ```bibtex
 @INPROCEEDINGS{10231266,
