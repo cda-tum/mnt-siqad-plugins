@@ -21,7 +21,7 @@ and __*QuickSim*__.
 Both are implemented on top of the [*fiction*](https://github.com/cda-tum/fiction) framework. This plugin makes the
 simulators available inside the [SiQAD](https://github.com/siqad/siqad) GUI.
 
-##### *QuickExact*
+#### *QuickExact*
 
 *QuickExact* is an exact simulator,
 i.e., it determines __all__ physically valid charge configurations of a given layout with __100 % accuracy__.
@@ -34,7 +34,7 @@ i.e., it determines __all__ physically valid charge configurations of a given la
   dynamically set to 3. Otherwise, it is set to 2. This ensures that the simulation consistently delivers correct
   results.
 
-##### *QuickSim*
+#### *QuickSim*
 
 *QuickSim* is an approximate 2-state simulator for determining the ground state of a given SiDB
 layout.
