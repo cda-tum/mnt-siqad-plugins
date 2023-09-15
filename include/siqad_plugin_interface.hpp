@@ -198,10 +198,11 @@ class siqad_plugin_interface
                         fiction::sidb_cell_clk_lyt_siqad>::automatic_base_number_detection::OFF;
                 }
             }
-            else if (simulation_engine == fiction::sidb_simulation_engine::EXGS)
+            else if (simulation_engine == fiction::sidb_simulation_engine::QUICKSIM)
             {
                 const auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
                 const auto alpha           = std::stod(sqconn->getParameter("alpha"));
+                quicksim_params            = fiction::quicksim_params{params, iteration_steps, alpha};
 
                 // prevent number of threads to be negative
                 if (const auto number_threads = static_cast<int64_t>(std::stod(sqconn->getParameter("num_threads")));
@@ -210,7 +211,6 @@ class siqad_plugin_interface
                     // Update quicksim_params with number_threads
                     quicksim_params.number_threads = static_cast<uint64_t>(number_threads);
                 }
-                quicksim_params = fiction::quicksim_params{params, iteration_steps, alpha};
             }
             log.echo() << "Retrieval from SiQADConn complete." << std::endl;
         }

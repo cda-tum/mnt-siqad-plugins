@@ -12,7 +12,7 @@
         <autofail>30</autofail>
         <eps_r>5.599999904632568</eps_r>
         <iteration_steps>70</iteration_steps>
-        <num_threads>-1</num_threads>
+        <num_threads>1</num_threads>
         <muzm>-0.25</muzm>
     </sim_params>
     <!--GUI Flags-->
