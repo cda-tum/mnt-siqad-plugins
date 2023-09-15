@@ -10,7 +10,7 @@
         <debye_length>5</debye_length>
         <autofail>30</autofail>
         <eps_r>5.599999904632568</eps_r>
-        <muzm>-0.25</muzm>
+        <muzm>-0.32</muzm>
         <base_number>2</base_number>
         <autodetection>0</autodetection>
     </sim_params>

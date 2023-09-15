@@ -5,8 +5,6 @@
 #include "siqad_plugin_interface.hpp"
 #include "timer.hpp"
 
-#include <fiction/algorithms/simulation/sidb/enum_class_exhaustive_algorithm.hpp>
-
 #include <fmt/format.h>
 
 #include <cstdlib>
@@ -65,10 +63,10 @@ int main(int argc, char* argv[])
 
         log.echo() << "\n*** Initiate QuickExact interface ***" << std::endl;
         log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
-        auto qs_interface =
-            siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::exhaustive_algorithm::QUICKEXACT};
+        auto quickexact_interface =
+            siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb_simulation_engine::QUICKEXACT};
 
-        if (qs_interface.get_auto_fail() < qs_interface.get_cell_num())
+        if (quickexact_interface.get_auto_fail() < quickexact_interface.get_cell_num())
         {
             log.warning() << "Problem size > autofail threshold, exiting." << std::endl;
             return EXIT_FAILURE;
@@ -76,11 +74,11 @@ int main(int argc, char* argv[])
 
         log.echo() << "\n*** Invoke simulation ***" << std::endl;
         stopwatch.start();
-        qs_interface.run_simulation();
+        quickexact_interface.run_simulation();
         stopwatch.end();
 
         log.echo() << "\n*** Write simulation results ***" << std::endl;
-        qs_interface.write_simulation_results();
+        quickexact_interface.write_simulation_results();
 
         log.echo() << "\n*** QuickExact Complete ***" << std::endl;
 

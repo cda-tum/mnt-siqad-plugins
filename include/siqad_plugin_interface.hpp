@@ -9,9 +9,9 @@
 #include "siqadconn.cc"
 #include "siqadconn.h"
 
-#include <fiction/algorithms/simulation/sidb/enum_class_exhaustive_algorithm.hpp>
 #include <fiction/algorithms/simulation/sidb/quickexact.hpp>
 #include <fiction/algorithms/simulation/sidb/quicksim.hpp>
+#include <fiction/algorithms/simulation/sidb/sidb_simulation_engine.hpp>
 #include <fiction/algorithms/simulation/sidb/sidb_simulation_parameters.hpp>
 #include <fiction/layouts/cell_level_layout.hpp>
 #include <fiction/technology/charge_distribution_surface.hpp>
@@ -35,7 +35,7 @@ class siqad_plugin_interface
     //! Constructor for QuickSimInterface
     siqad_plugin_interface(const std::string_view& t_in_path, const std::string_view& t_out_path,
                            const bool verbose = true, const int log_l = logger::MSG,
-                           fiction::exhaustive_algorithm engine = fiction::exhaustive_algorithm::QUICKEXACT) :
+                           fiction::sidb_simulation_engine engine = fiction::sidb_simulation_engine::QUICKEXACT) :
             log_level{log_l},
             in_path{t_in_path},
             out_path{t_out_path},
@@ -49,11 +49,11 @@ class siqad_plugin_interface
     // conduct physical simulation for given layout
     int run_simulation()
     {
-        if (simulation_engine == fiction::exhaustive_algorithm::QUICKEXACT)
+        if (simulation_engine == fiction::sidb_simulation_engine::QUICKEXACT)
         {
             simulation_results = fiction::quickexact<fiction::sidb_cell_clk_lyt_siqad>(layout, quickexact_params);
         }
-        else if (simulation_engine == fiction::exhaustive_algorithm::EXGS)
+        else if (simulation_engine == fiction::sidb_simulation_engine::QUICKSIM)
         {
             std::size_t invocations = 0;
             while (simulation_results.charge_distributions.empty() && invocations < 100)
@@ -183,20 +183,22 @@ class siqad_plugin_interface
 
             auto_fail = std::stoi(sqconn->getParameter("autofail"));
 
-            if (simulation_engine == fiction::exhaustive_algorithm::QUICKEXACT)
+            if (simulation_engine == fiction::sidb_simulation_engine::QUICKEXACT)
             {
                 params.base = static_cast<uint8_t>(std::stoi(sqconn->getParameter("base_number")));
                 quickexact_params.physical_parameters = params;
                 if (std::stoi(sqconn->getParameter("autodetection")) == 1)
                 {
-                    quickexact_params.base_number_detection = fiction::automatic_base_number_detection::ON;
+                    quickexact_params.base_number_detection = fiction::quickexact_params<
+                        fiction::sidb_cell_clk_lyt_siqad>::automatic_base_number_detection::ON;
                 }
                 else
                 {
-                    quickexact_params.base_number_detection = fiction::automatic_base_number_detection::OFF;
+                    quickexact_params.base_number_detection = fiction::quickexact_params<
+                        fiction::sidb_cell_clk_lyt_siqad>::automatic_base_number_detection::OFF;
                 }
             }
-            else if (simulation_engine == fiction::exhaustive_algorithm::EXGS)
+            else if (simulation_engine == fiction::sidb_simulation_engine::EXGS)
             {
                 const auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
                 const auto alpha           = std::stod(sqconn->getParameter("alpha"));
@@ -231,7 +233,7 @@ class siqad_plugin_interface
     fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> simulation_results{};
     fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>      quickexact_params{};
     fiction::quicksim_params                                          quicksim_params{};
-    fiction::exhaustive_algorithm                                     simulation_engine{};
+    fiction::sidb_simulation_engine                                   simulation_engine{};
 };
 
 #endif  // QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP

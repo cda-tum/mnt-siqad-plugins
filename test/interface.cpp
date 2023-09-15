@@ -8,7 +8,8 @@
 #include "logger.hpp"
 #include "siqad_plugin_interface.hpp"
 
-#include <fiction/algorithms/simulation/sidb/enum_class_exhaustive_algorithm.hpp>
+#include <fiction/algorithms/simulation/sidb/quickexact.hpp>
+#include <fiction/algorithms/simulation/sidb/sidb_simulation_engine.hpp>
 #include <fiction/types.hpp>
 
 #include <fmt/format.h>
@@ -20,14 +21,14 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
 {
     auto qs_interface = siqad_plugin_interface{fmt::format("{}/quicksim_problem_0.xml", TEST_PATH),
                                                fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG,
-                                               fiction::exhaustive_algorithm::EXGS};
+                                               fiction::sidb_simulation_engine::QUICKSIM};
 
     CHECK_THAT(qs_interface.get_physical_params().lambda_tf,
                Catch::Matchers::WithinAbs(5, fiction::physical_constants::POP_STABILITY_ERR));
     CHECK(qs_interface.get_quicksim_params().phys_params.epsilon_r == 5.6);
-    CHECK(qs_interface.get_quicksim_params().phys_params.mu_minus == -.25);
-    CHECK(qs_interface.get_quicksim_params().interation_steps == 70);
-    CHECK(qs_interface.get_quicksim_params().alpha == 0.8);
+    CHECK(qs_interface.get_quicksim_params().phys_params.mu_minus == -.32);
+    CHECK(qs_interface.get_quicksim_params().interation_steps == 80);
+    CHECK(qs_interface.get_quicksim_params().alpha == 0.7);
     CHECK(qs_interface.get_quicksim_params().number_threads == std::thread::hardware_concurrency());
 
     REQUIRE(qs_interface.run_simulation() == 0);
@@ -57,16 +58,17 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
 {
     auto       qs_interface      = siqad_plugin_interface{fmt::format("{}/quickexact_problem_0.xml", TEST_PATH),
                                                fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG,
-                                               fiction::exhaustive_algorithm::QUICKEXACT};
+                                               fiction::sidb_simulation_engine::QUICKEXACT};
     const auto quickexact_params = qs_interface.get_quickexact_params();
 
     CHECK(quickexact_params.physical_parameters.base == 2);
     CHECK_THAT(quickexact_params.physical_parameters.lambda_tf,
                Catch::Matchers::WithinAbs(5, fiction::physical_constants::POP_STABILITY_ERR));
     CHECK(quickexact_params.physical_parameters.epsilon_r == 5.6);
-    CHECK(quickexact_params.physical_parameters.mu_minus == -.25);
+    CHECK(quickexact_params.physical_parameters.mu_minus == -.32);
 
-    CHECK(quickexact_params.base_number_detection == fiction::automatic_base_number_detection::OFF);
+    CHECK(quickexact_params.base_number_detection ==
+          fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>::automatic_base_number_detection::OFF);
 
     REQUIRE(qs_interface.run_simulation() == 0);
     REQUIRE(!qs_interface.get_simulation_results().charge_distributions.empty());
