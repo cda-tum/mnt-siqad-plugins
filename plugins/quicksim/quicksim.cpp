@@ -2,7 +2,7 @@
 // Created by Jan Drewniok on 31.01.23.
 //
 
-#include "interface.hpp"
+#include "siqad_plugin_interface.hpp"
 #include "timer.hpp"
 
 #include <fmt/format.h>
@@ -14,7 +14,7 @@
 
 int main(int argc, char* argv[])
 {
-    std::cout << "Physeng invoked" << std::endl;
+    std::cout << "QuickSim invoked" << std::endl;
 
     const std::vector<std::string_view> cml_args(argv, argv + argc);
 
@@ -57,7 +57,8 @@ int main(int argc, char* argv[])
 
     log.echo() << "\n*** Initiate QuickSim interface ***" << std::endl;
     log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
-    auto qs_interface = quicksim_interface{if_name, of_name, verbose};
+    auto qs_interface =
+        siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb_simulation_engine::QUICKSIM};
 
     if (qs_interface.get_auto_fail() < qs_interface.get_cell_num())
     {
@@ -71,7 +72,7 @@ int main(int argc, char* argv[])
     stopwatch.end();
 
     log.echo() << "\n*** Write simulation results ***" << std::endl;
-    qs_interface.write_sim_results();
+    qs_interface.write_simulation_results();
 
     log.echo() << "\n*** QuickSim Complete ***" << std::endl;
 

@@ -1,6 +1,6 @@
 
-#ifndef QUICKSIM_SIQAD_PLUGIN_LOGGER_HPP
-#define QUICKSIM_SIQAD_PLUGIN_LOGGER_HPP
+#ifndef CDA_TUM_SIQAD_PLUGINS_LOGGER_HPP
+#define CDA_TUM_SIQAD_PLUGINS_LOGGER_HPP
 
 #include <iostream>
 #include <ostream>
@@ -65,4 +65,4 @@ class logger
     no_stream     nos{};
 };
 
-#endif  // QUICKSIM_SIQAD_PLUGIN_LOGGER_HPP
+#endif  // CDA_TUM_SIQAD_PLUGINS_LOGGER_HPP

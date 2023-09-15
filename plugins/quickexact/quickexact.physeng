@@ -14,11 +14,11 @@ interpreter, bin_path, command
 -->
 
 <physeng>
-    <name>QuickSim</name>
+    <name>QuickExact</name>
     <version>1.0</version>
     <description></description>
     <services>ElectronGroundState</services>
-    <bin_path>quicksim</bin_path>
+    <bin_path>quickexact</bin_path>
     <commands>
         <!-- Default command. -->
         <command label="Default">
@@ -39,30 +39,12 @@ interpreter, bin_path, command
     <dep_path></dep_path>
     <!-- Simulation parameters, read into SiQAD as a property map. -->
     <sim_params preserve_order="true">
-        <iteration_steps>
+        <autofail>
             <T>int</T>
-            <val>100</val>
-            <label>Iteration steps</label>
-            <tip>The number of simulation repetitions - can be increased to increase simulation accuracy.</tip>
-        </iteration_steps>
-        <alpha>
-         <T>double</T>
-         <val>0.7</val>
-         <label>alpha</label>
-         <tip>No solution is found -> reduce alpha.</tip>
-        </alpha>
-        <num_threads>
-                 <T>int</T>
-                 <val>-1</val>
-                 <label>Instance count</label>
-                 <tip>The number of QuickSim instances used in multithreading. If left at -1, a number is automatically selected based on the used engine.</tip>
-                </num_threads>
-                        <autofail>
-                            <T>int</T>
-                            <val>30</val>
-                            <label>Auto-fail DB count (read hover tip)</label>
-                            <tip>Accurate simulation results are not guaranteed for more DBs</tip>
-                        </autofail>
+            <val>30</val>
+            <label>Auto-fail DB count (read hover tip)</label>
+            <tip>Accurate simulation results are not guaranteed for more DBs</tip>
+        </autofail>
         <eps_r>
             <T>float</T>
             <val>5.6</val>
@@ -83,5 +65,17 @@ interpreter, bin_path, command
             <label>Screening distance (nm)</label>
             <tip>Thomas-Fermi screening distance.</tip>
         </debye_length>
+        <base_number>
+            <T>int</T>
+            <val>2</val>
+            <label>Base number</label>
+            <tip>2 and 3 state simulation is supported</tip>
+        </base_number>
+        <autodetection>
+            <T>int</T>
+            <val>0</val>
+            <label>simulation base number autodetecion (1 if on)</label>
+            <tip>This mode changes the base number if necessary (i.e. 3-state simulation is performed if positively charged SiDBs can occur).</tip>
+        </autodetection>
     </sim_params>
 </physeng>

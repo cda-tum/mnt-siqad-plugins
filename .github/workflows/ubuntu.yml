@@ -70,9 +70,9 @@ jobs:
           cmake ${{github.workspace}}
           -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
           -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
-          -DQUICKSIM_TEST=ON
+          -DCDA_TUM_SIQAD_PLUGINS_TEST=ON
 
-      - name: Build quicksim-siqad-plugin
+      - name: Build cda-tum-siqad-plugins
         working-directory: ${{github.workspace}}/build
         run: cmake --build . --config ${{matrix.build_type}} -j2
 

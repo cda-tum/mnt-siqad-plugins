@@ -76,11 +76,11 @@ jobs:
         run: >
           cmake ${{github.workspace}} -G "${{matrix.env}}" -A x64 -T ${{matrix.toolset}}
           -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
-          -DQUICKSIM_TEST=ON
+          -DCDA_TUM_SIQAD_PLUGINS_TEST=ON
         env:
           BOOST_ROOT: ${{steps.install-boost.outputs.BOOST_ROOT}}
 
-      - name: Build quicksim-siqad-plugin
+      - name: Build cda-tum-siqad-plugins
         working-directory: ${{github.workspace}}\build
         run: cmake --build . --config ${{matrix.build_type}} -j2
 
