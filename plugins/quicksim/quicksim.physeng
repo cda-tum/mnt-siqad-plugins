@@ -17,6 +17,30 @@ interpreter, bin_path, command
     <name>QuickSim</name>
     <version>1.0</version>
     <description></description>
+     <plugin_info>
+                <plugin_logo>logo-mnt.png</plugin_logo>
+                <authors>
+                    <name>Jan Drewniok</name>
+                    <name>Marcel Walter</name>
+                    <name>Samuel Ng</name>
+                    <name>Konrad Walus</name>
+                    <name>Robert Wille</name>
+                </authors>
+                <institutions>
+                    <institution>
+                        <content>
+                            <line>Chair for Design Automation</line>
+                            <line>School of Computation, Information and Technology</line>
+                            <line>Technical University of Munich</line>
+                        </content>
+                        <website href="https://www.cda.cit.tum.de/research/fcn/">MNT</website>
+                    </institution>
+                </institutions>
+                <links>
+                    <website href="https://github.com/siqad/simanneal-sidb">GitHub</website>
+                    <website href="https://ieeexplore.ieee.org/document/8963859">TNANO Paper</website>
+                </links>
+            </plugin_info>
     <services>ElectronGroundState</services>
     <bin_path>quicksim</bin_path>
     <commands>
