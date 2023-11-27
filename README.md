@@ -1,8 +1,8 @@
 # *Munich Nanotech Toolkit (MNT)* Plugins for SiQAD
 
-[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/ubuntu.yml)
-[![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/action/workflows/macos.yml)
-[![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/windows.yml)
+[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/action/workflows/ubuntu.yml)
+[![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/action/workflows/macos.yml)
+[![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/action/workflows/windows.yml)
 [![IEEEXplore](https://img.shields.io/static/v1?label=IEEEXplore&message=QuickSim&color=informational&style=flat-square)](https://ieeexplore.ieee.org/document/10231266)
 [![arXiv](https://img.shields.io/static/v1?label=arXiv&message=QuickExact&color=informational&style=flat-square)](https://arxiv.org/abs/2308.04487)
 
