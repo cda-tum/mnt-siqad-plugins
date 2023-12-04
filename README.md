@@ -1,8 +1,8 @@
-# *Munich Nanotech Toolkit (MNT)* Plugin for SiQAD
+# *Munich Nanotech Toolkit (MNT)* Plugins for SiQAD
 
-[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/ubuntu.yml)
-[![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/macos.yml)
-[![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/quicksim-siqad-plugin/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/quicksim-siqad-plugin/actions/workflows/windows.yml)
+[![Ubuntu CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/ubuntu.yml?label=Ubuntu&logo=ubuntu&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/action/workflows/ubuntu.yml)
+[![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/action/workflows/macos.yml)
+[![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/action/workflows/windows.yml)
 [![IEEEXplore](https://img.shields.io/static/v1?label=IEEEXplore&message=QuickSim&color=informational&style=flat-square)](https://ieeexplore.ieee.org/document/10231266)
 [![arXiv](https://img.shields.io/static/v1?label=arXiv&message=QuickExact&color=informational&style=flat-square)](https://arxiv.org/abs/2308.04487)
 
@@ -13,12 +13,12 @@
   </picture>
 </p>
 
-This plugin provides two Physical Simulators for *Silicon Dangling Bond (SiDB)* Logic: __*QuickExact*__
+This provides two Physical Simulators for *Silicon Dangling Bond (SiDB)* Logic: __*QuickExact*__
 and __*QuickSim*__.
 
 #### General information:
 
-Both are implemented on top of the [*fiction*](https://github.com/cda-tum/fiction) framework. This plugin makes the
+Both are implemented on top of the [*fiction*](https://github.com/cda-tum/fiction) framework. This project makes the
 simulators available inside the [SiQAD](https://github.com/siqad/siqad) GUI.
 
 #### *QuickExact*
@@ -51,15 +51,15 @@ layout.
 
 All you need is a `git` client, `cmake`, the [`Boost`](https://www.boost.org/) libraries, and a modern C++ compiler.
 
-### Building the Plugin
+### Building the Plugins
 
 > Clone the repository and its submodules:
 
 ```bash
-git clone --recursive https://github.com/cda-tum/mnt-siqad-plugin.git
+git clone --recursive https://github.com/cda-tum/mnt-siqad-plugins.git
 ```
 
-> Inside the newly cloned `mnt-siqad-plugin` folder, trigger the build process:
+> Inside the newly cloned `mnt-siqad-plugins` folder, trigger the build process:
 
 ```bash
 cmake . -B build
@@ -69,12 +69,12 @@ cmake --build . -j4
 
 ### Using *QuickExact* and *QuickSim* in the SiQAD GUI
 
-Make sure you have [SiQAD](https://github.com/siqad/siqad) installed and the plugin compiled.
+Make sure you have [SiQAD](https://github.com/siqad/siqad) installed and the plugins compiled.
 
 Navigate to `<PATH-TO-SIQAD>/plugins/` and create a new folder called `quicksim` and `quickexact`.
 
 Move the `quicksim` and `quickexact` binaries along with their respective `.physeng` files from
-the `mnt-siqad-plugin/build/`
+the `mnt-siqad-plugins/build/`
 directory to the newly created `siqad/plugins/quicksim/` and `siqad/plugins/quickexact/` directories. Once completed,
 restart SiQAD.
 
