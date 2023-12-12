@@ -57,7 +57,9 @@ jobs:
         run: >
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-      - name: Install Libraries
+      # macOS 11 is no longer supported
+      - if: matrix.os != 'macos-11'
+        name: Install Libraries
         run: >
           brew update &&
           brew install boost tbb
