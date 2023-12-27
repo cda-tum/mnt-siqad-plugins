@@ -54,18 +54,18 @@ jobs:
     steps:
 
       - name: Install Homebrew
-        run: >
+        run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-        name: Install Boost
-        run: >
+      - name: Install Boost
+        run: |
           brew update &&
           brew install boost
 
       # TBB doesn't support macOS 11 anymore
       - if: matrix.os != 'macos-11'
         name: Install TBB
-        run: >
+        run: |
           brew update &&
           brew install tbb
 
