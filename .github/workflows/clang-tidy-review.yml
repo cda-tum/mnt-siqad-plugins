@@ -48,7 +48,7 @@ jobs:
           FILE_DATA: '{}'
 
       - name: Upload review artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: clang-tidy-review
           path: |
