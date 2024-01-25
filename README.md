@@ -86,7 +86,7 @@ restart SiQAD.
 If you use *QuickExact* or *QuickSim* in your work, we would appreciate it if you cite the following publication:
 
 ```bibtex
-@inproceedings{10231266,
+@inproceedings{drewniok2023quicksim,
   author={Drewniok, Jan and Walter, Marcel and Hang Ng, Samuel Sze and Walus, Konrad and Wille, Robert},
   title={{\emph{QuickSim}: Efficient \emph{and} Accurate Physical Simulation of Silicon Dangling Bond Logic}},
   year={2023},
