@@ -13,8 +13,9 @@
   </picture>
 </p>
 
-This provides two Physical Simulators for *Silicon Dangling Bond (SiDB)* Logic: __*QuickExact*__
-and __*QuickSim*__.
+This provides two Physical Simulators for *Silicon Dangling Bond (SiDB)* Logic: [
+*QuickExact*](https://www.cda.cit.tum.de/files/eda/2024_aspdac_efficient_exact_simulation.pdf)
+and [*QuickSim*](https://www.cda.cit.tum.de/files/eda/2023_ieeenano_quicksim_physical_simulation.pdf).
 
 #### General information:
 
@@ -85,19 +86,16 @@ restart SiQAD.
 If you use *QuickExact* or *QuickSim* in your work, we would appreciate it if you cite the following publication:
 
 ```bibtex
-@INPROCEEDINGS{10231266,
+@inproceedings{10231266,
   author={Drewniok, Jan and Walter, Marcel and Hang Ng, Samuel Sze and Walus, Konrad and Wille, Robert},
   title={{\emph{QuickSim}: Efficient \emph{and} Accurate Physical Simulation of Silicon Dangling Bond Logic}},
   year={2023},
   pages={817-822},
   doi={10.1109/NANO58406.2023.10231266}}
 
-@misc{drewniok2023need,
+@inproceedings{drewniok2024quickexact,
   author={Drewniok, Jan and Walter, Marcel and Wille, Robert},
-  title={{The Need for Speed: Efficient Exact Simulation of Silicon Dangling Bond Logic}}, 
-  year={2023},
-  eprint={2308.04487},
-  archivePrefix={arXiv},
-  primaryClass={physics.app-ph}
-}
+  title={{The Need for Speed: Efficient Exact Simulation of Silicon Dangling Bond Logic}},
+  booktitle={Asia and South Pacific Design Automation Conference (ASP-DAC)},
+  year={2024}}
 ```
