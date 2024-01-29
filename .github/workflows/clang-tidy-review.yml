@@ -34,7 +34,7 @@ jobs:
 
       - name: Make sure that the review file exists
         id: check-review-output
-        uses: andstor/file-existence-action@v2.0.0
+        uses: andstor/file-existence-action@v3.0.0
         with:
           files: 'clang-tidy-review-output.json'
           ignore_case: true
