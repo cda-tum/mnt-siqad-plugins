@@ -37,8 +37,8 @@ interpreter, bin_path, command
                     </institution>
                 </institutions>
                 <links>
-                    <website href="https://github.com/siqad/simanneal-sidb">GitHub</website>
-                    <website href="https://ieeexplore.ieee.org/document/8963859">TNANO Paper</website>
+                    <website href="https://github.com/cda-tum/fiction">GitHub</website>
+                    <website href="https://ieeexplore.ieee.org/document/10231266">Paper</website>
                 </links>
             </plugin_info>
     <services>ElectronGroundState</services>
