@@ -22,6 +22,7 @@ foreach (filename ${FILENAMES})
             TARGET ${plugin} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
             ${CMAKE_CURRENT_SOURCE_DIR}/${plugin}/${plugin}.physeng
+            ${CMAKE_CURRENT_SOURCE_DIR}/${plugin}/logo-mnt.png
             ${CMAKE_CURRENT_BINARY_DIR})
 
     # Install the executable and the physeng file
