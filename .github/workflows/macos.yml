@@ -64,6 +64,7 @@ jobs:
 
       - name: Install Boost
         run: |
+          brew unlink python && brew link --overwrite python
           brew update &&
           brew install boost
 
