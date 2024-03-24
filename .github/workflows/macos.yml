@@ -34,24 +34,24 @@ jobs:
         build_type: [ Debug, Release ]
         include:
           - os: macos-12
-            architecture: x64
-          - os: macos-13
-            architecture: x64
-          - os: macos-14
-            architecture: arm64
-          - compiler: clang++
-            ccompiler: clang
-          - compiler: g++-11
-            ccompiler: gcc-11
-          - compiler: g++-12
-            ccompiler: gcc-12
-        exclude:
-          - os: macos-14
             compiler: g++-11
-          - os: macos-14
+          - os: macos-12
             compiler: g++-12
-          - os: macos-14
+          - os: macos-12
             compiler: g++-13
+          - os: macos-12
+            compiler: clang++
+          - os: macos-13
+            compiler: g++-11
+          - os: macos-13
+            compiler: g++-12
+          - os: macos-13
+            compiler: g++-13
+          - os: macos-13
+            compiler: clang++
+          - os: macos-14
+            compiler: clang++
+
 
     name: ${{matrix.os}} with ${{matrix.compiler}} (${{matrix.build_type}} mode)
     runs-on: ${{matrix.os}}
