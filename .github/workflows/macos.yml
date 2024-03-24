@@ -64,8 +64,8 @@ jobs:
 
       - name: Install Boost
         run: |
-          brew unlink python && brew link --overwrite python
           brew update &&
+          brew unlink python && brew link --overwrite python
           brew install boost
 
       # TBB doesn't support macOS 11 anymore
