@@ -154,12 +154,12 @@ class siqad_plugin_interface
         logger log(log_level);
 
         // grab all physical locations
-        log.debug() << "Grab all physical locations..." << std::endl;
+        log.debug() << "Grab all physical locations..." << '\n';
 
         auto* const db_collection = sqconn->dbCollection();
 
         std::vector<std::pair<double, double>> db_locs{};
-        db_locs.reserve(db_collection->db_tree_inner->size());
+        db_locs.reserve(static_cast<uint64_t>(static_cast<double>(db_collection->db_tree_inner->size())));
 
         for (const auto& db : *db_collection)
         {
@@ -181,7 +181,7 @@ class siqad_plugin_interface
                 fiction::round_to_n_decimal_places(std::stod(sqconn->getParameter("eps_r")), 2);  // round to two digits
             params.lambda_tf = std::stod(sqconn->getParameter("debye_length"));
 
-            auto_fail = std::stoi(sqconn->getParameter("autofail"));
+            auto_fail = static_cast<uint64_t>(std::stoi(sqconn->getParameter("autofail")));
 
             if (simulation_engine == fiction::sidb_simulation_engine::QUICKEXACT)
             {
@@ -212,11 +212,11 @@ class siqad_plugin_interface
                     quicksim_params.number_threads = static_cast<uint64_t>(number_threads);
                 }
             }
-            log.echo() << "Retrieval from SiQADConn complete." << std::endl;
+            log.echo() << "Retrieval from SiQADConn complete." << '\n';
         }
         catch (...)
         {
-            log.critical() << "Could not retrieve all parameters from SiQADConn." << std::endl;
+            log.critical() << "Could not retrieve all parameters from SiQADConn." << '\n';
             throw;
         }
     }
