@@ -2,8 +2,8 @@
 // Created by Jan Drewniok on 31.01.23.
 //
 
-#ifndef QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP
-#define QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP
+#ifndef SIQAD_PLUGIN_INTERFACE_HPP
+#define SIQAD_PLUGIN_INTERFACE_HPP
 
 #include "logger.hpp"
 #include "siqadconn.cc"
@@ -163,12 +163,11 @@ class siqad_plugin_interface
 
         for (const auto& db : *db_collection)
         {
-            db_locs.push_back(fiction::sidb_nm_position<fiction::sidb_cell_clk_lyt_siqad>(
-                fiction::sidb_simulation_parameters{}, {db->n, db->m, db->l}));
+            db_locs.push_back(fiction::sidb_nm_position<fiction::sidb_cell_clk_lyt_siqad>({db->n, db->m, db->l}));
 
             layout.assign_cell_type({db->n, db->m, db->l}, fiction::sidb_cell_clk_lyt_siqad::cell_type::NORMAL);
 
-            log.debug() << fmt::format("DB loc: x={}, y={}", db_locs.back().first, db_locs.back().second) << std::endl;
+            log.debug() << fmt::format("DB loc: x={}, y={}\n", db_locs.back().first, db_locs.back().second);
         }
 
         try
@@ -236,4 +235,4 @@ class siqad_plugin_interface
     fiction::sidb_simulation_engine                                   simulation_engine{};
 };
 
-#endif  // QUICKSIM_SIQAD_PLUGIN_INTERFACE_HPP
+#endif  // SIQAD_PLUGIN_INTERFACE_HPP
