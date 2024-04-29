@@ -118,10 +118,11 @@ class siqad_plugin_interface
     // get the physical parameters used for the simulation
     [[nodiscard]] fiction::sidb_simulation_parameters& get_physical_params() noexcept
     {
-        return quickexact_params.physical_parameters;
+        return quickexact_params.simulation_parameters;
     }
     // get the quickexact parameter
-    [[nodiscard]] fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>& get_quickexact_params() noexcept
+    [[nodiscard]] fiction::quickexact_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>&
+    get_quickexact_params() noexcept
     {
         return quickexact_params;
     }
@@ -163,7 +164,8 @@ class siqad_plugin_interface
 
         for (const auto& db : *db_collection)
         {
-            db_locs.push_back(fiction::sidb_nm_position<fiction::sidb_cell_clk_lyt_siqad>({db->n, db->m, db->l}));
+            db_locs.push_back(fiction::sidb_nm_position<fiction::sidb_cell_clk_lyt_siqad>(
+                fiction::sidb_cell_clk_lyt_siqad{}, {db->n, db->m, db->l}));
 
             layout.assign_cell_type({db->n, db->m, db->l}, fiction::sidb_cell_clk_lyt_siqad::cell_type::NORMAL);
 
@@ -185,16 +187,16 @@ class siqad_plugin_interface
             if (simulation_engine == fiction::sidb_simulation_engine::QUICKEXACT)
             {
                 params.base = static_cast<uint8_t>(std::stoi(sqconn->getParameter("base_number")));
-                quickexact_params.physical_parameters = params;
+                quickexact_params.simulation_parameters = params;
                 if (std::stoi(sqconn->getParameter("autodetection")) == 1)
                 {
                     quickexact_params.base_number_detection = fiction::quickexact_params<
-                        fiction::sidb_cell_clk_lyt_siqad>::automatic_base_number_detection::ON;
+                        fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>::automatic_base_number_detection::ON;
                 }
                 else
                 {
                     quickexact_params.base_number_detection = fiction::quickexact_params<
-                        fiction::sidb_cell_clk_lyt_siqad>::automatic_base_number_detection::OFF;
+                        fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>::automatic_base_number_detection::OFF;
                 }
             }
             else if (simulation_engine == fiction::sidb_simulation_engine::QUICKSIM)
@@ -224,15 +226,15 @@ class siqad_plugin_interface
     std::unique_ptr<SiQADConnector> sqconn = nullptr;
 
     // variables
-    uint64_t                                                          auto_fail{};
-    const int                                                         log_level{};
-    const std::string_view                                            in_path{};
-    const std::string_view                                            out_path{};
-    fiction::sidb_cell_clk_lyt_siqad                                  layout{};
-    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> simulation_results{};
-    fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>      quickexact_params{};
-    fiction::quicksim_params                                          quicksim_params{};
-    fiction::sidb_simulation_engine                                   simulation_engine{};
+    uint64_t                                                                    auto_fail{};
+    const int                                                                   log_level{};
+    const std::string_view                                                      in_path{};
+    const std::string_view                                                      out_path{};
+    fiction::sidb_cell_clk_lyt_siqad                                            layout{};
+    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad>           simulation_results{};
+    fiction::quickexact_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>> quickexact_params{};
+    fiction::quicksim_params                                                    quicksim_params{};
+    fiction::sidb_simulation_engine                                             simulation_engine{};
 };
 
 #endif  // SIQAD_PLUGIN_INTERFACE_HPP
