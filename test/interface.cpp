@@ -10,6 +10,7 @@
 
 #include <fiction/algorithms/simulation/sidb/quickexact.hpp>
 #include <fiction/algorithms/simulation/sidb/sidb_simulation_engine.hpp>
+#include <fiction/traits.hpp>
 #include <fiction/types.hpp>
 
 #include <fmt/format.h>
@@ -25,9 +26,9 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
 
     CHECK_THAT(qs_interface.get_physical_params().lambda_tf,
                Catch::Matchers::WithinAbs(5, fiction::physical_constants::POP_STABILITY_ERR));
-    CHECK(qs_interface.get_quicksim_params().phys_params.epsilon_r == 5.6);
-    CHECK(qs_interface.get_quicksim_params().phys_params.mu_minus == -.25);
-    CHECK(qs_interface.get_quicksim_params().interation_steps == 70);
+    CHECK(qs_interface.get_quicksim_params().simulation_parameters.epsilon_r == 5.6);
+    CHECK(qs_interface.get_quicksim_params().simulation_parameters.mu_minus == -.25);
+    CHECK(qs_interface.get_quicksim_params().iteration_steps == 70);
     CHECK(qs_interface.get_quicksim_params().alpha == 0.8);
     CHECK(qs_interface.get_quicksim_params().number_threads == 1);
 
@@ -61,14 +62,15 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
                                                fiction::sidb_simulation_engine::QUICKEXACT};
     const auto quickexact_params = qs_interface.get_quickexact_params();
 
-    CHECK(quickexact_params.physical_parameters.base == 2);
-    CHECK_THAT(quickexact_params.physical_parameters.lambda_tf,
+    CHECK(quickexact_params.simulation_parameters.base == 2);
+    CHECK_THAT(quickexact_params.simulation_parameters.lambda_tf,
                Catch::Matchers::WithinAbs(5, fiction::physical_constants::POP_STABILITY_ERR));
-    CHECK(quickexact_params.physical_parameters.epsilon_r == 5.6);
-    CHECK(quickexact_params.physical_parameters.mu_minus == -.32);
+    CHECK(quickexact_params.simulation_parameters.epsilon_r == 5.6);
+    CHECK(quickexact_params.simulation_parameters.mu_minus == -.32);
 
     CHECK(quickexact_params.base_number_detection ==
-          fiction::quickexact_params<fiction::sidb_cell_clk_lyt_siqad>::automatic_base_number_detection::OFF);
+          fiction::quickexact_params<
+              fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>::automatic_base_number_detection::OFF);
 
     REQUIRE(qs_interface.run_simulation() == 0);
     REQUIRE(!qs_interface.get_simulation_results().charge_distributions.empty());
