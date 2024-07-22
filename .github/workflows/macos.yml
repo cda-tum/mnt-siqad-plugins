@@ -137,6 +137,6 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: cmake --build . -j3  # all macOS runners provide at least 3 cores
 
-      - name: Test (Release)
+      - name: Test
         working-directory: ${{github.workspace}}/build
-        run: ctest -C Release --verbose --output-on-failure --repeat until-pass:3
+        run: ctest -C ${{matrix.build_type}} --verbose
