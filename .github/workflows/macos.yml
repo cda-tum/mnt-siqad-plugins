@@ -29,8 +29,6 @@ defaults:
   run:
     shell: bash
 
-env:
-  Z3_VERSION: 4.10.0
 
 jobs:
   build_and_test:
@@ -98,16 +96,6 @@ jobs:
           variant: ccache
           save: true
           max-size: 10G
-
-      - name: Setup Z3 Solver
-        id: z3
-        uses: cda-tum/setup-z3@v1
-        with:
-          version: ${{env.Z3_VERSION}}
-          platform: macOS
-          architecture: ${{matrix.architecture}}
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
