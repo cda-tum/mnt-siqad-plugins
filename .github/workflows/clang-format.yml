@@ -30,7 +30,7 @@ jobs:
           submodules: recursive
 
       - name: Run ClangFormat
-        uses: DoozyX/clang-format-lint-action@v0.17
+        uses: DoozyX/clang-format-lint-action@v0.18
         with:
           source: 'include plugins test'
           exclude: 'libs'
