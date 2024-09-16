@@ -4,7 +4,7 @@
 [![macOS CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/macos.yml?label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/action/workflows/macos.yml)
 [![Windows CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mnt-siqad-plugins/windows.yml?label=Windows&logo=windows&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/action/workflows/windows.yml)
 [![IEEEXplore](https://img.shields.io/static/v1?label=IEEEXplore&message=QuickSim&color=informational&style=flat-square)](https://ieeexplore.ieee.org/document/10231266)
-[![arXiv](https://img.shields.io/static/v1?label=arXiv&message=QuickExact&color=informational&style=flat-square)](https://arxiv.org/abs/2308.04487)
+[![ACM](https://img.shields.io/static/v1?label=ACM&message=QuickExact&color=informational&style=flat-square)](https://dl.acm.org/doi/10.1109/ASP-DAC58780.2024.10473946)
 
 <p align="center">
   <picture>
