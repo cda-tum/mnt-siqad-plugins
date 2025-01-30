@@ -270,18 +270,18 @@ class siqad_plugin_interface
     std::unique_ptr<SiQADConnector> sqconn = nullptr;
 
     // variables
-    uint64_t                                                                         auto_fail{};
-    const int                                                                        log_level{};
-    const std::string_view                                                           in_path{};
-    const std::string_view                                                           out_path{};
-    fiction::sidb_cell_clk_lyt_siqad                                                 layout{};
-    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad>                simulation_results{};
+    uint64_t                                                          auto_fail{};
+    const int                                                         log_level{};
+    const std::string_view                                            in_path{};
+    const std::string_view                                            out_path{};
+    fiction::sidb_cell_clk_lyt_siqad                                  layout{};
+    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> simulation_results{};
 #if (FICTION_ALGLIB_ENABLED)
     fiction::clustercomplete_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>> clustercomplete_params{};
 #endif  // FICTION_ALGLIB_ENABLED
-    fiction::quickexact_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>      quickexact_params{};
-    fiction::quicksim_params                                                         quicksim_params{};
-    fiction::sidb_simulation_engine                                                  simulation_engine{};
+    fiction::quickexact_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>> quickexact_params{};
+    fiction::quicksim_params                                                    quicksim_params{};
+    fiction::sidb_simulation_engine                                             simulation_engine{};
 };
 
 #endif  // SIQAD_PLUGIN_INTERFACE_HPP
