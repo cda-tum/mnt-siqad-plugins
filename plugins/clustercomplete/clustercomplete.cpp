@@ -1,6 +1,8 @@
 //
-// Created by Jan Drewniok on 31.01.23.
+// Created by Willem Lambooy on 30.01.25.
 //
+
+#if (FICTION_ALGLIB_ENABLED)
 
 #include "siqad_plugin_interface.hpp"
 #include "timer.hpp"
@@ -16,7 +18,7 @@ int main(int argc, char* argv[])
 {
     try
     {
-        std::cout << "QuickExact invoked" << std::endl;
+        std::cout << "ClusterComplete invoked" << std::endl;
 
         std::vector<std::string_view> cml_args;
         cml_args = std::vector<std::string_view>(argv, argv + argc);
@@ -61,12 +63,12 @@ int main(int argc, char* argv[])
         log.echo() << "In File: " << if_name << std::endl;
         log.echo() << "Out File: " << of_name << std::endl;
 
-        log.echo() << "\n*** Initiate QuickExact interface ***" << std::endl;
+        log.echo() << "\n*** Initiate ClusterComplete interface ***" << std::endl;
         log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
-        auto quickexact_interface =
-            siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb_simulation_engine::QUICKEXACT};
+        auto clustercomplete_interface =
+            siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb_simulation_engine::CLUSTERCOMPLETE};
 
-        if (quickexact_interface.get_auto_fail() < quickexact_interface.get_cell_num())
+        if (clustercomplete_interface.get_auto_fail() < clustercomplete_interface.get_cell_num())
         {
             log.warning() << "Problem size > autofail threshold, exiting." << std::endl;
             return EXIT_FAILURE;
@@ -74,13 +76,13 @@ int main(int argc, char* argv[])
 
         log.echo() << "\n*** Invoke simulation ***" << std::endl;
         stopwatch.start();
-        quickexact_interface.run_simulation();
+        clustercomplete_interface.run_simulation();
         stopwatch.end();
 
         log.echo() << "\n*** Write simulation results ***" << std::endl;
-        quickexact_interface.write_simulation_results();
+        clustercomplete_interface.write_simulation_results();
 
-        log.echo() << "\n*** QuickExact Complete ***" << std::endl;
+        log.echo() << "\n*** ClusterComplete Complete ***" << std::endl;
 
         stopwatch.print_stopwatch(log_level);
 
@@ -92,3 +94,14 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 }
+#else  // FICTION_ALGLIB_ENABLED
+
+#include <iostream>
+
+int main()
+{
+    std::cout << "Usage of ALGLIB is not enabled; pass \"-DFICTION_ALGLIB\" to your CMake build." << std::endl;
+    return EXIT_FAILURE;
+}
+
+#endif  // FICTION_ALGLIB_ENABLED

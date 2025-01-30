@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 
     logger log{log_level};
 
-    qsglobal::stopwatch stopwatch;
+    simglobal::stopwatch stopwatch;
 
     log.echo() << "In File: " << if_name << std::endl;
     log.echo() << "Out File: " << of_name << std::endl;

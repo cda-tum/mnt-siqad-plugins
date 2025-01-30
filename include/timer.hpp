@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-namespace qsglobal
+namespace simglobal
 {
 
 using hidh_res_clock = std::chrono::high_resolution_clock;
