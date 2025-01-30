@@ -35,6 +35,7 @@ jobs:
       matrix:
         os: [ macos-13, macos-14, macos-15 ]
         compiler: [ g++-13, g++-14, clang++ ]
+        build_type: [ Debug, Release ]
         include:
           - compiler: clang++
             ccompiler: clang
@@ -52,7 +53,7 @@ jobs:
           - os: macos-15
             compiler: g++-14
 
-    name: ${{matrix.os}} with ${{matrix.compiler}} (${{matrix.build_type}} mode)
+    name: 🍎 ${{matrix.os}} with ${{matrix.compiler}} (${{matrix.build_type}} mode)
     runs-on: ${{matrix.os}}
 
     steps:
