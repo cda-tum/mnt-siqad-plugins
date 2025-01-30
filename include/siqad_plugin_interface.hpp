@@ -272,10 +272,10 @@ class siqad_plugin_interface
     // variables
     uint64_t                                                          auto_fail{};
     const int                                                         log_level{};
-    const std::string_view                                            in_path{};
-    const std::string_view                                            out_path{};
-    fiction::sidb_cell_clk_lyt_siqad                                  layout{};
-    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> simulation_results{};
+    const std::string_view                                            in_path;
+    const std::string_view                                            out_path;
+    fiction::sidb_cell_clk_lyt_siqad                                  layout;
+    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> simulation_results;
 #if (FICTION_ALGLIB_ENABLED)
     fiction::clustercomplete_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>> clustercomplete_params{};
 #endif  // FICTION_ALGLIB_ENABLED
