@@ -91,6 +91,6 @@ class stopwatch
     bool                       timer_running{};  //! Indicate whether the timer is running.
 };
 
-}  // namespace qsglobal
+}  // namespace simglobal
 
 #endif  // CDA_TUM_SIQAD_PLUGINS_TIMER_HPP

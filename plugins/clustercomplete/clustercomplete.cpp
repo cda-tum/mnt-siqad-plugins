@@ -65,8 +65,8 @@ int main(int argc, char* argv[])
 
         log.echo() << "\n*** Initiate ClusterComplete interface ***" << std::endl;
         log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
-        auto clustercomplete_interface =
-            siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb_simulation_engine::CLUSTERCOMPLETE};
+        auto clustercomplete_interface = siqad_plugin_interface{if_name, of_name, verbose, log_level,
+                                                                fiction::sidb_simulation_engine::CLUSTERCOMPLETE};
 
         if (clustercomplete_interface.get_auto_fail() < clustercomplete_interface.get_cell_num())
         {
