@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
         log.echo() << "\n*** Write simulation results ***" << std::endl;
         quickexact_interface.write_simulation_results();
 
-        log.echo() << "\n*** QuickExact Complete ***" << std::endl;
+        log.echo() << "\n*** QuickExact Finished ***" << std::endl;
 
         stopwatch.print_stopwatch(log_level);
 
