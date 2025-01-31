@@ -1,4 +1,4 @@
-asdfname: Post Clang-Tidy Review
+name: Post Clang-Tidy Review
 
 on:
   workflow_run:
