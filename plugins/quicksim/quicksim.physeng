@@ -72,7 +72,7 @@ interpreter, bin_path, command
         <alpha>
             <T>double</T>
             <val>0.7</val>
-            <label>alpha</label>
+            <label>Alpha</label>
             <tip>No solution is found -> reduce alpha.</tip>
         </alpha>
         <num_threads>
