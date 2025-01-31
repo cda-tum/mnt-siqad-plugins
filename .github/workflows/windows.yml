@@ -99,7 +99,7 @@ jobs:
 
       - name: Build cda-tum-siqad-plugins
         working-directory: ${{github.workspace}}\build
-        run: cmake --build . --config ${{matrix.build_type}} -j4
+        run: cmake --build . -j4
 
       - name: Test
         working-directory: ${{github.workspace}}\build
