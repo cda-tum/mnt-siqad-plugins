@@ -28,11 +28,11 @@ simulators available inside the [SiQAD](https://github.com/siqad/siqad) GUI.
 i.e., it determines __all__ physically valid charge configurations of a given layout with __100% accuracy__.
 
 - The pre-simulation step offers configurability over some of its filtering endeavors: `Witness partitioning limit` and
-  `Overlapping witness limit` (always smaller or equal than the former) control limits before an NP-complete sub-problem 
-  is being solved. The default values ensure that the factorial scaling in the latter parameter is not noticeable in the 
-  total runtime. For large simulation problems, it may be beneficial to raise these parameters---their effect can be 
-  quickly observed by setting `Show pre-simulation statistics` to `1` (on). This reveals a number that is proportional 
-  to the total runtime, and might be lowered for the given simulation problem when the aforementioned limits are raised. 
+  `Overlapping witness limit` (always smaller or equal than the former) control limits before an NP-complete sub-problem
+  is being solved. The default values ensure that the factorial scaling in the latter parameter is not noticeable in the
+  total runtime. For large simulation problems, it may be beneficial to raise these parameters---their effect can be
+  quickly observed by setting `Show pre-simulation statistics` to `1` (on). This reveals a number that is proportional
+  to the total runtime, and might be lowered for the given simulation problem when the aforementioned limits are raised.
 - The `Instance count` parameter gives control over the number of threads used for the simulation.
   When set to `-1`, *ClusterComplete* maximizes computational resources by utilizing all available threads, optimizing
   simulation efficiency.
@@ -83,9 +83,9 @@ cd build
 cmake --build . -j4
 ```
 
-> **NB:** When building *ClusterComplete*, it is required to additionally pass `-DFICTION_ALGLIB=ON`. Furthermore, 
-  *ClusterComplete* can be made significantly faster by passing `-DFICTION_ENABLE_JEMALLOC=ON`, although this CMake 
-  option should not be passed when building *QuickSim*. See more information 
+> **NB:** When building *ClusterComplete*, it is required to additionally pass `-DFICTION_ALGLIB=ON`. Furthermore,
+  *ClusterComplete* can be made significantly faster by passing `-DFICTION_ENABLE_JEMALLOC=ON`, although this CMake
+  option should not be passed when building *QuickSim*. See more information
   [here](https://fiction.readthedocs.io/en/latest/getting_started.html#usage-of-jemalloc).
 
 ### Using *ClusterComplete*, *QuickExact* and *QuickSim* in the SiQAD GUI
@@ -95,7 +95,7 @@ Make sure you have [SiQAD](https://github.com/siqad/siqad) installed and the plu
 Navigate to `<PATH-TO-SIQAD>/plugins/` and create new folders named `clustercomplete`, `quicksim` and `quickexact`.
 
 Move the `clustercomplete`, `quicksim` and `quickexact` binaries along with their respective `.physeng` files from
-the `mnt-siqad-plugins/build/` directory to the newly created `siqad/plugins/quicksim/` and `siqad/plugins/quickexact/` 
+the `mnt-siqad-plugins/build/` directory to the newly created `siqad/plugins/quicksim/` and `siqad/plugins/quickexact/`
 directories. Once completed, restart SiQAD.
 
 *ClusterComplete*, *QuickExact* and *QuickSim* are now available in the engine list.
