@@ -112,7 +112,7 @@ jobs:
 
       - name: Build
         working-directory: ${{github.workspace}}/build
-        run: cmake --build . -j3  # all macOS runners provide at least 3 cores
+        run: cmake --build . -j4  # all macOS runners provide at least 3 cores
 
       - name: Test
         working-directory: ${{github.workspace}}/build
