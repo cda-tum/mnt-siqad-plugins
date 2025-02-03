@@ -1,4 +1,4 @@
-name: Windows CI
+name: 🪟 • CI
 
 on:
   push:
@@ -25,23 +25,25 @@ jobs:
   build_and_test:
     strategy:
       matrix:
-        os: [ windows-2019, windows-2022 ]
+        os: [ windows-2019, windows-2022, windows-2025 ]
         toolset: [ v142, v143, ClangCL ]
         build_type: [ Debug, Release ]
         include:
           - os: windows-2019
-            env: 'Visual Studio 16 2019'
-            boost_platform: 2019
+            env: "Visual Studio 16 2019"
           - os: windows-2022
-            env: 'Visual Studio 17 2022'
-            boost_platform: 2022
+            env: "Visual Studio 17 2022"
+          - os: windows-2025
+            env: "Visual Studio 17 2022"
         exclude:
           - os: windows-2019
             toolset: v143
           - os: windows-2022
             toolset: v142
+          - os: windows-2025
+            toolset: v142
 
-    name: ${{matrix.os}} with ${{matrix.env}} and ${{matrix.toolset}} toolset (${{matrix.build_type}} mode)
+    name: 🪟 ${{matrix.os}} with ${{matrix.env}} and ${{matrix.toolset}} toolset (${{matrix.build_type}} mode)
     runs-on: ${{matrix.os}}
 
     steps:
@@ -80,7 +82,6 @@ jobs:
         working-directory: ${{github.workspace}}\build
         run: >
           cmake ${{github.workspace}} -G "${{matrix.env}}" -A x64 -T ${{matrix.toolset}}
-          -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
           -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           -DFICTION_ENABLE_UNITY_BUILD=ON
           -DFICTION_ENABLE_PCH=ON
@@ -89,6 +90,7 @@ jobs:
           -DFICTION_BENCHMARK=OFF
           -DFICTION_EXPERIMENTS=ON
           -DFICTION_Z3=OFF
+          -DFICTION_ALGLIB=ON
           -DFICTION_PROGRESS_BARS=OFF
           -DFICTION_WARNINGS_AS_ERRORS=OFF
           -DMOCKTURTLE_EXAMPLES=OFF
@@ -97,7 +99,7 @@ jobs:
 
       - name: Build cda-tum-siqad-plugins
         working-directory: ${{github.workspace}}\build
-        run: cmake --build . --config ${{matrix.build_type}} -j2
+        run: cmake --build . --config ${{matrix.build_type}} -j4
 
       - name: Test
         working-directory: ${{github.workspace}}\build

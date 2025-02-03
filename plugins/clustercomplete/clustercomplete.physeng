@@ -14,12 +14,13 @@ interpreter, bin_path, command
 -->
 
 <physeng>
-    <name>QuickExact</name>
+    <name>ClusterComplete</name>
     <version>1.0</version>
     <description></description>
     <plugin_info>
         <plugin_logo>logo-mnt.png</plugin_logo>
         <authors>
+            <name>Willem Lambooy</name>
             <name>Jan Drewniok</name>
             <name>Marcel Walter</name>
             <name>Robert Wille</name>
@@ -36,12 +37,10 @@ interpreter, bin_path, command
         </institutions>
         <links>
             <website href="https://github.com/cda-tum/fiction">GitHub</website>
-            <website href="https://www.cda.cit.tum.de/files/eda/2024_aspdac_efficient_exact_simulation.pdf">Paper
-            </website>
         </links>
     </plugin_info>
     <services>ElectronGroundState</services>
-    <bin_path>quickexact</bin_path>
+    <bin_path>clustercomplete</bin_path>
     <commands>
         <!-- Default command. -->
         <command label="Default">
@@ -64,10 +63,18 @@ interpreter, bin_path, command
     <sim_params preserve_order="true">
         <autofail>
             <T>int</T>
-            <val>30</val>
+            <val>100</val>
             <label>Auto-fail DB count (read hover tip)</label>
-            <tip>Accurate simulation results are not guaranteed for more DBs</tip>
+            <tip>For more DBs, the simulation could take weeks, or even (many) months depending on the hardware.
+                Increase if you are patient.
+            </tip>
         </autofail>
+        <num_threads>
+            <T>int</T>
+            <val>-1</val>
+            <label>Instance count</label>
+            <tip>The number of ClusterComplete instances used in multithreading. If left at -1, a number is automatically selected based on the hardware availability.</tip>
+        </num_threads>
         <eps_r>
             <T>float</T>
             <val>5.6</val>
@@ -90,7 +97,7 @@ interpreter, bin_path, command
         </debye_length>
         <base_number>
             <T>int</T>
-            <val>2</val>
+            <val>3</val>
             <label>Base number</label>
             <tip>2 and 3 state simulation is supported.</tip>
         </base_number>
@@ -100,12 +107,26 @@ interpreter, bin_path, command
             <label>Global potential (V)</label>
             <tip>Global external electrostatic potential.</tip>
         </glob_pot>
-        <autodetection>
+        <presim_stats>
             <T>int</T>
             <val>0</val>
-            <label>Simulation base number auto-detection (1 if on)</label>
-            <tip>This mode changes the base number if necessary (i.e. 3-state simulation is performed if positively charged SiDBs can occur).
+            <label>Show pre-simulation statistics (1 if on)</label>
+            <tip>When set, pre-simulation statistics are shown, which give an estimate for the ClusterComplete runtimes, and thus allow the user to configure the validity witness partitioning parameters that could benefit large simulation problems through more intensive pruning before starting a lengthy simulation process.
             </tip>
-        </autodetection>
+        </presim_stats>
+        <witness_partitioning_limit>
+            <T>int</T>
+            <val>6</val>
+            <label>Witness partitioning limit</label>
+            <tip>The limit on the cluster size before pre-simulation omits the check for which it solves the validity witness partitioning NP-complete sub-problem.
+            </tip>
+        </witness_partitioning_limit>
+        <overlapping_witnesses_limit>
+            <T>int</T>
+            <val>6</val>
+            <label>Overlapping witnesses limit</label>
+            <tip>The limit on the number of overlapping witnesses (that determines the factorial scaling of the sub-procedure) before pre-simulation skips validity witness partitioning.
+            </tip>
+        </overlapping_witnesses_limit>
     </sim_params>
 </physeng>
