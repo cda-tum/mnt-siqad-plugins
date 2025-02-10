@@ -8,11 +8,14 @@
     </program>
     <sim_params>
         <debye_length>5</debye_length>
-        <autofail>30</autofail>
+        <autofail>99</autofail>
         <eps_r>5.599999904632568</eps_r>
         <muzm>-0.32</muzm>
         <base_number>2</base_number>
-        <autodetection>0</autodetection>
+        <num_threads>1</num_threads>
+        <witness_partitioning_limit>10</witness_partitioning_limit>
+        <overlapping_witnesses_limit>8</overlapping_witnesses_limit>
+        <presim_stats>1</presim_stats>
         <glob_pot>0.0</glob_pot>
     </sim_params>
     <!--GUI Flags-->

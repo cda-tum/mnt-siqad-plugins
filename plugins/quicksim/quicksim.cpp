@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 
     logger log{log_level};
 
-    qsglobal::stopwatch stopwatch;
+    simglobal::stopwatch stopwatch;
 
     log.echo() << "In File: " << if_name << std::endl;
     log.echo() << "Out File: " << of_name << std::endl;
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
     log.echo() << "\n*** Write simulation results ***" << std::endl;
     qs_interface.write_simulation_results();
 
-    log.echo() << "\n*** QuickSim Complete ***" << std::endl;
+    log.echo() << "\n*** QuickSim Finished ***" << std::endl;
 
     stopwatch.print_stopwatch(log_level);
 

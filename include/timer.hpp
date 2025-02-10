@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-namespace qsglobal
+namespace simglobal
 {
 
 using hidh_res_clock = std::chrono::high_resolution_clock;
@@ -91,6 +91,6 @@ class stopwatch
     bool                       timer_running{};  //! Indicate whether the timer is running.
 };
 
-}  // namespace qsglobal
+}  // namespace simglobal
 
 #endif  // MNT_SIQAD_PLUGINS_TIMER_HPP

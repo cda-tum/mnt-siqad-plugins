@@ -1,4 +1,4 @@
-name: Ubuntu CI
+name: 🐧 • CI
 
 on:
   push:
@@ -93,11 +93,11 @@ jobs:
           -DCMAKE_BUILD_TYPE=Release
           -DFICTION_ENABLE_UNITY_BUILD=ON
           -DFICTION_ENABLE_PCH=ON
-          -DFICTION_CLI=ON
-          -DFICTION_TEST=ON
-          -DFICTION_BENCHMARK=OFF
-          -DFICTION_EXPERIMENTS=ON
+          -DFICTION_CLI=OFF
+          -DFICTION_TEST=OFF
+          -DFICTION_EXPERIMENTS=OFF
           -DFICTION_Z3=OFF
+          -DFICTION_ALGLIB=ON
           -DFICTION_PROGRESS_BARS=OFF
           -DFICTION_WARNINGS_AS_ERRORS=OFF
           -DMOCKTURTLE_EXAMPLES=OFF

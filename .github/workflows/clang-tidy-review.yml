@@ -27,6 +27,7 @@ jobs:
             cmake . -B build
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
             -DMNT_SIQAD_PLUGINS_TEST=ON
+            -DFICTION_ALGLIB=ON
           build_dir: build
           config_file: '.clang-tidy'
           exclude: 'libs/*'

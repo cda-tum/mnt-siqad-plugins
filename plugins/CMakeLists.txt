@@ -17,6 +17,24 @@ foreach (filename ${FILENAMES})
         set(PLUGIN_INSTALL_DIR "release")
     endif ()
 
+    if (WIN32)
+        # Modify the physeng file (add .exe to the bin_path)
+        set(physeng_file "${CMAKE_CURRENT_SOURCE_DIR}/${plugin}/${plugin}.physeng")
+
+        # Check if the file exists
+        if (EXISTS ${physeng_file})
+            file(READ ${physeng_file} physeng_content)
+
+            # Replace <bin_path>plugin_name</bin_path> with <bin_path>plugin_name.exe</bin_path>
+            string(REPLACE "<bin_path>${plugin}</bin_path>" "<bin_path>${plugin}.exe</bin_path>" physeng_content ${physeng_content})
+
+            # Write the updated content back to the file
+            file(WRITE ${physeng_file} ${physeng_content})
+        else ()
+            message(WARNING "Physeng file not found for plugin: ${plugin}")
+        endif ()
+    endif ()
+
     # Copy the physeng file to the build directory
     add_custom_command(
             TARGET ${plugin} POST_BUILD

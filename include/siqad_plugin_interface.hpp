@@ -9,6 +9,7 @@
 #include "siqadconn.cc"
 #include "siqadconn.h"
 
+#include <fiction/algorithms/simulation/sidb/clustercomplete.hpp>
 #include <fiction/algorithms/simulation/sidb/quickexact.hpp>
 #include <fiction/algorithms/simulation/sidb/quicksim.hpp>
 #include <fiction/algorithms/simulation/sidb/sidb_simulation_engine.hpp>
@@ -32,7 +33,7 @@
 class siqad_plugin_interface
 {
   public:
-    //! Constructor for QuickSimInterface
+    //! Constructor for siqad_plugin_interface
     siqad_plugin_interface(const std::string_view& t_in_path, const std::string_view& t_out_path,
                            const bool verbose = true, const int log_l = logger::MSG,
                            fiction::sidb_simulation_engine engine = fiction::sidb_simulation_engine::QUICKEXACT) :
@@ -62,6 +63,13 @@ class siqad_plugin_interface
                 simulation_results = fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, quicksim_params);
             }
         }
+#if (FICTION_ALGLIB_ENABLED)
+        else if (simulation_engine == fiction::sidb_simulation_engine::CLUSTERCOMPLETE)
+        {
+            simulation_results =
+                fiction::clustercomplete<fiction::sidb_cell_clk_lyt_siqad>(layout, clustercomplete_params);
+        }
+#endif  // FICTION_ALGLIB_ENABLED
 
         return EXIT_SUCCESS;
     }
@@ -115,11 +123,14 @@ class siqad_plugin_interface
 
         sqconn->writeResultsXml();
     }
-    // get the physical parameters used for the simulation
-    [[nodiscard]] fiction::sidb_simulation_parameters& get_physical_params() noexcept
+#if (FICTION_ALGLIB_ENABLED)
+    // get the clustercomplete parameter
+    [[nodiscard]] fiction::clustercomplete_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>&
+    get_clustercomplete_params() noexcept
     {
-        return quickexact_params.simulation_parameters;
+        return clustercomplete_params;
     }
+#endif  // FICTION_ALGLIB_ENABLED
     // get the quickexact parameter
     [[nodiscard]] fiction::quickexact_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>&
     get_quickexact_params() noexcept
@@ -188,6 +199,8 @@ class siqad_plugin_interface
             {
                 params.base = static_cast<uint8_t>(std::stoi(sqconn->getParameter("base_number")));
                 quickexact_params.simulation_parameters = params;
+                quickexact_params.global_potential      = fiction::round_to_n_decimal_places(
+                    std::stod(sqconn->getParameter("glob_pot")), 6);  // round to six digits
                 if (std::stoi(sqconn->getParameter("autodetection")) == 1)
                 {
                     quickexact_params.base_number_detection = fiction::quickexact_params<
@@ -213,6 +226,37 @@ class siqad_plugin_interface
                     quicksim_params.number_threads = static_cast<uint64_t>(number_threads);
                 }
             }
+#if (FICTION_ALGLIB_ENABLED)
+            else if (simulation_engine == fiction::sidb_simulation_engine::CLUSTERCOMPLETE)
+            {
+                params.base = static_cast<uint8_t>(std::stoi(sqconn->getParameter("base_number")));
+                clustercomplete_params.simulation_parameters = params;
+                clustercomplete_params.global_potential      = fiction::round_to_n_decimal_places(
+                    std::stod(sqconn->getParameter("glob_pot")), 6);  // round to six digits
+                clustercomplete_params.validity_witness_partitioning_max_cluster_size_gss =
+                    static_cast<uint64_t>(std::stoi(sqconn->getParameter("witness_partitioning_limit")));
+                clustercomplete_params.num_overlapping_witnesses_limit_gss =
+                    static_cast<uint64_t>(std::stoi(sqconn->getParameter("overlapping_witnesses_limit")));
+                if (std::stoi(sqconn->getParameter("presim_stats")) == 1)
+                {
+                    clustercomplete_params.report_gss_stats = fiction::clustercomplete_params<
+                        fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>::ground_state_space_reporting::ON;
+                }
+                else
+                {
+                    clustercomplete_params.report_gss_stats = fiction::clustercomplete_params<
+                        fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>::ground_state_space_reporting::OFF;
+                }
+
+                // prevent number of threads to be negative
+                if (const auto number_threads = static_cast<int64_t>(std::stod(sqconn->getParameter("num_threads")));
+                    number_threads >= 0)
+                {
+                    // Update clustercomplete_params with number_threads
+                    clustercomplete_params.available_threads = static_cast<uint64_t>(number_threads);
+                }
+            }
+#endif  // FICTION_ALGLIB_ENABLED
             log.echo() << "Retrieval from SiQADConn complete." << '\n';
         }
         catch (...)
@@ -226,12 +270,15 @@ class siqad_plugin_interface
     std::unique_ptr<SiQADConnector> sqconn = nullptr;
 
     // variables
-    uint64_t                                                                    auto_fail{};
-    const int                                                                   log_level{};
-    const std::string_view                                                      in_path{};
-    const std::string_view                                                      out_path{};
-    fiction::sidb_cell_clk_lyt_siqad                                            layout{};
-    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad>           simulation_results{};
+    uint64_t                                                          auto_fail{};
+    const int                                                         log_level{};
+    const std::string_view                                            in_path;
+    const std::string_view                                            out_path;
+    fiction::sidb_cell_clk_lyt_siqad                                  layout;
+    fiction::sidb_simulation_result<fiction::sidb_cell_clk_lyt_siqad> simulation_results;
+#if (FICTION_ALGLIB_ENABLED)
+    fiction::clustercomplete_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>> clustercomplete_params{};
+#endif  // FICTION_ALGLIB_ENABLED
     fiction::quickexact_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>> quickexact_params{};
     fiction::quicksim_params                                                    quicksim_params{};
     fiction::sidb_simulation_engine                                             simulation_engine{};
