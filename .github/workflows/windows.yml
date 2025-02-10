@@ -88,7 +88,7 @@ jobs:
           -DFICTION_PROGRESS_BARS=OFF
           -DFICTION_WARNINGS_AS_ERRORS=OFF
           -DMOCKTURTLE_EXAMPLES=OFF
-          -DCDA_TUM_SIQAD_PLUGINS_TEST=ON
+          -DMNT_SIQAD_PLUGINS_TEST=ON
         env:
           BOOST_ROOT: ${{steps.install-boost.outputs.BOOST_ROOT}}
 
