@@ -6,7 +6,7 @@ foreach (filename ${FILENAMES})
     # Create an executable
     get_filename_component(plugin ${filename} NAME_WE)
     add_executable(${plugin} ${filename})
-    target_link_libraries(${plugin} PRIVATE cda-tum-siqad-plugins-include cda-tum-siqad-plugins-dependencies)
+    target_link_libraries(${plugin} PRIVATE mnt-siqad-plugins-include mnt-siqad-plugins-dependencies)
 
     # SiQAD installation path
     if (DEFINED SIQAD_PLUGINS_ROOT)

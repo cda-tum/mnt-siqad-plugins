@@ -8,6 +8,6 @@ foreach (FILE IN LISTS FILENAMES)
     get_filename_component(NAME ${FILE} NAME_WE)
     set(TEST_NAME test_${NAME})
     add_executable(${TEST_NAME} ${FILE})
-    target_link_libraries(${TEST_NAME} PRIVATE Catch2::Catch2WithMain mnt-siqad-plugins-include mnt-siqad-siqad-plugins-dependencies mnt-siqad-plugins-testlib)
+    target_link_libraries(${TEST_NAME} PRIVATE Catch2::Catch2WithMain mnt-siqad-plugins-include mnt-siqadcd ..-plugins-dependencies mnt-siqad-plugins-testlib)
     add_test(NAME ${NAME} COMMAND ${TEST_NAME}) # group tests by file
 endforeach ()
