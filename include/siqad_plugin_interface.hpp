@@ -123,11 +123,6 @@ class siqad_plugin_interface
 
         sqconn->writeResultsXml();
     }
-    // get the physical parameters used for the simulation
-    [[nodiscard]] fiction::sidb_simulation_parameters& get_physical_params() noexcept
-    {
-        return quickexact_params.simulation_parameters;
-    }
 #if (FICTION_ALGLIB_ENABLED)
     // get the clustercomplete parameter
     [[nodiscard]] fiction::clustercomplete_params<fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>&

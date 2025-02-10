@@ -24,13 +24,15 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
                                                 fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG,
                                                 fiction::sidb_simulation_engine::QUICKSIM};
 
-    CHECK_THAT(sim_interface.get_physical_params().lambda_tf,
+    const auto quicksim_params = sim_interface.get_quicksim_params();
+
+    CHECK_THAT(quicksim_params.simulation_parameters.lambda_tf,
                Catch::Matchers::WithinAbs(5, fiction::physical_constants::POP_STABILITY_ERR));
-    CHECK(sim_interface.get_quicksim_params().simulation_parameters.epsilon_r == 5.6);
-    CHECK(sim_interface.get_quicksim_params().simulation_parameters.mu_minus == -.25);
-    CHECK(sim_interface.get_quicksim_params().iteration_steps == 70);
-    CHECK(sim_interface.get_quicksim_params().alpha == 0.8);
-    CHECK(sim_interface.get_quicksim_params().number_threads == 1);
+    CHECK(quicksim_params.simulation_parameters.epsilon_r == 5.6);
+    CHECK(quicksim_params.simulation_parameters.mu_minus == -.25);
+    CHECK(quicksim_params.iteration_steps == 70);
+    CHECK(quicksim_params.alpha == 0.8);
+    CHECK(quicksim_params.number_threads == 1);
 
     REQUIRE(sim_interface.run_simulation() == 0);
     REQUIRE(!sim_interface.get_simulation_results().charge_distributions.empty());
@@ -57,9 +59,10 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
 
 TEST_CASE("Test if reading, simulating, and creating a result-file works for QuickExact", "[interface]")
 {
-    auto       sim_interface     = siqad_plugin_interface{fmt::format("{}/quickexact_problem_0.xml", TEST_PATH),
+    auto sim_interface = siqad_plugin_interface{fmt::format("{}/quickexact_problem_0.xml", TEST_PATH),
                                                 fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG,
                                                 fiction::sidb_simulation_engine::QUICKEXACT};
+
     const auto quickexact_params = sim_interface.get_quickexact_params();
 
     CHECK(quickexact_params.simulation_parameters.base == 2);
@@ -100,9 +103,10 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
 #if (FICTION_ALGLIB_ENABLED)
 TEST_CASE("Test if reading, simulating, and creating a result-file works for ClusterComplete", "[interface]")
 {
-    auto       sim_interface = siqad_plugin_interface{fmt::format("{}/clustercomplete_problem_0.xml", TEST_PATH),
+    auto sim_interface = siqad_plugin_interface{fmt::format("{}/clustercomplete_problem_0.xml", TEST_PATH),
                                                 fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG,
                                                 fiction::sidb_simulation_engine::CLUSTERCOMPLETE};
+
     const auto clustercomplete_params = sim_interface.get_clustercomplete_params();
 
     CHECK(clustercomplete_params.simulation_parameters.base == 2);
