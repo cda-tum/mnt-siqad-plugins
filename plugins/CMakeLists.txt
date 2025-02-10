@@ -27,5 +27,6 @@ foreach (filename ${FILENAMES})
 
     # Install the executable and the physeng file
     install(TARGETS ${plugin} RUNTIME DESTINATION ${PLUGIN_INSTALL_DIR})
-    install(FILES ${plugin}/${plugin}.physeng DESTINATION ${PLUGIN_INSTALL_DIR})
+    install(FILES ${plugin}/${plugin}.physeng ${plugin}/logo-mnt.png DESTINATION ${PLUGIN_INSTALL_DIR})
+
 endforeach ()
