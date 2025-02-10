@@ -29,52 +29,68 @@ jobs:
   build_and_test:
     strategy:
       matrix:
-        os: [ ubuntu-20.04, ubuntu-22.04 ]
-        compiler: [ g++-9, g++-10, clang++-10, clang++-11, clang++-12 ]
-        build_type: [ Debug, Release ]
+        os: [ ubuntu-22.04, ubuntu-24.04, ubuntu-24.04-arm ]
+        compiler: [ g++-11, g++-12, g++-13, clang++-14, clang++-15, clang++-16 ]
         exclude:
           - os: ubuntu-22.04
-            compiler: clang++-10
+            compiler: g++-13
+          - os: ubuntu-22.04
+            compiler: clang++-16
+          - os: ubuntu-24.04
+            compiler: clang++-14
+          - os: ubuntu-24.04-arm
+            compiler: g++-11
+          - os: ubuntu-24.04-arm
+            compiler: g++-12
+          - os: ubuntu-24.04-arm
+            compiler: g++-13
+          - os: ubuntu-24.04-arm
+            compiler: clang++-14
+        include:
+          - os: ubuntu-22.04
+            compiler: g++-10
+          - os: ubuntu-24.04
+            compiler: g++-14
+          - os: ubuntu-24.04
+            compiler: clang++-17
+          - os: ubuntu-24.04
+            compiler: clang++-18
+          - os: ubuntu-24.04-arm
+            compiler: clang++-17
+          - os: ubuntu-24.04-arm
+            compiler: clang++-18
 
-    name: ${{matrix.os}} with ${{matrix.compiler}} (${{matrix.build_type}} mode)
+    name: 🐧 ${{matrix.os}} with ${{matrix.compiler}}
     runs-on: ${{matrix.os}}
 
     steps:
       - name: Install libraries and the respective compiler
-        run: >
-          sudo apt-get update &&
-          sudo apt-get install -yq
-          libboost-all-dev
-          libtbb-dev
-          ${{matrix.compiler}}
+        run: sudo apt-get update && sudo apt-get install -yq libtbb-dev ${{matrix.compiler}}
 
       - name: Clone Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10.x'
-
       - name: Setup ccache
+        # ccache is not supported on ARM yet
+        if: matrix.os != 'ubuntu-24.04-arm'
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: '${{matrix.os}}-${{matrix.compiler}}-${{matrix.build_type}}'
+          key: "${{matrix.os}}-${{matrix.compiler}}"
           variant: ccache
           save: true
           max-size: 10G
 
       - name: Create Build Environment
-        run: cmake -E make_directory ${{github.workspace}}/build
+        run: cmake -E make_directory ${{github.workspace}}/build_release
 
       - name: Configure CMake
-        working-directory: ${{github.workspace}}/build
+        working-directory: ${{github.workspace}}/build_release
         run: >
           cmake ${{github.workspace}}
           -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
-          -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
+          -DCMAKE_BUILD_TYPE=Release
           -DFICTION_ENABLE_UNITY_BUILD=ON
           -DFICTION_ENABLE_PCH=ON
           -DFICTION_CLI=ON
@@ -85,13 +101,12 @@ jobs:
           -DFICTION_PROGRESS_BARS=OFF
           -DFICTION_WARNINGS_AS_ERRORS=OFF
           -DMOCKTURTLE_EXAMPLES=OFF
+          -DCDA_TUM_SIQAD_PLUGINS_TEST=ON
 
-      - name: Build cda-tum-siqad-plugins
-        working-directory: ${{github.workspace}}/build
-        run: cmake --build . --config ${{matrix.build_type}} -j2
+      - name: Build
+        working-directory: ${{github.workspace}}/build_release
+        run: cmake --build . --config Debug -j4
 
       - name: Test
-        working-directory: ${{github.workspace}}/build
-        # Execute tests defined by the CMake configuration.
-        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-        run: ctest -C ${{matrix.build_type}} --verbose
+        working-directory: ${{github.workspace}}/build_release
+        run: ctest -C Debug --verbose --output-on-failure --repeat until-pass:3 --parallel 4

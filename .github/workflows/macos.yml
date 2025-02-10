@@ -97,7 +97,6 @@ jobs:
           cmake ${{github.workspace}}
           -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
           -DCMAKE_BUILD_TYPE=Release
-          -DCDA_TUM_SIQAD_PLUGINS_TEST=ON
           -DFICTION_ENABLE_UNITY_BUILD=ON
           -DFICTION_ENABLE_PCH=ON
           -DFICTION_CLI=ON
@@ -108,6 +107,7 @@ jobs:
           -DFICTION_PROGRESS_BARS=OFF
           -DFICTION_WARNINGS_AS_ERRORS=OFF
           -DMOCKTURTLE_EXAMPLES=OFF
+          -DCDA_TUM_SIQAD_PLUGINS_TEST=ON
 
       - name: Build
         working-directory: ${{github.workspace}}/build_release
