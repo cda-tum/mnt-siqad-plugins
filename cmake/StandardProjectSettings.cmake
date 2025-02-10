@@ -17,9 +17,9 @@ endif ()
 # Generate compile_commands.json to make it easier to work with clang based tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(CDA_TUM_SIQAD_PLUGINS_ENABLE_IPO "Enable Interprocedural Optimization, aka Link Time Optimization (LTO)" OFF)
+option(MNT_SIQAD_PLUGINS_ENABLE_IPO "Enable Interprocedural Optimization, aka Link Time Optimization (LTO)" OFF)
 
-if (CDA_TUM_SIQAD_PLUGINS_ENABLE_IPO)
+if (MNT_SIQAD_PLUGINS_ENABLE_IPO)
     include(CheckIPOSupported)
     check_ipo_supported(
             RESULT
