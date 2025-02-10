@@ -83,7 +83,7 @@ jobs:
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: "${{matrix.os}}-${{matrix.compiler}}"
+          key: "${{matrix.os}}-${{matrix.compiler}}-Release"
           variant: ccache
           save: true
           max-size: 10G

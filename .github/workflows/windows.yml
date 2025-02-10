@@ -64,7 +64,7 @@ jobs:
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: "${{matrix.os}}-${{matrix.toolset}}"
+          key: "${{matrix.os}}-${{matrix.toolset}}-Release"
           variant: ccache
           save: true
           max-size: 10G
@@ -73,7 +73,7 @@ jobs:
         run: cmake -E make_directory ${{github.workspace}}\build_release
 
       - name: Configure CMake
-        working-directory: ${{github.workspace}}\build
+        working-directory: ${{github.workspace}}\build_release
         run: >
           cmake ${{github.workspace}} -G "${{matrix.env}}" -A x64 -T ${{matrix.toolset}}
           -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
