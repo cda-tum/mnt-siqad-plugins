@@ -116,4 +116,3 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build_release
         run: ctest -C Release --verbose --output-on-failure --repeat until-pass:3 --parallel 4
-
