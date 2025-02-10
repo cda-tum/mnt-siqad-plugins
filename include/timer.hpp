@@ -2,8 +2,8 @@
 // Created by Jan Drewniok on 06.02.23.
 //
 
-#ifndef CDA_TUM_SIQAD_PLUGINS_TIMER_HPP
-#define CDA_TUM_SIQAD_PLUGINS_TIMER_HPP
+#ifndef MNT_SIQAD_PLUGINS_TIMER_HPP
+#define MNT_SIQAD_PLUGINS_TIMER_HPP
 
 #include "logger.hpp"
 
@@ -93,4 +93,4 @@ class stopwatch
 
 }  // namespace qsglobal
 
-#endif  // CDA_TUM_SIQAD_PLUGINS_TIMER_HPP
+#endif  // MNT_SIQAD_PLUGINS_TIMER_HPP

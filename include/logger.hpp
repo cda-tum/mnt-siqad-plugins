@@ -1,6 +1,6 @@
 
-#ifndef CDA_TUM_SIQAD_PLUGINS_LOGGER_HPP
-#define CDA_TUM_SIQAD_PLUGINS_LOGGER_HPP
+#ifndef MNT_SIQAD_PLUGINS_LOGGER_HPP
+#define MNT_SIQAD_PLUGINS_LOGGER_HPP
 
 #include <iostream>
 #include <ostream>
@@ -65,4 +65,4 @@ class logger
     no_stream     nos{};
 };
 
-#endif  // CDA_TUM_SIQAD_PLUGINS_LOGGER_HPP
+#endif  // MNT_SIQAD_PLUGINS_LOGGER_HPP
