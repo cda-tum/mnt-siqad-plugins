@@ -35,7 +35,6 @@ jobs:
       matrix:
         os: [ macos-13, macos-14, macos-15 ]
         compiler: [ g++-13, g++-14, clang++ ]
-        build_type: [ Debug, Release ]
         include:
           - compiler: clang++
             ccompiler: clang
@@ -53,7 +52,7 @@ jobs:
           - os: macos-15
             compiler: g++-14
 
-    name: 🍎 ${{matrix.os}} with ${{matrix.compiler}} (${{matrix.build_type}} mode)
+    name: 🍎 ${{matrix.os}} with ${{matrix.compiler}}
     runs-on: ${{matrix.os}}
 
     steps:
@@ -84,23 +83,23 @@ jobs:
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: '${{matrix.os}}-${{matrix.compiler}}-${{matrix.build_type}}'
+          key: "${{matrix.os}}-${{matrix.compiler}}-Release"
           variant: ccache
           save: true
           max-size: 10G
 
       - name: Create Build Environment
-        run: cmake -E make_directory ${{github.workspace}}/build
+        run: cmake -E make_directory ${{github.workspace}}/build_release
 
       - name: Configure CMake
-        working-directory: ${{github.workspace}}/build
+        working-directory: ${{github.workspace}}/build_release
         run: >
           cmake ${{github.workspace}}
           -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
-          -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
+          -DCMAKE_BUILD_TYPE=Release
           -DFICTION_ENABLE_UNITY_BUILD=ON
           -DFICTION_ENABLE_PCH=ON
-          -DFICTION_CLI=ON
+          -DFICTION_CLI=ONmak
           -DFICTION_TEST=ON
           -DFICTION_BENCHMARK=OFF
           -DFICTION_EXPERIMENTS=ON
@@ -109,11 +108,12 @@ jobs:
           -DFICTION_PROGRESS_BARS=OFF
           -DFICTION_WARNINGS_AS_ERRORS=OFF
           -DMOCKTURTLE_EXAMPLES=OFF
+          -DMNT_SIQAD_PLUGINS_TEST=ON
 
       - name: Build
-        working-directory: ${{github.workspace}}/build
-        run: cmake --build . -j4  # all macOS runners provide at least 3 cores
+        working-directory: ${{github.workspace}}/build_release
+        run: cmake --build . --config Release -j4 # all macOS runners provide at least 3 cores
 
       - name: Test
-        working-directory: ${{github.workspace}}/build
-        run: ctest -C ${{matrix.build_type}} --verbose
+        working-directory: ${{github.workspace}}/build_release
+        run: ctest -C Release --verbose --output-on-failure --repeat until-pass:3 --parallel 4

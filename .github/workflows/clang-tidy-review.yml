@@ -19,14 +19,14 @@ jobs:
           submodules: recursive
 
       - name: Review code with Clang-Tidy
-        uses: ZedThree/clang-tidy-review@v0.20.0
+        uses: ZedThree/clang-tidy-review@v0.20.1
         id: review
         with:
           apt_packages: 'libboost-all-dev,libtbb-dev'
           cmake_command: >
             cmake . -B build
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-            -DCDA_TUM_SIQAD_PLUGINS_TEST=ON
+            -DMNT_SIQAD_PLUGINS_TEST=ON
             -DFICTION_ALGLIB=ON
           build_dir: build
           config_file: '.clang-tidy'

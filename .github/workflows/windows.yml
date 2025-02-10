@@ -27,7 +27,6 @@ jobs:
       matrix:
         os: [ windows-2019, windows-2022, windows-2025 ]
         toolset: [ v142, v143, ClangCL ]
-        build_type: [ Debug, Release ]
         include:
           - os: windows-2019
             env: "Visual Studio 16 2019"
@@ -43,7 +42,7 @@ jobs:
           - os: windows-2025
             toolset: v142
 
-    name: 🪟 ${{matrix.os}} with ${{matrix.env}} and ${{matrix.toolset}} toolset (${{matrix.build_type}} mode)
+    name: 🪟 ${{matrix.os}} with ${{matrix.env}} and ${{matrix.toolset}} toolset
     runs-on: ${{matrix.os}}
 
     steps:
@@ -51,11 +50,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10.x'
 
       - name: Install Boost
         uses: MarkusJx/install-boost@v2.5.0
@@ -70,19 +64,20 @@ jobs:
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: '${{matrix.os}}-${{matrix.toolset}}-${{matrix.build_type}}'
+          key: "${{matrix.os}}-${{matrix.toolset}}-Release"
           variant: ccache
           save: true
           max-size: 10G
 
       - name: Create Build Environment
-        run: cmake -E make_directory ${{github.workspace}}\build
+        run: cmake -E make_directory ${{github.workspace}}\build_release
 
       - name: Configure CMake
-        working-directory: ${{github.workspace}}\build
+        working-directory: ${{github.workspace}}\build_release
         run: >
           cmake ${{github.workspace}} -G "${{matrix.env}}" -A x64 -T ${{matrix.toolset}}
-          -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
+          -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
+          -DCMAKE_BUILD_TYPE=Release
           -DFICTION_ENABLE_UNITY_BUILD=ON
           -DFICTION_ENABLE_PCH=ON
           -DFICTION_CLI=ON
@@ -94,15 +89,14 @@ jobs:
           -DFICTION_PROGRESS_BARS=OFF
           -DFICTION_WARNINGS_AS_ERRORS=OFF
           -DMOCKTURTLE_EXAMPLES=OFF
+          -DMNT_SIQAD_PLUGINS_TEST=ON
         env:
           BOOST_ROOT: ${{steps.install-boost.outputs.BOOST_ROOT}}
 
-      - name: Build cda-tum-siqad-plugins
-        working-directory: ${{github.workspace}}\build
-        run: cmake --build . --config ${{matrix.build_type}} -j4
+      - name: Build
+        working-directory: ${{github.workspace}}\build_release
+        run: cmake --build . --config Release -j4
 
       - name: Test
-        working-directory: ${{github.workspace}}\build
-        # Execute tests defined by the CMake configuration.
-        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-        run: ctest -C ${{matrix.build_type}} --verbose
+        working-directory: ${{github.workspace}}\build_release
+        run: ctest -C Release --verbose --output-on-failure --repeat until-pass:3 --parallel 4

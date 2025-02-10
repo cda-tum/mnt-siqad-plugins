@@ -2,8 +2,8 @@
 // Created by Jan Drewniok on 31.01.23.
 //
 
-#ifndef SIQAD_PLUGIN_INTERFACE_HPP
-#define SIQAD_PLUGIN_INTERFACE_HPP
+#ifndef MNT_SIQAD_PLUGINS_SIQAD_PLUGIN_INTERFACE_HPP
+#define MNT_SIQAD_PLUGINS_SIQAD_PLUGIN_INTERFACE_HPP
 
 #include "logger.hpp"
 #include "siqadconn.cc"
@@ -284,4 +284,4 @@ class siqad_plugin_interface
     fiction::sidb_simulation_engine                                             simulation_engine{};
 };
 
-#endif  // SIQAD_PLUGIN_INTERFACE_HPP
+#endif  // MNT_SIQAD_PLUGINS_SIQAD_PLUGIN_INTERFACE_HPP
