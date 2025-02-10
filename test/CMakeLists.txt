@@ -10,4 +10,11 @@ foreach (FILE IN LISTS FILENAMES)
     add_executable(${TEST_NAME} ${FILE})
     target_link_libraries(${TEST_NAME} PRIVATE Catch2::Catch2WithMain mnt-siqad-plugins-include mnt-siqad-plugins-dependencies mnt-siqad-plugins-testlib)
     add_test(NAME ${NAME} COMMAND ${TEST_NAME}) # group tests by file
+
+    if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+        add_custom_command(TARGET ${TEST_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:Catch2>" $<TARGET_FILE_DIR:${TEST_NAME}>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:Catch2WithMain>" $<TARGET_FILE_DIR:${TEST_NAME}>
+        )
+    endif ()
 endforeach ()
