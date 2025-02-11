@@ -78,7 +78,7 @@ git clone --recursive https://github.com/cda-tum/mnt-siqad-plugins.git
 > Inside the newly cloned `mnt-siqad-plugins` folder, trigger the build process:
 
 ```bash
-cmake . -B build -DFICTION_Z3=OFF -DFICTION_BENCHMARK=OFF -DFICTION_PROGRESS_BARS=OFF -DMOCKTURTLE_EXAMPLES=OFF
+cmake . -B build
 cd build
 cmake --build . -j4
 ```
