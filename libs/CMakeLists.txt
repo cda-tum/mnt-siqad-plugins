@@ -5,6 +5,7 @@ set(FICTION_CLI OFF CACHE BOOL "" FORCE)
 set(FICTION_TEST OFF CACHE BOOL "" FORCE)
 set(FICTION_EXPERIMENTS OFF CACHE BOOL "" FORCE)
 set(FICTION_PROGRESS_BARS OFF CACHE BOOL "" FORCE)
+set(FICTION_ALGLIB ON CACHE BOOL "" FORCE)  # Enable ALGLIB by default to support ClusterComplete
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/fiction)
 target_link_libraries(mnt-siqad-plugins-dependencies INTERFACE libfiction)
 
