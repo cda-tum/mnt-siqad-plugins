@@ -36,7 +36,7 @@ interpreter, bin_path, command
             </institution>
         </institutions>
         <links>
-            <website href="https://github.com/cda-tum/fiction">GitHub</website>
+            <website href="https://fiction.readthedocs.io/en/latest/algorithms/sidb_simulation.html#_CPPv4I0EN7fiction15clustercompleteE22sidb_simulation_resultI3LytERK3LytRK22clustercomplete_paramsI4cellI3LytEE">GitHub Docu</website>
         </links>
     </plugin_info>
     <services>ElectronGroundState</services>

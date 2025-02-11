@@ -37,7 +37,7 @@ interpreter, bin_path, command
                     </institution>
                 </institutions>
                 <links>
-                    <website href="https://github.com/cda-tum/fiction">GitHub</website>
+                    <website href="https://fiction.readthedocs.io/en/latest/algorithms/sidb_simulation.html#_CPPv4I0EN7fiction8quicksimE22sidb_simulation_resultI3LytERK3LytRK15quicksim_params">GitHub Docu</website>
                     <website href="https://ieeexplore.ieee.org/document/10231266">Paper</website>
                 </links>
             </plugin_info>
