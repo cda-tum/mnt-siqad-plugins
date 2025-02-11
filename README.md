@@ -83,7 +83,7 @@ cd build
 cmake --build . -j4  # replace "4" with the number of CPU cores you want to use for the build process
 ```
 
-#### Building a faster *ClusterComplete* binary 
+#### Building a faster *ClusterComplete* binary
 
 > *ClusterComplete* can be made significantly faster by passing `-DFICTION_ENABLE_JEMALLOC=ON`, i.e.:
 ```bash
@@ -91,7 +91,7 @@ cmake . -B build -DFICTION_ENABLE_JEMALLOC=ON
 cd build
 cmake --build . -j4
 ```
-> **NB:** This CMake option should not be passed when building *QuickSim* as it has an adverse effect on the runtime for this plugin. 
+> **NB:** This CMake option should not be passed when building *QuickSim* as it has an adverse effect on the runtime for this plugin.
 > Find more information [here](https://fiction.readthedocs.io/en/latest/getting_started.html#usage-of-jemalloc).
 
 ### Using *ClusterComplete*, *QuickExact* and *QuickSim* in the SiQAD GUI
