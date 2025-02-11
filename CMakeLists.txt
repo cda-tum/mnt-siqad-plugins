@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21...3.29)
 
 project(mnt-siqad-plugins
-        VERSION 0.1
+        VERSION 0.2.0
         LANGUAGES CXX C)
 
 # Only set the CMAKE_CXX_STANDARD if it is not set by someone else
