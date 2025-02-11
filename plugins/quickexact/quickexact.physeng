@@ -35,7 +35,7 @@ interpreter, bin_path, command
             </institution>
         </institutions>
         <links>
-            <website href="https://fiction.readthedocs.io/en/latest/algorithms/sidb_simulation.html#_CPPv4I0EN7fiction10quickexactE22sidb_simulation_resultI3LytERK3LytRK17quickexact_paramsI4cellI3LytEE">GitHub Docu</website>
+            <website href="https://fiction.readthedocs.io/en/latest/algorithms/sidb_simulation.html#_CPPv4I0EN7fiction10quickexactE22sidb_simulation_resultI3LytERK3LytRK17quickexact_paramsI4cellI3LytEE">GitHub docu</website>
             <website href="https://www.cda.cit.tum.de/files/eda/2024_aspdac_efficient_exact_simulation.pdf">Paper
             </website>
         </links>
