@@ -2,8 +2,6 @@ add_library(mnt-siqad-plugins-dependencies INTERFACE)
 
 # Include fiction
 set(FICTION_CLI OFF CACHE BOOL "" FORCE)
-set(FICTION_TEST OFF CACHE BOOL "" FORCE)
-set(FICTION_EXPERIMENTS OFF CACHE BOOL "" FORCE)
 set(FICTION_PROGRESS_BARS OFF CACHE BOOL "" FORCE)
 set(FICTION_ALGLIB ON CACHE BOOL "" FORCE)  # Enable ALGLIB by default to support ClusterComplete
 set(MOCKTURTLE_EXAMPLES OFF CACHE BOOL "" FORCE)
