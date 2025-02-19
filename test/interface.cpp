@@ -100,7 +100,6 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
     CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_PATH)));
 }
 
-#if (FICTION_ALGLIB_ENABLED)
 TEST_CASE("Test if reading, simulating, and creating a result-file works for ClusterComplete", "[interface]")
 {
     auto sim_interface = siqad_plugin_interface{fmt::format("{}/clustercomplete_problem_0.xml", TEST_PATH),
@@ -145,4 +144,3 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Clu
 
     CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_PATH)));
 }
-#endif  // FICTION_ALGLIB_ENABLED
