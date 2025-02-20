@@ -10,6 +10,7 @@
 
 #include <fiction/algorithms/simulation/sidb/quickexact.hpp>
 #include <fiction/algorithms/simulation/sidb/sidb_simulation_engine.hpp>
+#include <fiction/technology/constants.hpp>
 #include <fiction/traits.hpp>
 #include <fiction/types.hpp>
 
@@ -27,7 +28,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
     const auto quicksim_params = sim_interface.get_quicksim_params();
 
     CHECK_THAT(quicksim_params.simulation_parameters.lambda_tf,
-               Catch::Matchers::WithinAbs(5, fiction::physical_constants::POP_STABILITY_ERR));
+               Catch::Matchers::WithinAbs(5, fiction::constants::ERROR_MARGIN));
     CHECK(quicksim_params.simulation_parameters.epsilon_r == 5.6);
     CHECK(quicksim_params.simulation_parameters.mu_minus == -.25);
     CHECK(quicksim_params.iteration_steps == 70);
@@ -67,7 +68,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
 
     CHECK(quickexact_params.simulation_parameters.base == 2);
     CHECK_THAT(quickexact_params.simulation_parameters.lambda_tf,
-               Catch::Matchers::WithinAbs(5, fiction::physical_constants::POP_STABILITY_ERR));
+               Catch::Matchers::WithinAbs(5, fiction::constants::ERROR_MARGIN));
     CHECK(quickexact_params.simulation_parameters.epsilon_r == 5.6);
     CHECK(quickexact_params.simulation_parameters.mu_minus == -.32);
 
@@ -75,7 +76,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
           fiction::quickexact_params<
               fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>::automatic_base_number_detection::OFF);
     CHECK_THAT(quickexact_params.global_potential,
-               Catch::Matchers::WithinAbs(0, fiction::physical_constants::POP_STABILITY_ERR));
+               Catch::Matchers::WithinAbs(0, fiction::constants::ERROR_MARGIN));
 
     REQUIRE(sim_interface.run_simulation() == 0);
     REQUIRE(!sim_interface.get_simulation_results().charge_distributions.empty());
@@ -111,14 +112,14 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Clu
 
     CHECK(clustercomplete_params.simulation_parameters.base == 2);
     CHECK_THAT(clustercomplete_params.simulation_parameters.lambda_tf,
-               Catch::Matchers::WithinAbs(5, fiction::physical_constants::POP_STABILITY_ERR));
+               Catch::Matchers::WithinAbs(5, fiction::constants::ERROR_MARGIN));
     CHECK(clustercomplete_params.simulation_parameters.epsilon_r == 5.6);
     CHECK(clustercomplete_params.simulation_parameters.mu_minus == -.32);
 
     CHECK(clustercomplete_params.validity_witness_partitioning_max_cluster_size_gss == 10);
     CHECK(clustercomplete_params.num_overlapping_witnesses_limit_gss == 8);
     CHECK_THAT(clustercomplete_params.global_potential,
-               Catch::Matchers::WithinAbs(0, fiction::physical_constants::POP_STABILITY_ERR));
+               Catch::Matchers::WithinAbs(0, fiction::constants::ERROR_MARGIN));
     CHECK(clustercomplete_params.report_gss_stats ==
           fiction::clustercomplete_params<
               fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>::ground_state_space_reporting::ON);
