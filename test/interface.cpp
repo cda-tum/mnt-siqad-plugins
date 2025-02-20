@@ -75,8 +75,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
     CHECK(quickexact_params.base_number_detection ==
           fiction::quickexact_params<
               fiction::cell<fiction::sidb_cell_clk_lyt_siqad>>::automatic_base_number_detection::OFF);
-    CHECK_THAT(quickexact_params.global_potential,
-               Catch::Matchers::WithinAbs(0, fiction::constants::ERROR_MARGIN));
+    CHECK_THAT(quickexact_params.global_potential, Catch::Matchers::WithinAbs(0, fiction::constants::ERROR_MARGIN));
 
     REQUIRE(sim_interface.run_simulation() == 0);
     REQUIRE(!sim_interface.get_simulation_results().charge_distributions.empty());
