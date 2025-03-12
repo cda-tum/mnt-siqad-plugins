@@ -61,7 +61,8 @@ class siqad_plugin_interface
             {
                 invocations += 1;
                 const auto sim_results = fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, quicksim_params);
-                if (sim_results.has_value()) {
+                if (sim_results.has_value())
+                {
                     simulation_results = sim_results.value();
                 }
             }
