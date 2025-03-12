@@ -93,6 +93,8 @@ jobs:
           -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
           -DCMAKE_BUILD_TYPE=Release
           -DMNT_SIQAD_PLUGINS_TEST=ON
+          -DFICTION_ENABLE_UNITY_BUILD=ON
+          -DFICTION_ENABLE_PCH=ON
 
       - name: Build
         working-directory: ${{github.workspace}}/build_release
