@@ -145,4 +145,5 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Clu
 
     CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_PATH)));
 }
+
 #endif  // FICTION_ALGLIB_ENABLED
