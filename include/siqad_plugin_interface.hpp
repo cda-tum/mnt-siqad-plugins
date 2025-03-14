@@ -60,7 +60,11 @@ class siqad_plugin_interface
             while (simulation_results.charge_distributions.empty() && invocations < 100)
             {
                 invocations += 1;
-                simulation_results = fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, quicksim_params);
+                const auto sim_results = fiction::quicksim<fiction::sidb_cell_clk_lyt_siqad>(layout, quicksim_params);
+                if (sim_results.has_value())
+                {
+                    simulation_results = sim_results.value();
+                }
             }
         }
 #if (FICTION_ALGLIB_ENABLED)
