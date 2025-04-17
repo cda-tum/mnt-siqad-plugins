@@ -113,7 +113,7 @@ class siqad_plugin_interface
                 {
                     db_dist_data.push_back({{
                         fiction::charge_configuration_to_string(lyt.get_all_sidb_charges()),  // config
-                        std::to_string(lyt.get_system_energy()),                              // energy
+                        std::to_string(lyt.get_electrostatic_potential_energy()),             // energy
                         std::to_string(1),                                                    // occurrence freq
                         "1",                                                                  // metastability
                         "3"  // 3-state (GUI still does not work for 2)
