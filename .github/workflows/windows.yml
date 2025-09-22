@@ -43,7 +43,7 @@ jobs:
           submodules: recursive
 
       - name: Install Boost
-        uses: MarkusJx/install-boost@v2.5.0
+        uses: MarkusJx/install-boost@v2.5.1
         id: install-boost
         with:
           boost_version: 1.80.0
