@@ -38,7 +38,7 @@ jobs:
           clangFormatVersion: 15
           inplace: True
 
-      - uses: EndBug/add-and-commit@v9
+      - uses: EndBug/add-and-commit@v10
         with:
           add: 'include plugins test'
           commit: '--signoff'
