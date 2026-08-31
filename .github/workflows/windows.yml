@@ -31,7 +31,7 @@ jobs:
           - os: windows-2022
             env: "Visual Studio 17 2022"
           - os: windows-2025
-            env: "Visual Studio 17 2022"
+            env: "Visual Studio 18 2026"
 
     name: 🪟 ${{matrix.os}} with ${{matrix.env}} and ${{matrix.toolset}} toolset
     runs-on: ${{matrix.os}}
