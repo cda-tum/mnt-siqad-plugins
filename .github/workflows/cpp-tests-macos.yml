@@ -1,0 +1,78 @@
+name: 🍎 • C++ Tests
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        description: The runner to execute on
+        required: true
+        type: string
+      compiler:
+        description: The C++ compiler binary name
+        required: true
+        type: string
+
+concurrency:
+  group: >-
+    ${{ github.workflow }}-${{ github.head_ref || github.run_id }}-cpp-tests-${{
+    inputs.runs-on }}-${{ inputs.compiler }}
+  cancel-in-progress: true
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build_and_test:
+    name: 🍎 ${{ inputs.runs-on }} ${{ inputs.compiler }}
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read # required to check out the repository
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+          persist-credentials: false
+
+      # Remove existing 2to3 binary, which clashes with the Homebrew-installed one
+      - name: Remove existing 2to3 binary
+        run: sudo rm /usr/local/bin/2to3 || true
+
+      - name: Install Boost
+        run: brew install boost
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2
+        with:
+          key: "${{ inputs.runs-on }}-${{ inputs.compiler }}"
+          variant: ccache
+          # Only `main` writes; pull requests restore its cache.
+          save: ${{ github.ref == 'refs/heads/main' }}
+          max-size: 10G
+
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{ github.workspace }}/build_release
+
+      - name: Configure CMake
+        working-directory: ${{ github.workspace }}/build_release
+        env:
+          COMPILER: ${{ inputs.compiler }}
+        run: >
+          cmake ${{ github.workspace }}
+          -DCMAKE_CXX_COMPILER="$COMPILER"
+          -DCMAKE_BUILD_TYPE=Release
+          -DMNT_SIQAD_PLUGINS_TEST=ON
+          -DFICTION_ENABLE_UNITY_BUILD=ON
+          -DFICTION_ENABLE_PCH=ON
+
+      - name: Build
+        working-directory: ${{ github.workspace }}/build_release
+        run: cmake --build . --config Release -j4 # all macOS runners provide at least 3 cores
+
+      - name: Test
+        working-directory: ${{ github.workspace }}/build_release
+        run: ctest -C Release --verbose --output-on-failure --repeat until-pass:3 --parallel 4

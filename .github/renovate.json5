@@ -1,0 +1,67 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:recommended",
+    ":gitSignOff",
+    "helpers:pinGitHubActionDigestsToSemver",
+    ":automergeDigest",
+    ":automergeStableNonMajor",
+    ":combinePatchMinorReleases",
+    ":configMigration",
+    ":enablePreCommit",
+    ":prConcurrentLimitNone",
+    ":prHourlyLimitNone"
+  ],
+  enabledManagers: [
+    "github-actions",
+    "pre-commit",
+    "git-submodules",
+  ],
+  lockFileMaintenance: {
+    enabled: true,
+    automerge: true
+  },
+  schedule: [
+    "every weekend"
+  ],
+  packageRules: [
+    {
+      matchManagers: [
+        "github-actions"
+      ],
+      addLabels: [
+        "github_actions"
+      ],
+      commitMessagePrefix: "⬆️👨‍💻",
+    },
+    {
+      matchManagers: [
+        "pre-commit"
+      ],
+      addLabels: [
+        "pre-commit"
+      ],
+      commitMessagePrefix: "⬆️🪝",
+      versioning: "pep440"
+    },
+    {
+      matchManagers: [
+        "git-submodules"
+      ],
+      addLabels: [
+        "dependencies",
+        "submodules"
+      ],
+      commitMessagePrefix: "⬆️📦",
+    },
+    {
+      description: "Group and automerge all patch updates",
+      groupName: "patch versions",
+      groupSlug: "all-patch",
+      matchUpdateTypes: [
+        "patch"
+      ],
+      automerge: true
+    }
+  ]
+}
