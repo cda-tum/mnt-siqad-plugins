@@ -52,8 +52,8 @@ repos:
     rev: v0.6.13
     hooks:
       - id: cmake-format
-        additional_dependencies: [ pyyaml ]
-        types: [ file ]
+        additional_dependencies: [pyyaml]
+        types: [file]
         files: (\.cmake|CMakeLists.txt)(.in)?$
 
   # clang-format the C++ part of the code base
@@ -61,15 +61,15 @@ repos:
     rev: v23.1.0
     hooks:
       - id: clang-format
-        types_or: [ c++, c ]
-        args: [ "-style=file" ]
+        types_or: [c++, c]
+        args: ["-style=file"]
 
   # Format configuration files with prettier
   - repo: https://github.com/rbubley/mirrors-prettier
     rev: v3.9.6
     hooks:
       - id: prettier
-        types_or: [ yaml, markdown, json ]
+        types_or: [yaml, markdown, json]
 
   # Check JSON schemata
   - repo: https://github.com/python-jsonschema/check-jsonschema
@@ -77,4 +77,4 @@ repos:
     hooks:
       - id: check-github-workflows
       - id: check-renovate
-        additional_dependencies: [ "json5" ]
+        additional_dependencies: ["json5"]
