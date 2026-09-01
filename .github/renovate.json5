@@ -15,6 +15,11 @@
     "pre-commit",
     "git-submodules",
   ],
+  // The git-submodules manager is disabled by default independent of enabledManagers
+  // above (enabledManagers only allowlists it), so it needs its own opt-in too.
+  "git-submodules": {
+    enabled: true
+  },
   // Delegate the actual merge to GitHub's native auto-merge instead of Renovate polling
   // and merging itself, so it goes through the same "🚦 Check" required-status gate as
   // any other PR. Requires "Allow auto-merge" enabled in the repo's GitHub settings and
