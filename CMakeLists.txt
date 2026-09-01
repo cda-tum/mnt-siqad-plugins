@@ -2,12 +2,16 @@ cmake_minimum_required(VERSION 3.21...4.2)
 
 # Only set the CMAKE_CXX_STANDARD if it is not set by someone else
 if(NOT DEFINED CMAKE_CXX_STANDARD)
-  # Set C++ standard; at least C++17 is required
-  set(CMAKE_CXX_STANDARD 17)
+  # Set C++ standard; at least C++20 is required, matching fiction's own
+  # requirement. This must not be lower than fiction's own standard: fiction's
+  # CMakeLists.txt only sets CMAKE_CXX_STANDARD if it is not already defined, so
+  # a lower value set here before add_subdirectory(libs) would silently
+  # downgrade the standard fiction itself gets built with.
+  set(CMAKE_CXX_STANDARD 20)
 endif()
 
 # strongly encouraged to enable this globally to avoid conflicts between
-# -Wpedantic being enabled and -std=c++17 and -std=gnu++17 for example
+# -Wpedantic being enabled and -std=c++20 and -std=gnu++20 for example
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # With the Ninja generator, CMake >= 3.28 enables C++20 module dependency
