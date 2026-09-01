@@ -7,6 +7,7 @@ To add a new plugin, simply create a new sub-folder and add a single `.cpp` file
 well as a single `.physeng` configuration file that contains the plugin metadata and arguments.
 
 ---
+
 **NOTE**
 
 The folder name, source file name and configuration file name must be identical!

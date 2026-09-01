@@ -1,0 +1,85 @@
+name: 🪟 • C++ Tests
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        description: The runner to execute on
+        required: true
+        type: string
+      toolset:
+        description: The MSVC toolset, `v143` or `ClangCL`
+        required: true
+        type: string
+      generator:
+        description: The CMake Visual Studio generator matching `inputs.runs-on`'s installed Visual Studio version
+        required: true
+        type: string
+
+concurrency:
+  group: >-
+    ${{ github.workflow }}-${{ github.head_ref || github.run_id }}-cpp-tests-${{
+    inputs.runs-on }}-${{ inputs.toolset }}
+  cancel-in-progress: true
+
+permissions: {}
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  build_and_test:
+    name: 🪟 ${{ inputs.runs-on }} with ${{ inputs.generator }} and ${{ inputs.toolset }} toolset
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read # required to check out the repository
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Install Boost
+        uses: MarkusJx/install-boost@f9d34f6fe427b8f2ae424d7bf2a3ebccb0dae5a3 # v2.6.0
+        id: install-boost
+        with:
+          boost_version: 1.80.0
+          cache: true
+          toolset: msvc
+          arch: x86
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2
+        with:
+          key: "${{ inputs.runs-on }}-${{ inputs.toolset }}-Release"
+          variant: ccache
+          # Only `main` writes; pull requests restore its cache.
+          save: ${{ github.ref == 'refs/heads/main' }}
+          max-size: 10G
+
+      - name: Create Build Environment
+        run: cmake -E make_directory build_release
+
+      - name: Configure CMake
+        working-directory: build_release
+        env:
+          GENERATOR: ${{ inputs.generator }}
+          TOOLSET: ${{ inputs.toolset }}
+          BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+        run: >
+          cmake .. -G "$env:GENERATOR" -A x64 -T "$env:TOOLSET"
+          -DCMAKE_BUILD_TYPE=Release
+          -DMNT_SIQAD_PLUGINS_TEST=ON
+          -DFICTION_ENABLE_UNITY_BUILD=ON
+          -DFICTION_ENABLE_PCH=ON
+
+      - name: Build
+        working-directory: build_release
+        run: cmake --build . --config Release -j4
+
+      - name: Test
+        working-directory: build_release
+        run: ctest -C Release --verbose --output-on-failure --repeat until-pass:3 --parallel 4

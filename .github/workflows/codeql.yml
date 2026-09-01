@@ -1,0 +1,85 @@
+name: 📝 • CodeQL
+
+on:
+  workflow_call:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}-codeql
+  cancel-in-progress: true
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  analyze:
+    name: 📝 Analyze
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read # required by github/codeql-action/init to check the workflow run
+      contents: read # required to check out the repository
+      security-events: write # required to upload the SARIF results
+
+    steps:
+      - name: Install libraries
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          timeout 10m sudo -E apt-get update -o Acquire::Retries=3
+          timeout 10m sudo -E apt-get install -yq -o Acquire::Retries=3 libboost-all-dev libtbb-dev
+
+      - name: Clone Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2
+        with:
+          key: "codeql-ubuntu-24.04"
+          variant: ccache
+          save: ${{ github.ref == 'refs/heads/main' }}
+          max-size: 10G
+
+      - name: Setup mold
+        uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
+        with:
+          languages: cpp
+          build-mode: manual
+
+      # Unity builds and PCH would leave CodeQL's manual build tracer with fewer, merged
+      # translation units to attribute findings to, so both stay off here.
+      - name: Configure CMake
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DMNT_SIQAD_PLUGINS_TEST=ON
+
+      - name: Build
+        run: cmake --build build --config Release -j4
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
+        with:
+          upload: false
+          output: sarif-results
+
+      - name: Filter SARIF file to exclude library warnings
+        uses: advanced-security/filter-sarif@2da736ff05ef065cb2894ac6892e47b5eac2c3c0 # v1.1
+        with:
+          patterns: |
+            -**/libs/**
+            -**/_deps/**
+          input: sarif-results/cpp.sarif
+          output: sarif-results/cpp.sarif
+
+      - name: Upload SARIF to GitHub
+        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
+        with:
+          sarif_file: sarif-results/cpp.sarif

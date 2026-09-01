@@ -1,0 +1,81 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:recommended",
+    ":gitSignOff",
+    "helpers:pinGitHubActionDigestsToSemver",
+    ":combinePatchMinorReleases",
+    ":configMigration",
+    ":enablePreCommit",
+    ":prConcurrentLimitNone",
+    ":prHourlyLimitNone"
+  ],
+  enabledManagers: [
+    "github-actions",
+    "pre-commit",
+    "git-submodules",
+  ],
+  // The git-submodules manager is disabled by default independent of enabledManagers
+  // above (enabledManagers only allowlists it), so it needs its own opt-in too.
+  "git-submodules": {
+    enabled: true
+  },
+  // Delegate the actual merge to GitHub's native auto-merge instead of Renovate polling
+  // and merging itself, so it goes through the same "🚦 Check" required-status gate as
+  // any other PR. Requires "Allow auto-merge" enabled in the repo's GitHub settings and
+  // branch protection to require the "🚦 Check" context — both are admin-only follow-ups.
+  platformAutomerge: true,
+  // Every update Renovate opens here (github-actions, pre-commit, and the three git
+  // submodules, majors included) automerges once CI is green: nothing currently reviews
+  // these beyond watching CI pass, so there's no manual gate to preserve.
+  automerge: true,
+  lockFileMaintenance: {
+    enabled: true,
+    automerge: true
+  },
+  schedule: [
+    "every weekend"
+  ],
+  packageRules: [
+    {
+      matchManagers: [
+        "github-actions"
+      ],
+      addLabels: [
+        "github_actions"
+      ],
+      commitMessagePrefix: "⬆️👨‍💻",
+      automerge: true
+    },
+    {
+      matchManagers: [
+        "pre-commit"
+      ],
+      addLabels: [
+        "pre-commit"
+      ],
+      commitMessagePrefix: "⬆️🪝",
+      versioning: "pep440",
+      automerge: true
+    },
+    {
+      matchManagers: [
+        "git-submodules"
+      ],
+      addLabels: [
+        "dependencies",
+        "submodules"
+      ],
+      commitMessagePrefix: "⬆️📦",
+      automerge: true
+    },
+    {
+      description: "Group patch updates into one PR",
+      groupName: "patch versions",
+      groupSlug: "all-patch",
+      matchUpdateTypes: [
+        "patch"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,244 @@
+name: CI
+
+# The thin caller. Every real job lives in a callable workflow beside this file; the only
+# work done here is deciding what runs and aggregating the outcome into `🚦 Check`.
+#
+# Deliberately no `on: paths:` filters. A workflow that `paths:` skips never reports a
+# status context, so it can never be required by branch protection. Filtering moved into
+# `change-detection.yml`, whose flags skip *jobs* while `🚦 Check` still concludes.
+
+on:
+  push:
+    branches: ["main"]
+  # deliberately unfiltered: a pull request onto any other base still has to report `🚦 Check`,
+  # and a required context that never arrives blocks that pull request forever
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  change-detection:
+    name: 🔍 Change
+    permissions:
+      contents: read # required to check out the repository
+    uses: ./.github/workflows/change-detection.yml
+
+  # One job per OS and compiler. The caller job's name is the group its checks appear
+  # under, so it stays a short label and deliberately does not mention the matrix —
+  # GitHub appends the entry itself, and the called job spells it out:
+  # `🐧 Test (ubuntu-24.04, g++-13) / 🐧 ubuntu-24.04 g++-13`.
+  cpp-tests-ubuntu:
+    name: 🐧 Test
+    permissions:
+      contents: read # required to check out the repository
+    needs: change-detection
+    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
+    strategy:
+      fail-fast: false
+      matrix:
+        # The ends of each compiler family and one point in between, not every version.
+        # g++-11 on 22.04 is the oldest combination we support.
+        include:
+          - runs-on: ubuntu-22.04
+            compiler: g++-11
+          - runs-on: ubuntu-24.04
+            compiler: g++-13
+          - runs-on: ubuntu-24.04
+            compiler: g++-14
+          - runs-on: ubuntu-24.04
+            compiler: clang++-18
+          - runs-on: ubuntu-24.04
+            compiler: clang++-19
+          - runs-on: ubuntu-24.04
+            compiler: clang++-20
+          - runs-on: ubuntu-24.04-arm
+            compiler: clang++-19
+          - runs-on: ubuntu-24.04-arm
+            compiler: clang++-20
+    uses: ./.github/workflows/cpp-tests-ubuntu.yml
+    with:
+      runs-on: ${{ matrix.runs-on }}
+      compiler: ${{ matrix.compiler }}
+
+  cpp-tests-macos:
+    name: 🍎 Test
+    permissions:
+      contents: read # required to check out the repository
+    needs: change-detection
+    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runs-on: macos-14
+            compiler: clang++
+          - runs-on: macos-15
+            compiler: clang++
+    uses: ./.github/workflows/cpp-tests-macos.yml
+    with:
+      runs-on: ${{ matrix.runs-on }}
+      compiler: ${{ matrix.compiler }}
+
+  cpp-tests-windows:
+    name: 🪟 Test
+    permissions:
+      contents: read # required to check out the repository
+    needs: change-detection
+    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on: [windows-2022, windows-2025]
+        toolset: [v143, ClangCL]
+        include:
+          - runs-on: windows-2022
+            generator: "Visual Studio 17 2022"
+          - runs-on: windows-2025
+            generator: "Visual Studio 18 2026"
+    uses: ./.github/workflows/cpp-tests-windows.yml
+    with:
+      runs-on: ${{ matrix.runs-on }}
+      toolset: ${{ matrix.toolset }}
+      generator: ${{ matrix.generator }}
+
+  cpp-linter:
+    name: 🚨 Lint
+    permissions:
+      contents: read # required to check out the repository
+      pull-requests: write # required to post/update the clang-tidy thread comment on the PR
+    needs: change-detection
+    if: fromJSON(needs.change-detection.outputs.run-cpp-linter)
+    uses: ./.github/workflows/cpp-linter.yml
+
+  codeql:
+    name: 📝 CodeQL
+    permissions:
+      actions: read # required by github/codeql-action/init to check the workflow run
+      contents: read # required to check out the repository
+      security-events: write # required to upload the SARIF results
+    needs: change-detection
+    if: fromJSON(needs.change-detection.outputs.run-codeql)
+    uses: ./.github/workflows/codeql.yml
+
+  zizmor:
+    name: 🌈 Zizmor
+    permissions:
+      contents: read # required to check out the repository
+      security-events: write # required to upload results to the code scanning API
+    needs: change-detection
+    if: fromJSON(needs.change-detection.outputs.run-workflows)
+    uses: ./.github/workflows/zizmor.yml
+
+  # The next four jobs exist so the README can show one badge per platform/check again. Each
+  # collapses a matrix into a single check run with a fixed name, which is what
+  # `img.shields.io/github/check-runs/…?nameFilter=` needs: it matches the check run's
+  # name exactly, and the jobs above carry their matrix entry in theirs, leaving nothing
+  # fixed to point at. They are `🚦 Check` in miniature and follow it for the same
+  # reasons: without `if: always()` a failed dependency skips the job, and a group that
+  # change detection skips has to conclude here anyway — a check run that never appears
+  # reads as a grey "no check runs" on the badge, not as success.
+  #
+  # None of them belong in `required-checks-pass`. They restate jobs the guard already
+  # covers, and branch protection has exactly one required context by design.
+  cpp-tests-ubuntu-badge:
+    name: 🐧 Ubuntu
+    if: always()
+    needs:
+      - change-detection
+      - cpp-tests-ubuntu
+    runs-on: ubuntu-slim
+    steps:
+      - name: Decide whether the Ubuntu tests succeeded or failed
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # v1.3.0
+        with:
+          allowed-skips: >-
+            ${{ !fromJSON(needs.change-detection.outputs.run-cpp-tests)
+            && 'cpp-tests-ubuntu' || '' }}
+          jobs: ${{ toJSON(needs) }}
+
+  cpp-tests-macos-badge:
+    name: 🍎 macOS
+    if: always()
+    needs:
+      - change-detection
+      - cpp-tests-macos
+    runs-on: ubuntu-slim
+    steps:
+      - name: Decide whether the macOS tests succeeded or failed
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # v1.3.0
+        with:
+          allowed-skips: >-
+            ${{ !fromJSON(needs.change-detection.outputs.run-cpp-tests)
+            && 'cpp-tests-macos' || '' }}
+          jobs: ${{ toJSON(needs) }}
+
+  cpp-tests-windows-badge:
+    name: 🪟 Windows
+    if: always()
+    needs:
+      - change-detection
+      - cpp-tests-windows
+    runs-on: ubuntu-slim
+    steps:
+      - name: Decide whether the Windows tests succeeded or failed
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # v1.3.0
+        with:
+          allowed-skips: >-
+            ${{ !fromJSON(needs.change-detection.outputs.run-cpp-tests)
+            && 'cpp-tests-windows' || '' }}
+          jobs: ${{ toJSON(needs) }}
+
+  codeql-badge:
+    name: 📝 CodeQL Analysis
+    if: always()
+    needs:
+      - change-detection
+      - codeql
+    runs-on: ubuntu-slim
+    steps:
+      - name: Decide whether the CodeQL analysis succeeded or failed
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # v1.3.0
+        with:
+          allowed-skips: >-
+            ${{ !fromJSON(needs.change-detection.outputs.run-codeql)
+            && 'codeql' || '' }}
+          jobs: ${{ toJSON(needs) }}
+
+  # This job does nothing and is only used for branch protection. `if: always()` is what
+  # makes it usable as a required check: without it a failed dependency would *skip* the
+  # guard, and a skipped required context leaves a pull request waiting forever.
+  required-checks-pass:
+    name: 🚦 Check
+    if: always()
+    needs:
+      - change-detection
+      - cpp-tests-ubuntu
+      - cpp-tests-macos
+      - cpp-tests-windows
+      - cpp-linter
+      - codeql
+      - zizmor
+    runs-on: ubuntu-slim
+    steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        # `alls-green` fails on any skip that `allowed-skips` did not predict — a job
+        # skipped because an upstream job died still fails the guard. A hand-rolled
+        # `contains(needs.*.result, 'failure')` would silently pass on lost coverage.
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # v1.3.0
+        with:
+          allowed-skips: >-
+            ${{ !fromJSON(needs.change-detection.outputs.run-cpp-tests)
+            && 'cpp-tests-ubuntu,cpp-tests-macos,cpp-tests-windows,' || '' }}
+            ${{ !fromJSON(needs.change-detection.outputs.run-cpp-linter)
+            && 'cpp-linter,' || '' }}
+            ${{ !fromJSON(needs.change-detection.outputs.run-codeql)
+            && 'codeql,' || '' }}
+            ${{ !fromJSON(needs.change-detection.outputs.run-workflows)
+            && 'zizmor' || '' }}
+          jobs: ${{ toJSON(needs) }}

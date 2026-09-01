@@ -1,0 +1,88 @@
+name: 🐧 • C++ Tests
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        description: The runner to execute on
+        required: true
+        type: string
+      compiler:
+        description: The C++ compiler package and binary name, e.g. `g++-13`
+        required: true
+        type: string
+
+concurrency:
+  group: >-
+    ${{ github.workflow }}-${{ github.head_ref || github.run_id }}-cpp-tests-${{
+    inputs.runs-on }}-${{ inputs.compiler }}
+  cancel-in-progress: true
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build_and_test:
+    name: 🐧 ${{ inputs.runs-on }} ${{ inputs.compiler }}
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read # required to check out the repository
+
+    steps:
+      - name: Install libraries and the respective compiler
+        env:
+          COMPILER: ${{ inputs.compiler }}
+          DEBIAN_FRONTEND: noninteractive
+        # `inputs.compiler` is the binary name CMake needs. Ubuntu ships the Clang binaries in
+        # `clang-NN`; `clang++-NN` is no package at all and only resolved because apt falls back
+        # to reading an unmatched name as a regex. `g++-NN` is a real package and needs no
+        # translation.
+        run: |
+          timeout 10m sudo -E apt-get update -o Acquire::Retries=3
+          timeout 10m sudo -E apt-get install -yq -o Acquire::Retries=3 libboost-all-dev libtbb-dev "${COMPILER/clang++-/clang-}"
+
+      - name: Clone Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Setup ccache
+        # ccache is not supported on ARM yet
+        if: inputs.runs-on != 'ubuntu-24.04-arm'
+        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2
+        with:
+          key: "${{ inputs.runs-on }}-${{ inputs.compiler }}"
+          variant: ccache
+          # Only `main` writes; pull requests restore its cache.
+          save: ${{ github.ref == 'refs/heads/main' }}
+          max-size: 10G
+
+      - name: Setup mold
+        uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
+
+      - name: Create Build Environment
+        run: cmake -E make_directory build_release
+
+      - name: Configure CMake
+        working-directory: build_release
+        env:
+          COMPILER: ${{ inputs.compiler }}
+        run: >
+          cmake ..
+          -DCMAKE_CXX_COMPILER="$COMPILER"
+          -DCMAKE_BUILD_TYPE=Release
+          -DMNT_SIQAD_PLUGINS_TEST=ON
+          -DFICTION_ENABLE_UNITY_BUILD=ON
+          -DFICTION_ENABLE_PCH=ON
+
+      - name: Build
+        working-directory: build_release
+        run: cmake --build . --config Release -j4
+
+      - name: Test
+        working-directory: build_release
+        run: ctest -C Release --verbose --output-on-failure --repeat until-pass:3 --parallel 4
