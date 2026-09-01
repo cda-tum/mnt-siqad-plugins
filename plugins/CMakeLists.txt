@@ -42,17 +42,20 @@ foreach(filename ${FILENAMES})
   # Copy the physeng and logo files into a per-plugin subdirectory of the build
   # tree. Every plugin's logo is named `logo-mnt.png`, so copying them all
   # straight into the shared ${CMAKE_CURRENT_BINARY_DIR} would have every
-  # plugin's POST_BUILD step race to write the same destination path.
+  # plugin's POST_BUILD step race to write the same destination path. The
+  # subdirectory is suffixed with "-files" so it can't collide with the
+  # plugin's own executable, which on non-Windows platforms is an
+  # extension-less file literally named ${CMAKE_CURRENT_BINARY_DIR}/${plugin}.
   add_custom_command(
     TARGET ${plugin}
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory
-            ${CMAKE_CURRENT_BINARY_DIR}/${plugin}
+            ${CMAKE_CURRENT_BINARY_DIR}/${plugin}-files
     COMMAND
       ${CMAKE_COMMAND} -E copy
       ${CMAKE_CURRENT_SOURCE_DIR}/${plugin}/${plugin}.physeng
       ${CMAKE_CURRENT_SOURCE_DIR}/${plugin}/logo-mnt.png
-      ${CMAKE_CURRENT_BINARY_DIR}/${plugin})
+      ${CMAKE_CURRENT_BINARY_DIR}/${plugin}-files)
 
   # Install the executable and the physeng file
   install(TARGETS ${plugin} RUNTIME DESTINATION ${PLUGIN_INSTALL_DIR})
