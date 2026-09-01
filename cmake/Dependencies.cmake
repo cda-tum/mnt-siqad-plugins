@@ -31,9 +31,20 @@ FetchContent_Declare(
   GIT_TAG ${FICTION_REV})
 FetchContent_MakeAvailable(fiction)
 
-# siqadconn is used as headers only (see libs/CMakeLists.txt), so its own
-# CMakeLists.txt is never invoked -- populate the source tree without building
-# it.
+# siqadconn is used as headers only (see libs/CMakeLists.txt). Its own
+# CMakeLists.txt does real work we don't want here (a separate project(),
+# forcing CXX_STANDARD 11 on its own library target, requiring Boost/SWIG), so
+# FetchContent_MakeAvailable() -- which would add_subdirectory() it -- is not an
+# option; populate the source tree without building it instead.
+#
+# FetchContent_Populate() called with a prior FetchContent_Declare() is
+# deprecated as of CMake 3.30 (policy CMP0169) in favor of
+# FetchContent_MakeAvailable(), which doesn't support populate-only use.
+# Explicitly opt into the pre-3.30 behavior this populate-only case still needs;
+# CMake's own docs list this as the supported way to keep doing it.
+if(POLICY CMP0169)
+  cmake_policy(SET CMP0169 OLD)
+endif()
 set(SIQADCONN_REV
     15b3cf5a67bb96945d9f7c4efedb951927a12bfa
     CACHE STRING "siqadconn revision -- head of the master branch")
