@@ -34,25 +34,21 @@ FetchContent_MakeAvailable(fiction)
 # siqadconn is used as headers only (see libs/CMakeLists.txt). Its own
 # CMakeLists.txt does real work we don't want here (a separate project(),
 # forcing CXX_STANDARD 11 on its own library target, requiring Boost/SWIG), so
-# FetchContent_MakeAvailable() -- which would add_subdirectory() it -- is not an
-# option; populate the source tree without building it instead.
-#
-# FetchContent_Populate() called with a prior FetchContent_Declare() is
-# deprecated as of CMake 3.30 (policy CMP0169) in favor of
-# FetchContent_MakeAvailable(), which doesn't support populate-only use.
-# Explicitly opt into the pre-3.30 behavior this populate-only case still needs;
-# CMake's own docs list this as the supported way to keep doing it.
-if(POLICY CMP0169)
-  cmake_policy(SET CMP0169 OLD)
-endif()
+# it must never be add_subdirectory()'d. Pointing SOURCE_SUBDIR at a path that
+# doesn't exist in the populated source tree is CMake's documented way to make
+# FetchContent_MakeAvailable() skip that add_subdirectory() step while still
+# populating the source -- this avoids FetchContent_Populate()'s single-name
+# form, which CMake 3.30's CMP0169 policy makes a hard error under its NEW
+# (default) behavior.
 set(SIQADCONN_REV
     15b3cf5a67bb96945d9f7c4efedb951927a12bfa
     CACHE STRING "siqadconn revision -- head of the master branch")
 FetchContent_Declare(
   siqadconn
   GIT_REPOSITORY https://github.com/siqad/siqadconn.git
-  GIT_TAG ${SIQADCONN_REV})
-FetchContent_Populate(siqadconn)
+  GIT_TAG ${SIQADCONN_REV}
+  SOURCE_SUBDIR do-not-build)
+FetchContent_MakeAvailable(siqadconn)
 
 # Catch2 (test-only)
 if(MNT_SIQAD_PLUGINS_TEST)
