@@ -13,21 +13,66 @@
   enabledManagers: [
     "github-actions",
     "pre-commit",
-    "git-submodules",
+    "custom.regex",
   ],
-  // The git-submodules manager is disabled by default independent of enabledManagers
-  // above (enabledManagers only allowlists it), so it needs its own opt-in too.
-  "git-submodules": {
-    enabled: true
-  },
+  // Renovate has no native manager for CMake FetchContent, so the pinned
+  // revisions in cmake/Dependencies.cmake are tracked via regex managers
+  // instead, one per dependency, matching the `set(<DEP>_REV ...)` /
+  // `set(<DEP>_VERSION ...)` line that feeds the FetchContent GIT_TAG.
+  customManagers: [
+    {
+      customType: "regex",
+      description: "Update the fiction revision pinned for CMake FetchContent",
+      managerFilePatterns: [
+        "cmake/Dependencies.cmake"
+      ],
+      matchStrings: [
+        "set\\(\\s*FICTION_REV\\s+(?<currentDigest>[0-9a-f]{40})"
+      ],
+      depNameTemplate: "cda-tum/fiction",
+      packageNameTemplate: "https://github.com/cda-tum/fiction",
+      currentValueTemplate: "main",
+      datasourceTemplate: "git-refs",
+    },
+    {
+      customType: "regex",
+      description: "Update the siqadconn revision pinned for CMake FetchContent",
+      managerFilePatterns: [
+        "cmake/Dependencies.cmake"
+      ],
+      matchStrings: [
+        "set\\(\\s*SIQADCONN_REV\\s+(?<currentDigest>[0-9a-f]{40})"
+      ],
+      depNameTemplate: "siqad/siqadconn",
+      packageNameTemplate: "https://github.com/siqad/siqadconn",
+      currentValueTemplate: "master",
+      datasourceTemplate: "git-refs",
+    },
+    {
+      customType: "regex",
+      description: "Update the Catch2 version pinned for CMake FetchContent",
+      managerFilePatterns: [
+        "cmake/Dependencies.cmake"
+      ],
+      matchStrings: [
+        "set\\(\\s*CATCH2_VERSION\\s+(?<currentValue>[0-9.]+)"
+      ],
+      depNameTemplate: "catchorg/Catch2",
+      packageNameTemplate: "catchorg/Catch2",
+      datasourceTemplate: "github-tags",
+      extractVersionTemplate: "^v(?<version>.+)$",
+    }
+  ],
   // Delegate the actual merge to GitHub's native auto-merge instead of Renovate polling
   // and merging itself, so it goes through the same "🚦 Check" required-status gate as
   // any other PR. Requires "Allow auto-merge" enabled in the repo's GitHub settings and
   // branch protection to require the "🚦 Check" context — both are admin-only follow-ups.
   platformAutomerge: true,
-  // Every update Renovate opens here (github-actions, pre-commit, and the three git
-  // submodules, majors included) automerges once CI is green: nothing currently reviews
-  // these beyond watching CI pass, so there's no manual gate to preserve.
+  // Every update Renovate opens here (github-actions, pre-commit, and the three
+  // FetchContent dependencies, majors included) automerges once CI is green: nothing
+  // currently reviews these beyond watching CI pass, so there's no manual gate to
+  // preserve. Unlike a tarball+hash FetchContent setup, a git-SHA/tag pin has no
+  // stale-hash failure mode, so automerge is safe here even for the dependency bumps.
   automerge: true,
   lockFileMaintenance: {
     enabled: true,
@@ -60,11 +105,12 @@
     },
     {
       matchManagers: [
-        "git-submodules"
+        "custom.regex"
       ],
       addLabels: [
         "dependencies",
-        "submodules"
+        "C++",
+        "build_system"
       ],
       commitMessagePrefix: "⬆️📦",
       automerge: true

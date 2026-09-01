@@ -26,7 +26,7 @@ categories:
     collapse-after: 5
     labels:
       - "dependencies"
-      - "submodules"
+      - "build_system"
 change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
 change-title-escapes: '\<*&'
 version-resolver:

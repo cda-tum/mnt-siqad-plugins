@@ -7,14 +7,14 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
   # fiction itself has since raised its own minimum to C++20, and this value
   # must not be lower than fiction's own standard: fiction's CMakeLists.txt only
   # sets CMAKE_CXX_STANDARD if it is not already defined, so staying at 17 will
-  # silently downgrade fiction's own build the next time its submodule pin is
-  # bumped. Bumping this to 20 was tried and reverted: it broke the macOS build
-  # with `invalid application of 'sizeof' to an incomplete type 'phys::Layer'`
-  # in libs/siqadconn/src/siqadconn.h, a pre-existing forward-declaration issue
-  # in the (third-party, unpinned by us beyond its own submodule commit)
-  # siqadconn dependency that C++20's stricter libc++ allocator only newly
-  # exposes. Revisit once siqadconn is fixed upstream or the fiction submodule
-  # pin actually advances past C++17.
+  # silently downgrade fiction's own build the next time its FetchContent pin
+  # (cmake/Dependencies.cmake) is bumped. Bumping this to 20 was tried and
+  # reverted: it broke the macOS build with `invalid application of 'sizeof' to
+  # an incomplete type 'phys::Layer'` in siqadconn's siqadconn.h, a pre-existing
+  # forward-declaration issue in the (third-party, unpinned by us beyond its own
+  # FetchContent commit) siqadconn dependency that C++20's stricter libc++
+  # allocator only newly exposes. Revisit once siqadconn is fixed upstream or
+  # the fiction FetchContent pin actually advances past C++17.
   set(CMAKE_CXX_STANDARD 17)
 endif()
 

@@ -69,10 +69,10 @@ All you need is a `git` client, `cmake`, the [`Boost`](https://www.boost.org/) l
 
 ### Building the Plugins
 
-> Clone the repository and its submodules:
+> Clone the repository:
 
 ```bash
-git clone --recursive https://github.com/cda-tum/mnt-siqad-plugins.git
+git clone https://github.com/cda-tum/mnt-siqad-plugins.git
 ```
 
 > Inside the newly cloned `mnt-siqad-plugins` folder, trigger the build process:
