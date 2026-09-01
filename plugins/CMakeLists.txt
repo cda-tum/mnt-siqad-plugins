@@ -43,9 +43,9 @@ foreach(filename ${FILENAMES})
   # tree. Every plugin's logo is named `logo-mnt.png`, so copying them all
   # straight into the shared ${CMAKE_CURRENT_BINARY_DIR} would have every
   # plugin's POST_BUILD step race to write the same destination path. The
-  # subdirectory is suffixed with "-files" so it can't collide with the
-  # plugin's own executable, which on non-Windows platforms is an
-  # extension-less file literally named ${CMAKE_CURRENT_BINARY_DIR}/${plugin}.
+  # subdirectory is suffixed with "-files" so it can't collide with the plugin's
+  # own executable, which on non-Windows platforms is an extension-less file
+  # literally named ${CMAKE_CURRENT_BINARY_DIR}/${plugin}.
   add_custom_command(
     TARGET ${plugin}
     POST_BUILD
