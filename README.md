@@ -102,9 +102,10 @@ Make sure you have [SiQAD](https://github.com/siqad/siqad) installed and the plu
 
 Navigate to `<PATH-TO-SIQAD>/plugins/` and create new folders named `clustercomplete`, `quicksim` and `quickexact`.
 
-Move the `clustercomplete`, `quicksim` and `quickexact` binaries along with their respective `.physeng` files from
-the `mnt-siqad-plugins/build/` directory to the newly created `siqad/plugins/quicksim/` and `siqad/plugins/quickexact/`
-directories. Once completed, restart SiQAD.
+Move the `clustercomplete`, `quicksim` and `quickexact` binaries from the `mnt-siqad-plugins/build/plugins/` directory,
+along with their respective `.physeng` and `logo-mnt.png` files from the neighboring
+`mnt-siqad-plugins/build/plugins/<plugin-name>-files/` directory, to the newly created `siqad/plugins/quicksim/` and
+`siqad/plugins/quickexact/` directories. Once completed, restart SiQAD.
 
 _ClusterComplete_, _QuickExact_ and _QuickSim_ are now available in the engine list.
 
