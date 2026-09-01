@@ -17,8 +17,8 @@
   ],
   // Renovate has no native manager for CMake FetchContent, so the pinned
   // revisions in cmake/Dependencies.cmake are tracked via regex managers
-  // instead, one per dependency, matching the `set(<DEP>_REV ...)` /
-  // `set(<DEP>_VERSION ...)` line that feeds the FetchContent GIT_TAG.
+  // instead, one per dependency, matching the `set(<DEP>_REV ...)` line
+  // that feeds the FetchContent GIT_TAG.
   customManagers: [
     {
       customType: "regex",
@@ -49,18 +49,23 @@
       datasourceTemplate: "git-refs",
     },
     {
+      // Catch2 is pinned by commit SHA (currentDigest) rather than tag name,
+      // with the version kept only as a trailing comment (currentValue) --
+      // same sha-plus-version-comment idiom as
+      // helpers:pinGitHubActionDigestsToSemver uses for Actions. Renovate
+      // keeps both in sync on every bump, so this never goes stale the way a
+      // separately-computed hash would.
       customType: "regex",
-      description: "Update the Catch2 version pinned for CMake FetchContent",
+      description: "Update the Catch2 revision pinned for CMake FetchContent",
       managerFilePatterns: [
         "cmake/Dependencies.cmake"
       ],
       matchStrings: [
-        "set\\(\\s*CATCH2_VERSION\\s+(?<currentValue>[0-9.]+)"
+        "set\\(\\s*CATCH2_REV\\s+(?<currentDigest>[0-9a-f]{40})\\s+#\\s*v(?<currentValue>[0-9.]+)"
       ],
       depNameTemplate: "catchorg/Catch2",
       packageNameTemplate: "catchorg/Catch2",
       datasourceTemplate: "github-tags",
-      extractVersionTemplate: "^v(?<version>.+)$",
     }
   ],
   // Delegate the actual merge to GitHub's native auto-merge instead of Renovate polling

@@ -50,14 +50,20 @@ FetchContent_Declare(
   SOURCE_SUBDIR do-not-build)
 FetchContent_MakeAvailable(siqadconn)
 
-# Catch2 (test-only)
+# Catch2 (test-only). Pinned to the release commit's own SHA rather than its
+# `vX.Y.Z` tag name: an annotated tag is a separate, mutable ref that could in
+# principle be repointed at different content without this file changing,
+# whereas a commit SHA is self-verifying. The version comment is Renovate
+# metadata only (kept in sync with the digest on every bump), matching the same
+# sha-plus-version-comment idiom already used to pin GitHub Actions in this
+# repo's workflows.
 if(MNT_SIQAD_PLUGINS_TEST)
-  set(CATCH2_VERSION
-      3.15.3
-      CACHE STRING "Catch2 version")
+  set(CATCH2_REV
+      8b08d4d79514f45f7e4ce2a607ac9c94e920d1bb # v3.15.3
+      CACHE STRING "Catch2 revision")
   FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG v${CATCH2_VERSION})
+    GIT_TAG ${CATCH2_REV})
   FetchContent_MakeAvailable(Catch2)
 endif()
