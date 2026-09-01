@@ -14,16 +14,15 @@
   </picture>
 </p>
 
-This provides three Physical Simulators for _Silicon Dangling Bond (SiDB)_ Logic: [_ClusterComplete_](https://www.math.ru.nl/~bosma/Students/WillemLambooyMSc.pdf), [
-_QuickExact_](https://www.cda.cit.tum.de/files/eda/2024_aspdac_efficient_exact_simulation.pdf)
+This provides three Physical Simulators for _Silicon Dangling Bond (SiDB)_ Logic: [_ClusterComplete_](https://www.math.ru.nl/~bosma/Students/WillemLambooyMSc.pdf), [_QuickExact_](https://www.cda.cit.tum.de/files/eda/2024_aspdac_efficient_exact_simulation.pdf)
 and [_QuickSim_](https://www.cda.cit.tum.de/files/eda/2023_ieeenano_quicksim_physical_simulation.pdf).
 
-#### General information:
+## General information:
 
 Each of these is implemented on top of the [_fiction_](https://github.com/cda-tum/fiction) framework. This project makes the
 simulators available inside the [SiQAD](https://github.com/siqad/siqad) GUI.
 
-#### _ClusterComplete_
+### _ClusterComplete_
 
 _ClusterComplete_ is an exact simulator,
 i.e., it determines **all** physically valid charge configurations of a given layout with **100% accuracy**.
@@ -38,7 +37,7 @@ i.e., it determines **all** physically valid charge configurations of a given la
   When set to `-1`, _ClusterComplete_ maximizes computational resources by utilizing all available threads, optimizing
   simulation efficiency.
 
-#### _QuickExact_
+### _QuickExact_
 
 _QuickExact_ is an exact simulator,
 i.e., it determines **all** physically valid charge configurations of a given layout with **100% accuracy**.
@@ -51,7 +50,7 @@ i.e., it determines **all** physically valid charge configurations of a given la
   dynamically set to 3. Otherwise, it is set to 2. This ensures that the simulation consistently delivers correct
   results.
 
-#### _QuickSim_
+### _QuickSim_
 
 _QuickSim_ is an approximate 2-state simulator for determining the ground state of a given SiDB
 layout.
@@ -95,7 +94,7 @@ cmake --build . -j4
 ```
 
 > **NB:** This CMake option should not be passed when building _QuickSim_ as it has an adverse effect on the runtime for this plugin.
-> Find more information [here](https://fiction.readthedocs.io/en/latest/getting_started.html#usage-of-jemalloc).
+> Find more information in [the fiction jemalloc documentation](https://fiction.readthedocs.io/en/latest/getting_started.html#usage-of-jemalloc).
 
 ### Using _ClusterComplete_, _QuickExact_ and _QuickSim_ in the SiQAD GUI
 

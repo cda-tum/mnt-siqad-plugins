@@ -55,14 +55,14 @@ jobs:
           max-size: 10G
 
       - name: Create Build Environment
-        run: cmake -E make_directory ${{ github.workspace }}/build_release
+        run: cmake -E make_directory build_release
 
       - name: Configure CMake
-        working-directory: ${{ github.workspace }}/build_release
+        working-directory: build_release
         env:
           COMPILER: ${{ inputs.compiler }}
         run: >
-          cmake ${{ github.workspace }}
+          cmake ..
           -DCMAKE_CXX_COMPILER="$COMPILER"
           -DCMAKE_BUILD_TYPE=Release
           -DMNT_SIQAD_PLUGINS_TEST=ON
@@ -70,9 +70,9 @@ jobs:
           -DFICTION_ENABLE_PCH=ON
 
       - name: Build
-        working-directory: ${{ github.workspace }}/build_release
+        working-directory: build_release
         run: cmake --build . --config Release -j4 # all macOS runners provide at least 3 cores
 
       - name: Test
-        working-directory: ${{ github.workspace }}/build_release
+        working-directory: build_release
         run: ctest -C Release --verbose --output-on-failure --repeat until-pass:3 --parallel 4

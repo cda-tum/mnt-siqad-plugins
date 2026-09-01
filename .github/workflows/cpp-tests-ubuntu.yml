@@ -65,14 +65,14 @@ jobs:
         uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
 
       - name: Create Build Environment
-        run: cmake -E make_directory ${{ github.workspace }}/build_release
+        run: cmake -E make_directory build_release
 
       - name: Configure CMake
-        working-directory: ${{ github.workspace }}/build_release
+        working-directory: build_release
         env:
           COMPILER: ${{ inputs.compiler }}
         run: >
-          cmake ${{ github.workspace }}
+          cmake ..
           -DCMAKE_CXX_COMPILER="$COMPILER"
           -DCMAKE_BUILD_TYPE=Release
           -DMNT_SIQAD_PLUGINS_TEST=ON
@@ -80,9 +80,9 @@ jobs:
           -DFICTION_ENABLE_PCH=ON
 
       - name: Build
-        working-directory: ${{ github.workspace }}/build_release
+        working-directory: build_release
         run: cmake --build . --config Release -j4
 
       - name: Test
-        working-directory: ${{ github.workspace }}/build_release
+        working-directory: build_release
         run: ctest -C Release --verbose --output-on-failure --repeat until-pass:3 --parallel 4
