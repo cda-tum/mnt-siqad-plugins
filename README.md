@@ -4,6 +4,7 @@
 [![macOS CI](https://img.shields.io/github/check-runs/cda-tum/mnt-siqad-plugins/main?nameFilter=%F0%9F%8D%8E%20macOS&label=macOS&logo=apple&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/actions/workflows/ci.yml)
 [![Windows CI](https://img.shields.io/github/check-runs/cda-tum/mnt-siqad-plugins/main?nameFilter=%F0%9F%AA%9F%20Windows&label=Windows&logo=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyMyAyMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KIDxwYXRoIGQ9Ik0xIDFoMTB2MTBIMXoiIGZpbGw9IiNmMzUzMjUiLz4KIDxwYXRoIGQ9Ik0xMiAxaDEwdjEwSDEyeiIgZmlsbD0iIzgxYmMwNiIvPgogPHBhdGggZD0iTTEgMTJoMTB2MTBIMXoiIGZpbGw9IiMwNWE2ZjAiLz4KIDxwYXRoIGQ9Ik0xMiAxMmgxMHYxMEgxMnoiIGZpbGw9IiNmZmJhMDgiLz4KPC9zdmc+Cg==&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/actions/workflows/ci.yml)
 [![CodeQL](https://img.shields.io/github/check-runs/cda-tum/mnt-siqad-plugins/main?nameFilter=%F0%9F%93%9D%20CodeQL%20Analysis&label=CodeQL&logo=github&style=flat-square)](https://github.com/cda-tum/mnt-siqad-plugins/actions/workflows/ci.yml)
+[![IEEEXplore](https://img.shields.io/static/v1?label=IEEEXplore&message=ClusterComplete&color=informational&style=flat-square)](https://ieeexplore.ieee.org/document/11420323/)
 [![IEEEXplore](https://img.shields.io/static/v1?label=IEEEXplore&message=QuickSim&color=informational&style=flat-square)](https://ieeexplore.ieee.org/document/10231266)
 [![ACM](https://img.shields.io/static/v1?label=ACM&message=QuickExact&color=informational&style=flat-square)](https://dl.acm.org/doi/10.1109/ASP-DAC58780.2024.10473946)
 
@@ -111,7 +112,8 @@ _ClusterComplete_, _QuickExact_ and _QuickSim_ are now available in the engine l
 
 ## References
 
-If you use _QuickExact_ or _QuickSim_ in your work, we would appreciate it if you cite the following publication:
+If you use _ClusterComplete_, _QuickExact_, or _QuickSim_ in your work, we would appreciate it if you cite the following
+publications:
 
 ```bibtex
 @inproceedings{drewniok2023quicksim,
@@ -126,4 +128,11 @@ If you use _QuickExact_ or _QuickSim_ in your work, we would appreciate it if yo
   title={{The Need for Speed: Efficient Exact Simulation of Silicon Dangling Bond Logic}},
   booktitle={Asia and South Pacific Design Automation Conference (ASP-DAC)},
   year={2024}}
+
+@inproceedings{lambooy2026clustercomplete,
+  author={Lambooy, Willem and Drewniok, Jan and Walter, Marcel and Wille, Robert},
+  title={{Mastering the Exponential Complexity of Exact Physical Simulation of Silicon Dangling Bonds}},
+  booktitle={Asia and South Pacific Design Automation Conference (ASP-DAC)},
+  year={2026},
+  doi={10.1109/ASP-DAC66049.2026.11420323}}
 ```
