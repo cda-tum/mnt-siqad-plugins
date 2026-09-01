@@ -4,8 +4,6 @@
     "config:recommended",
     ":gitSignOff",
     "helpers:pinGitHubActionDigestsToSemver",
-    ":automergeDigest",
-    ":automergeStableNonMajor",
     ":combinePatchMinorReleases",
     ":configMigration",
     ":enablePreCommit",
@@ -17,6 +15,15 @@
     "pre-commit",
     "git-submodules",
   ],
+  // Delegate the actual merge to GitHub's native auto-merge instead of Renovate polling
+  // and merging itself, so it goes through the same "🚦 Check" required-status gate as
+  // any other PR. Requires "Allow auto-merge" enabled in the repo's GitHub settings and
+  // branch protection to require the "🚦 Check" context — both are admin-only follow-ups.
+  platformAutomerge: true,
+  // Every update Renovate opens here (github-actions, pre-commit, and the three git
+  // submodules, majors included) automerges once CI is green: nothing currently reviews
+  // these beyond watching CI pass, so there's no manual gate to preserve.
+  automerge: true,
   lockFileMaintenance: {
     enabled: true,
     automerge: true
@@ -33,6 +40,7 @@
         "github_actions"
       ],
       commitMessagePrefix: "⬆️👨‍💻",
+      automerge: true
     },
     {
       matchManagers: [
@@ -42,7 +50,8 @@
         "pre-commit"
       ],
       commitMessagePrefix: "⬆️🪝",
-      versioning: "pep440"
+      versioning: "pep440",
+      automerge: true
     },
     {
       matchManagers: [
@@ -53,15 +62,15 @@
         "submodules"
       ],
       commitMessagePrefix: "⬆️📦",
+      automerge: true
     },
     {
-      description: "Group and automerge all patch updates",
+      description: "Group patch updates into one PR",
       groupName: "patch versions",
       groupSlug: "all-patch",
       matchUpdateTypes: [
         "patch"
-      ],
-      automerge: true
+      ]
     }
   ]
 }
