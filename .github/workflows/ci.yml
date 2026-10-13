@@ -76,9 +76,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runs-on: macos-14
-            compiler: clang++
-          - runs-on: macos-15
+          - runs-on: macos-26
             compiler: clang++
     uses: ./.github/workflows/cpp-tests-macos.yml
     with:
