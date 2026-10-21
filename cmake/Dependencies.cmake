@@ -40,9 +40,7 @@ FetchContent_MakeAvailable(fiction)
 # populating the source -- this avoids FetchContent_Populate()'s single-name
 # form, which CMake 3.30's CMP0169 policy makes a hard error under its NEW
 # (default) behavior.
-set(SIQADCONN_REV
-    766910907559e53b3e2b8704d04e5d387a5e521e
-    CACHE STRING "siqadconn revision -- head of the master branch")
+set(SIQADCONN_REV 766910907559e53b3e2b8704d04e5d387a5e521e)
 FetchContent_Declare(
   siqadconn
   GIT_REPOSITORY https://github.com/siqad/siqadconn.git
@@ -58,9 +56,8 @@ FetchContent_MakeAvailable(siqadconn)
 # sha-plus-version-comment idiom already used to pin GitHub Actions in this
 # repo's workflows.
 if(MNT_SIQAD_PLUGINS_TEST)
-  set(CATCH2_REV
-      08092139210881f01a34e60c5f2fd6afa0ea4024 # v3.16.1
-      CACHE STRING "Catch2 revision")
+  set(CATCH2_REV 08092139210881f01a34e60c5f2fd6afa0ea4024 # v3.16.1
+  )
   FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
