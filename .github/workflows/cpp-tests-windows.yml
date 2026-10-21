@@ -45,13 +45,13 @@ jobs:
         uses: MarkusJx/install-boost@f9d34f6fe427b8f2ae424d7bf2a3ebccb0dae5a3 # v2.6.0
         id: install-boost
         with:
-          boost_version: 1.80.0
+          boost_version: 1.92.0
           cache: true
           toolset: msvc
           arch: x86
 
       - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2
+        uses: hendrikmuhs/ccache-action@f09c25b45002a07be2955cbe52e8cee55643f89d # v1.2.24
         with:
           key: "${{ inputs.runs-on }}-${{ inputs.toolset }}-Release"
           variant: ccache

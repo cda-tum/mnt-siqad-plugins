@@ -10,7 +10,7 @@ include(FetchContent)
 # submodule pins were arbitrary points on their default branch), so they stay
 # pinned to a branch-head commit SHA via a `<DEP>_REV` variable, updated by
 # Renovate's git-refs datasource. Catch2 does publish clean semver tags, so it
-# is pinned to a released version instead via `<DEP>_VERSION`.
+# is pinned to a release commit, with its version in a comment.
 
 # fiction
 set(FICTION_REV 9f9b072566737665184578de7567e0fbb3af4dd8)
@@ -32,9 +32,7 @@ FetchContent_MakeAvailable(fiction)
 # populating the source -- this avoids FetchContent_Populate()'s single-name
 # form, which CMake 3.30's CMP0169 policy makes a hard error under its NEW
 # (default) behavior.
-set(SIQADCONN_REV
-    15b3cf5a67bb96945d9f7c4efedb951927a12bfa
-    CACHE STRING "siqadconn revision -- head of the master branch")
+set(SIQADCONN_REV 766910907559e53b3e2b8704d04e5d387a5e521e)
 FetchContent_Declare(
   siqadconn
   GIT_REPOSITORY https://github.com/siqad/siqadconn.git
@@ -93,9 +91,8 @@ file(CONFIGURE OUTPUT "${siqadconn_BINARY_DIR}/siqadconn.cc" CONTENT
 # sha-plus-version-comment idiom already used to pin GitHub Actions in this
 # repo's workflows.
 if(MNT_SIQAD_PLUGINS_TEST)
-  set(CATCH2_REV
-      8b08d4d79514f45f7e4ce2a607ac9c94e920d1bb # v3.15.3
-      CACHE STRING "Catch2 revision")
+  set(CATCH2_REV 08092139210881f01a34e60c5f2fd6afa0ea4024 # v3.16.1
+  )
   FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
