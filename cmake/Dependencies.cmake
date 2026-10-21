@@ -10,7 +10,7 @@ include(FetchContent)
 # submodule pins were arbitrary points on their default branch), so they stay
 # pinned to a branch-head commit SHA via a `<DEP>_REV` variable, updated by
 # Renovate's git-refs datasource. Catch2 does publish clean semver tags, so it
-# is pinned to a released version instead via `<DEP>_VERSION`.
+# is pinned to a release commit, with its version in a comment.
 
 # fiction
 set(FICTION_REV
