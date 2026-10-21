@@ -2,22 +2,34 @@
 // Created by Jan Drewniok on 31.01.23.
 //
 
-#include <catch2/catch_template_test_macros.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include "logger.hpp"
 #include "siqad_plugin_interface.hpp"
 
+#include <fiction/technology/sidb/lattice.hpp>
+#include <fiction/technology/sidb/layout.hpp>
+#include <fiction/technology/sidb/model/charge_state.hpp>
 #include <fiction/technology/sidb/simulation/engine.hpp>
 #include <fiction/technology/sidb/simulation/engines/quickexact.hpp>
 #include <fiction/utils/math/math_utils.hpp>
 
 #include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <fmt/format.h>
 
+#include <cstddef>
+#include <cstdlib>
 #include <filesystem>
-#include <thread>
+#include <map>
+#include <stdexcept>
+#include <string>
+
+namespace
+{
 
 /**
  * Checks that XML locations and charge states share the result layout's raster order.
@@ -235,3 +247,5 @@ TEST_CASE("SiQAD basis indices are validated before narrowing", "[interface]")
                     std::out_of_range);
     std::filesystem::remove(input_path);
 }
+
+}  // namespace

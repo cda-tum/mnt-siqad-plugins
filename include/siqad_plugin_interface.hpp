@@ -6,11 +6,11 @@
 #define MNT_SIQAD_PLUGINS_SIQAD_PLUGIN_INTERFACE_HPP
 
 #include "logger.hpp"
-#include "siqadconn.cc"
 #include "siqadconn.h"
 
 #include <fiction/technology/sidb/charge_distribution.hpp>
 #include <fiction/technology/sidb/layout.hpp>
+#include <fiction/technology/sidb/model/charge_state.hpp>
 #include <fiction/technology/sidb/model/simulation_parameters.hpp>
 #include <fiction/technology/sidb/simulation/engine.hpp>
 #include <fiction/technology/sidb/simulation/engines/clustercomplete.hpp>
@@ -52,8 +52,8 @@ class siqad_plugin_interface
             log_level{log_l},
             simulation_engine{engine}
     {
-        sqconn = std::make_unique<SiQADConnector>("", static_cast<std::string>(t_in_path),
-                                                  static_cast<std::string>(t_out_path), verbose);
+        sqconn = std::make_unique<phys::SiQADConnector>("", static_cast<std::string>(t_in_path),
+                                                        static_cast<std::string>(t_out_path), verbose);
         initialize_fiction_layout();
     }
 
@@ -234,7 +234,10 @@ class siqad_plugin_interface
             {
                 const auto iteration_steps = static_cast<uint64_t>(std::stoi(sqconn->getParameter("iteration_steps")));
                 const auto alpha           = std::stod(sqconn->getParameter("alpha"));
-                quicksim_params = fiction::sidb::simulation::engines::quicksim_params{params, iteration_steps, alpha};
+                quicksim_params =
+                    fiction::sidb::simulation::engines::quicksim_params{.sim_params      = params,
+                                                                        .iteration_steps = iteration_steps,
+                                                                        .alpha           = alpha};
 
                 // prevent number of threads to be negative
                 if (const auto number_threads = static_cast<int64_t>(std::stod(sqconn->getParameter("num_threads")));
@@ -285,11 +288,11 @@ class siqad_plugin_interface
     }
 
     // Instances
-    std::unique_ptr<SiQADConnector> sqconn = nullptr;
+    std::unique_ptr<phys::SiQADConnector> sqconn = nullptr;
 
     // variables
     uint64_t                          auto_fail{};
-    const int                         log_level{};
+    int                               log_level{};
     fiction::sidb::layout             layout;
     fiction::sidb::simulation::result simulation_results;
 #if (FICTION_ALGLIB_ENABLED)

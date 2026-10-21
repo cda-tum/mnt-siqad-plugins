@@ -29,13 +29,14 @@ class no_stream : public std::ostream
 class logger
 {
   public:
-    enum
-    {
-        MSG,
-        CRT,
-        WRN,
-        DBG
-    };
+    /** Message verbosity. */
+    static constexpr int MSG{0};
+    /** Critical-error verbosity. */
+    static constexpr int CRT{1};
+    /** Warning verbosity. */
+    static constexpr int WRN{2};
+    /** Debug verbosity. */
+    static constexpr int DBG{3};
 
     /**
      * @param log_verbosity Maximum message level to emit.
@@ -69,7 +70,7 @@ class logger
   private:
     const int     verbosity{};
     std::ostream& os;
-    no_stream     nos{};
+    no_stream     nos;
 };
 
 #endif  // MNT_SIQAD_PLUGINS_LOGGER_HPP

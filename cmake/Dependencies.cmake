@@ -25,8 +25,8 @@ FetchContent_Declare(
   GIT_TAG ${FICTION_REV})
 FetchContent_MakeAvailable(fiction)
 
-# siqadconn is used as headers only (see libs/CMakeLists.txt). Its own
-# CMakeLists.txt does real work we don't want here (a separate project(),
+# siqadconn uses this project's build settings (see libs/CMakeLists.txt). Its
+# own CMakeLists.txt does real work we don't want here (a separate project(),
 # forcing CXX_STANDARD 11 on its own library target, requiring Boost/SWIG), so
 # it must never be add_subdirectory()'d. Pointing SOURCE_SUBDIR at a path that
 # doesn't exist in the populated source tree is CMake's documented way to make
