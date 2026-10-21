@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 }
 #else  // FICTION_ALGLIB_ENABLED
 
-#include <exception>
+#include <cstdlib>
 #include <iostream>
 
 int main()
