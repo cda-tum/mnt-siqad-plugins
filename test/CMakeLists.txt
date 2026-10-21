@@ -47,13 +47,25 @@ add_test(
     ${CMAKE_COMMAND} "-DPLUGIN=$<TARGET_FILE:quicksim>"
     "-DINPUT=${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results.xml"
     "-DOUTPUT=${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results_out.xml"
-    "-DEXPECTED_MESSAGE=Simulation produced no charge distributions" -P
-    "${CMAKE_CURRENT_SOURCE_DIR}/check_plugin_failure.cmake")
+    "-DEXPECTED_EXIT=1"
+          "-DEXPECTED_MESSAGE=Simulation produced no charge distributions" -P
+    "${CMAKE_CURRENT_SOURCE_DIR}/check_plugin_result.cmake")
 add_test(
   NAME quicksim_invalid_basis
   COMMAND
     ${CMAKE_COMMAND} "-DPLUGIN=$<TARGET_FILE:quicksim>"
     "-DINPUT=${CMAKE_CURRENT_BINARY_DIR}/quicksim_invalid_basis.xml"
     "-DOUTPUT=${CMAKE_CURRENT_BINARY_DIR}/quicksim_invalid_basis_out.xml"
-    "-DEXPECTED_MESSAGE=Invalid SiQAD lattice basis index" -P
-    "${CMAKE_CURRENT_SOURCE_DIR}/check_plugin_failure.cmake")
+    "-DEXPECTED_EXIT=1"
+          "-DEXPECTED_MESSAGE=Invalid SiQAD lattice basis index" -P
+    "${CMAKE_CURRENT_SOURCE_DIR}/check_plugin_result.cmake")
+
+foreach(plugin IN ITEMS quicksim quickexact clustercomplete)
+  add_test(NAME ${plugin}_debug
+           COMMAND ${CMAKE_COMMAND} "-DPLUGIN=$<TARGET_FILE:${plugin}>"
+                   "-DINPUT=${CMAKE_CURRENT_SOURCE_DIR}/${plugin}_problem_0.xml"
+                   "-DOUTPUT=${CMAKE_CURRENT_BINARY_DIR}/${plugin}_debug_out.xml"
+                   "-DARGUMENTS=--debug" "-DEXPECTED_EXIT=0"
+                   "-DEXPECTED_MESSAGE=--debug: Showing additional outputs"
+                   -P "${CMAKE_CURRENT_SOURCE_DIR}/check_plugin_result.cmake")
+endforeach()
