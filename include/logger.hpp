@@ -29,16 +29,17 @@ class no_stream : public std::ostream
 class logger
 {
   public:
-    /** Message verbosity. */
+    /** @brief Message verbosity. */
     static constexpr int MSG{0};
-    /** Critical-error verbosity. */
+    /** @brief Critical-error verbosity. */
     static constexpr int CRT{1};
-    /** Warning verbosity. */
+    /** @brief Warning verbosity. */
     static constexpr int WRN{2};
-    /** Debug verbosity. */
+    /** @brief Debug verbosity. */
     static constexpr int DBG{3};
 
     /**
+     * @brief Borrows an output stream and filters messages by verbosity.
      * @param log_verbosity Maximum message level to emit.
      * @param output Stream receiving messages.
      */

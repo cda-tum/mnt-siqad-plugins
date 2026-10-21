@@ -17,6 +17,12 @@
 #include <span>
 #include <string_view>
 
+/**
+ * @brief Runs QuickExact on a SiQAD problem file.
+ * @param argc Number of command-line arguments.
+ * @param argv Program name, input and output paths, and optional flags.
+ * @return EXIT_SUCCESS when simulation results are written, otherwise EXIT_FAILURE.
+ */
 int main(int argc, char* argv[])
 {
     try

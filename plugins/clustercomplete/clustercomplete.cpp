@@ -19,6 +19,12 @@
 #include <span>
 #include <string_view>
 
+/**
+ * @brief Runs ClusterComplete on a SiQAD problem file.
+ * @param argc Number of command-line arguments.
+ * @param argv Program name, input and output paths, and optional flags.
+ * @return EXIT_SUCCESS when simulation results are written, otherwise EXIT_FAILURE.
+ */
 int main(int argc, char* argv[])
 {
     try
@@ -107,6 +113,10 @@ int main(int argc, char* argv[])
 #include <cstdlib>
 #include <iostream>
 
+/**
+ * @brief Reports that ClusterComplete requires ALGLIB.
+ * @return EXIT_FAILURE.
+ */
 int main()
 {
     std::cout << "Usage of ALGLIB is not enabled; pass \"-DFICTION_ALGLIB\" to your CMake build." << '\n';

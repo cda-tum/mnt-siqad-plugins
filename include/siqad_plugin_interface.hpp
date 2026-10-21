@@ -32,13 +32,13 @@
 #include <vector>
 
 /**
- * Runs SiDB simulations from SiQAD problem files and exports their charge distributions.
+ * @brief Runs SiDB simulations from SiQAD problem files and exports their charge distributions.
  */
 class siqad_plugin_interface
 {
   public:
     /**
-     * Reads a SiQAD problem and its simulation parameters.
+     * @brief Reads a SiQAD problem and its simulation parameters.
      * @param t_in_path Input problem file.
      * @param t_out_path Output simulation file.
      * @param verbose Enable SiQADConnector messages.
@@ -58,7 +58,7 @@ class siqad_plugin_interface
     }
 
     /**
-     * Replaces the previous result with a new simulation.
+     * @brief Replaces the previous result with a new simulation.
      * @return EXIT_SUCCESS if charge distributions were found, otherwise EXIT_FAILURE.
      */
     int run_simulation()
@@ -92,7 +92,7 @@ class siqad_plugin_interface
     }
 
     /**
-     * Exports unique charge distributions and matching SiDB positions in raster order.
+     * @brief Exports unique charge distributions and matching SiDB positions in raster order.
      * @throws std::runtime_error if no charge distributions are available.
      */
     void write_simulation_results()
@@ -142,18 +142,18 @@ class siqad_plugin_interface
         sqconn->writeResultsXml();
     }
 #if (FICTION_ALGLIB_ENABLED)
-    // get the clustercomplete parameter
+    /** @return ClusterComplete parameters for the next simulation. */
     [[nodiscard]] fiction::sidb::simulation::engines::clustercomplete_params& get_clustercomplete_params() noexcept
     {
         return clustercomplete_params;
     }
 #endif  // FICTION_ALGLIB_ENABLED
-    // get the quickexact parameter
+    /** @return QuickExact parameters for the next simulation. */
     [[nodiscard]] fiction::sidb::simulation::engines::quickexact_params& get_quickexact_params() noexcept
     {
         return quickexact_params;
     }
-    // get the quicksim parameter
+    /** @return QuickSim parameters for the next simulation. */
     [[nodiscard]] fiction::sidb::simulation::engines::quicksim_params& get_quicksim_params() noexcept
     {
         return quicksim_params;
@@ -165,19 +165,19 @@ class siqad_plugin_interface
     {
         return simulation_results;
     }
-    // get number of SiDBs set at auto fail
+    /** @return Maximum SiDB count allowed by the SiQAD problem. */
     [[nodiscard]] uint64_t get_auto_fail() const
     {
         return auto_fail;
     }
-    // get the number of cells of the given layout
+    /** @return Number of SiDBs in the layout. */
     [[nodiscard]] uint64_t get_cell_num() const
     {
         return layout.num_dots();
     }
 
   private:
-    // parameters are initialized and prepared for the simulation
+    /** @brief Reads SiQAD parameters and assigns the problem's SiDBs to the layout. */
     void initialize_fiction_layout()
     {
         logger log(log_level);
