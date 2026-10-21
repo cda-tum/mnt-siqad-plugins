@@ -41,7 +41,7 @@ FetchContent_MakeAvailable(fiction)
 # form, which CMake 3.30's CMP0169 policy makes a hard error under its NEW
 # (default) behavior.
 set(SIQADCONN_REV
-    15b3cf5a67bb96945d9f7c4efedb951927a12bfa
+    766910907559e53b3e2b8704d04e5d387a5e521e
     CACHE STRING "siqadconn revision -- head of the master branch")
 FetchContent_Declare(
   siqadconn
@@ -59,7 +59,7 @@ FetchContent_MakeAvailable(siqadconn)
 # repo's workflows.
 if(MNT_SIQAD_PLUGINS_TEST)
   set(CATCH2_REV
-      8b08d4d79514f45f7e4ce2a607ac9c94e920d1bb # v3.15.3
+      08092139210881f01a34e60c5f2fd6afa0ea4024 # v3.16.1
       CACHE STRING "Catch2 revision")
   FetchContent_Declare(
     Catch2

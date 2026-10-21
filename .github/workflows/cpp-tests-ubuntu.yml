@@ -52,7 +52,7 @@ jobs:
       - name: Setup ccache
         # ccache is not supported on ARM yet
         if: inputs.runs-on != 'ubuntu-24.04-arm'
-        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2
+        uses: hendrikmuhs/ccache-action@f09c25b45002a07be2955cbe52e8cee55643f89d # v1.2.24
         with:
           key: "${{ inputs.runs-on }}-${{ inputs.compiler }}"
           variant: ccache
@@ -61,7 +61,7 @@ jobs:
           max-size: 10G
 
       - name: Setup mold
-        uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
+        uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
 
       - name: Create Build Environment
         run: cmake -E make_directory build_release
