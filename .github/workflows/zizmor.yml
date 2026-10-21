@@ -29,11 +29,7 @@ jobs:
         uses: zizmorcore/zizmor-action@85b2b9fb8e3325e7a23d7d0a9d7ba5ae0f999e3e # v0.7.1
         with:
           persona: pedantic
-          # pin the zizmor CLI version itself; the action's `version` input defaults to
-          # `latest`, which the pinned action commit does not otherwise constrain.
-          # 1.29.0 is the newest version this action commit vendors an image digest for
-          # (and what its own `latest` currently resolves to) — keep in step with the
-          # action pin above when bumping either.
+          # The action vendors hash-locked wheels for this exact zizmor version.
           version: 1.31.1
           # fork PRs get a read-only GITHUB_TOKEN and cannot upload SARIF to code scanning
           advanced-security: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
