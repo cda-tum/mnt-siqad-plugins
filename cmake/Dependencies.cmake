@@ -14,7 +14,7 @@ include(FetchContent)
 
 # fiction
 set(FICTION_REV
-    f43da37e8b9c62e37e3de08ea7d0a428d18b5f61
+    9f9b072566737665184578de7567e0fbb3af4dd8
     CACHE STRING "fiction revision -- head of the main branch")
 set(FICTION_ALGLIB
     ON
