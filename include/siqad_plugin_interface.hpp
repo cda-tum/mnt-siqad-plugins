@@ -20,7 +20,8 @@
 
 #include <fmt/format.h>
 
-#include <cmath>
+#include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <map>
 #include <memory>
@@ -30,24 +31,36 @@
 #include <utility>
 #include <vector>
 
+/**
+ * Runs SiDB simulations from SiQAD problem files and exports their charge distributions.
+ */
 class siqad_plugin_interface
 {
   public:
-    //! Constructor for siqad_plugin_interface
+    /**
+     * Reads a SiQAD problem and its simulation parameters.
+     * @param t_in_path Input problem file.
+     * @param t_out_path Output simulation file.
+     * @param verbose Enable SiQADConnector messages.
+     * @param log_l Logging verbosity.
+     * @param engine Simulation engine to invoke.
+     * @throws std::out_of_range if a lattice basis index is not 0 or 1.
+     */
     siqad_plugin_interface(const std::string_view& t_in_path, const std::string_view& t_out_path,
                            const bool verbose = true, const int log_l = logger::MSG,
                            fiction::sidb::simulation::engine engine = fiction::sidb::simulation::engine::QUICKEXACT) :
             log_level{log_l},
-            in_path{t_in_path},
-            out_path{t_out_path},
             simulation_engine{engine}
     {
-        sqconn = std::make_unique<SiQADConnector>("", static_cast<std::string>(in_path),
-                                                  static_cast<std::string>(out_path), verbose);
+        sqconn = std::make_unique<SiQADConnector>("", static_cast<std::string>(t_in_path),
+                                                  static_cast<std::string>(t_out_path), verbose);
         initialize_fiction_layout();
     }
 
-    // conduct physical simulation for given layout
+    /**
+     * Replaces the previous result with a new simulation.
+     * @return EXIT_SUCCESS if charge distributions were found, otherwise EXIT_FAILURE.
+     */
     int run_simulation()
     {
         simulation_results = {};
@@ -61,10 +74,10 @@ class siqad_plugin_interface
             while (simulation_results.charge_distributions.empty() && invocations < 100)
             {
                 invocations += 1;
-                const auto sim_results = fiction::sidb::simulation::engines::quicksim(layout, quicksim_params);
+                auto sim_results = fiction::sidb::simulation::engines::quicksim(layout, quicksim_params);
                 if (sim_results.has_value())
                 {
-                    simulation_results = sim_results.value();
+                    simulation_results = std::move(*sim_results);
                 }
             }
         }
@@ -78,7 +91,10 @@ class siqad_plugin_interface
         return simulation_results.charge_distributions.empty() ? EXIT_FAILURE : EXIT_SUCCESS;
     }
 
-    // simulation results are written to xml
+    /**
+     * Exports unique charge distributions and matching SiDB positions in raster order.
+     * @throws std::runtime_error if no charge distributions are available.
+     */
     void write_simulation_results()
     {
         if (simulation_results.charge_distributions.empty())
@@ -142,8 +158,10 @@ class siqad_plugin_interface
     {
         return quicksim_params;
     }
-    // get the simulation results
-    [[nodiscard]] fiction::sidb::simulation::result get_simulation_results() const noexcept
+    /**
+     * @return Simulation results, valid until the next simulation or interface destruction.
+     */
+    [[nodiscard]] const fiction::sidb::simulation::result& get_simulation_results() const noexcept
     {
         return simulation_results;
     }
@@ -169,9 +187,6 @@ class siqad_plugin_interface
 
         auto* const db_collection = sqconn->dbCollection();
 
-        std::vector<std::pair<double, double>> db_locs{};
-        db_locs.reserve(static_cast<uint64_t>(static_cast<double>(db_collection->db_tree_inner->size())));
-
         for (const auto& db : *db_collection)
         {
             if (db->l != 0 && db->l != 1)
@@ -179,11 +194,11 @@ class siqad_plugin_interface
                 throw std::out_of_range("Invalid SiQAD lattice basis index");
             }
 
-            db_locs.push_back(layout.get_lattice().nm_position({db->n, db->m, static_cast<int8_t>(db->l)}));
+            const auto [x, y] = layout.get_lattice().nm_position({db->n, db->m, static_cast<int8_t>(db->l)});
 
             layout.assign_sidb({db->n, db->m, static_cast<int8_t>(db->l)});
 
-            log.debug() << fmt::format("DB loc: x={}, y={}\n", db_locs.back().first, db_locs.back().second);
+            log.debug() << fmt::format("DB loc: x={}, y={}\n", x, y);
         }
 
         try
@@ -275,8 +290,6 @@ class siqad_plugin_interface
     // variables
     uint64_t                          auto_fail{};
     const int                         log_level{};
-    const std::string_view            in_path;
-    const std::string_view            out_path;
     fiction::sidb::layout             layout;
     fiction::sidb::simulation::result simulation_results;
 #if (FICTION_ALGLIB_ENABLED)

@@ -16,12 +16,6 @@ include(FetchContent)
 set(FICTION_REV
     f43da37e8b9c62e37e3de08ea7d0a428d18b5f61
     CACHE STRING "fiction revision -- head of the main branch")
-set(FICTION_CLI
-    OFF
-    CACHE BOOL "" FORCE)
-set(FICTION_PROGRESS_BARS
-    OFF
-    CACHE BOOL "" FORCE)
 set(FICTION_ALGLIB
     ON
     CACHE BOOL "" FORCE) # Enable ALGLIB by default to support ClusterComplete
@@ -70,7 +64,8 @@ string(
     SIQADCONN_HEADER
     "${SIQADCONN_HEADER}")
 file(MAKE_DIRECTORY "${siqadconn_BINARY_DIR}")
-file(WRITE "${siqadconn_BINARY_DIR}/siqadconn.h" "${SIQADCONN_HEADER}")
+file(CONFIGURE OUTPUT "${siqadconn_BINARY_DIR}/siqadconn.h" CONTENT
+     "${SIQADCONN_HEADER}" @ONLY)
 configure_file("${siqadconn_SOURCE_DIR}/src/siqadconn.cc"
                "${siqadconn_BINARY_DIR}/siqadconn.cc" COPYONLY)
 

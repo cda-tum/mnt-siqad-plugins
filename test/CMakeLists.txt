@@ -28,3 +28,16 @@ foreach(FILE IN LISTS FILENAMES)
               "$<TARGET_FILE:Catch2WithMain>" $<TARGET_FILE_DIR:${TEST_NAME}>)
   endif()
 endforeach()
+
+# A failed heuristic search must reach the caller as a nonzero plugin exit.
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/quicksim_problem_0.xml"
+     NO_RESULT_PROBLEM)
+string(REPLACE "<iteration_steps>70</iteration_steps>"
+               "<iteration_steps>0</iteration_steps>" NO_RESULT_PROBLEM
+               "${NO_RESULT_PROBLEM}")
+file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results.xml"
+     CONTENT "${NO_RESULT_PROBLEM}" @ONLY)
+add_test(NAME quicksim_no_results
+         COMMAND quicksim "${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results.xml"
+                 "${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results_out.xml")
+set_tests_properties(quicksim_no_results PROPERTIES WILL_FAIL TRUE)

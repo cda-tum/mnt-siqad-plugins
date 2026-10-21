@@ -15,6 +15,8 @@
 #include <fmt/format.h>
 
 #include <filesystem>
+#include <fstream>
+#include <iterator>
 #include <thread>
 
 /**
@@ -23,7 +25,7 @@
  */
 void check_simulation_xml(const siqad_plugin_interface& sim_interface)
 {
-    const auto                  result = sim_interface.get_simulation_results();
+    const auto&                 result = sim_interface.get_simulation_results();
     boost::property_tree::ptree xml{};
     boost::property_tree::read_xml(fmt::format("{}/sim_result_0.xml", TEST_PATH), xml);
     const auto& locations = xml.get_child("sim_out.physloc");
@@ -204,4 +206,21 @@ TEST_CASE("Export preserves distinct charge states beyond 64 SiDBs", "[interface
     REQUIRE(sim_interface.get_simulation_results().charge_distributions.size() == 2);
     sim_interface.write_simulation_results();
     check_simulation_xml(sim_interface);
+}
+
+TEST_CASE("SiQAD basis indices are validated before narrowing", "[interface]")
+{
+    std::ifstream source{fmt::format("{}/quickexact_problem_0.xml", TEST_PATH)};
+    std::string   xml{std::istreambuf_iterator<char>{source}, std::istreambuf_iterator<char>{}};
+    const auto    basis = xml.find("l=\"0\"");
+    REQUIRE(basis != std::string::npos);
+    xml.replace(basis, 5, "l=\"256\"");
+    const auto input_path = fmt::format("{}/invalid_basis.xml", TEST_PATH);
+    {
+        std::ofstream output{input_path};
+        output << xml;
+    }
+    CHECK_THROWS_AS((siqad_plugin_interface{input_path, fmt::format("{}/sim_result_0.xml", TEST_PATH), false}),
+                    std::out_of_range);
+    std::filesystem::remove(input_path);
 }

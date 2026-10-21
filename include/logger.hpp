@@ -37,7 +37,14 @@ class logger
         DBG
     };
 
-    explicit logger(int verbosity = 0, std::ostream& os = std::cout) : verbosity(verbosity), os(os) {}
+    /**
+     * @param log_verbosity Maximum message level to emit.
+     * @param output Stream receiving messages.
+     */
+    explicit logger(const int log_verbosity = 0, std::ostream& output = std::cout) :
+            verbosity{log_verbosity},
+            os{output}
+    {}
 
     std::ostream& debug()
     {
