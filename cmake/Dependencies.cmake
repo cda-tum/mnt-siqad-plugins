@@ -13,9 +13,7 @@ include(FetchContent)
 # is pinned to a released version instead via `<DEP>_VERSION`.
 
 # fiction
-set(FICTION_REV
-    9f9b072566737665184578de7567e0fbb3af4dd8
-    CACHE STRING "fiction revision -- head of the main branch")
+set(FICTION_REV 9f9b072566737665184578de7567e0fbb3af4dd8)
 set(FICTION_ALGLIB
     ON
     CACHE BOOL "" FORCE) # Enable ALGLIB by default to support ClusterComplete
@@ -49,7 +47,8 @@ FetchContent_MakeAvailable(siqadconn)
 set_property(
   DIRECTORY
   APPEND
-  PROPERTY CMAKE_CONFIGURE_DEPENDS "${siqadconn_SOURCE_DIR}/src/siqadconn.h")
+  PROPERTY CMAKE_CONFIGURE_DEPENDS "${siqadconn_SOURCE_DIR}/src/siqadconn.h"
+           "${siqadconn_SOURCE_DIR}/src/siqadconn.cc")
 file(READ "${siqadconn_SOURCE_DIR}/src/siqadconn.h" SIQADCONN_HEADER)
 string(FIND "${SIQADCONN_HEADER}"
             "std::vector<Layer> getLayers(void){return layers;}"
@@ -70,8 +69,17 @@ string(
 file(MAKE_DIRECTORY "${siqadconn_BINARY_DIR}")
 file(CONFIGURE OUTPUT "${siqadconn_BINARY_DIR}/siqadconn.h" CONTENT
      "${SIQADCONN_HEADER}" @ONLY)
-configure_file("${siqadconn_SOURCE_DIR}/src/siqadconn.cc"
-               "${siqadconn_BINARY_DIR}/siqadconn.cc" COPYONLY)
+# Export only through write_simulation_results; destruction can follow failure.
+file(READ "${siqadconn_SOURCE_DIR}/src/siqadconn.cc" SIQADCONN_SOURCE)
+string(
+  REGEX
+  REPLACE
+    "  if \\(output_path != \"\"( && !results_written)?\\)[ \r\n]*writeResultsXml\\(\\);"
+    ""
+    SIQADCONN_SOURCE
+    "${SIQADCONN_SOURCE}")
+file(CONFIGURE OUTPUT "${siqadconn_BINARY_DIR}/siqadconn.cc" CONTENT
+     "${SIQADCONN_SOURCE}" @ONLY)
 
 # Catch2 (test-only). Pinned to the release commit's own SHA rather than its
 # `vX.Y.Z` tag name: an annotated tag is a separate, mutable ref that could in

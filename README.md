@@ -84,6 +84,9 @@ cd build
 cmake --build . -j4  # replace "4" with the number of CPU cores you want to use for the build process
 ```
 
+The fiction revision is fixed by the project and updates when an existing build tree is reconfigured.
+To build against a local fiction checkout, pass `-DFETCHCONTENT_SOURCE_DIR_FICTION=/path/to/fiction` to CMake.
+
 #### Building a faster _ClusterComplete_ binary
 
 > _ClusterComplete_ can be made significantly faster by passing `-DFICTION_ENABLE_JEMALLOC=ON`, i.e.:
