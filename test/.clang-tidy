@@ -1,0 +1,5 @@
+InheritParentConfig: true
+CheckOptions:
+  # Catch2 assertion macros use do/while wrappers to behave as single statements.
+  - key: cppcoreguidelines-avoid-do-while.IgnoreMacros
+    value: true

@@ -61,7 +61,6 @@ jobs:
           filter: |
             include/**
             plugins/**
-            src/**
             test/**
             libs/**
             cmake/**
@@ -89,7 +88,6 @@ jobs:
           filter: |
             include/**
             plugins/**
-            src/**
             test/**
             libs/**
             cmake/**
@@ -115,7 +113,6 @@ jobs:
           filter: |
             include/**
             plugins/**
-            src/**
             test/**
             libs/**
             cmake/**

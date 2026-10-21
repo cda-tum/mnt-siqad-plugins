@@ -29,15 +29,24 @@ class no_stream : public std::ostream
 class logger
 {
   public:
-    enum
-    {
-        MSG,
-        CRT,
-        WRN,
-        DBG
-    };
+    /** @brief Message verbosity. */
+    static constexpr int MSG{0};
+    /** @brief Critical-error verbosity. */
+    static constexpr int CRT{1};
+    /** @brief Warning verbosity. */
+    static constexpr int WRN{2};
+    /** @brief Debug verbosity. */
+    static constexpr int DBG{3};
 
-    explicit logger(int verbosity = 0, std::ostream& os = std::cout) : verbosity(verbosity), os(os) {}
+    /**
+     * @brief Borrows an output stream and filters messages by verbosity.
+     * @param log_verbosity Maximum message level to emit.
+     * @param output Stream receiving messages.
+     */
+    explicit logger(const int log_verbosity = 0, std::ostream& output = std::cout) :
+            verbosity{log_verbosity},
+            os{output}
+    {}
 
     std::ostream& debug()
     {
@@ -62,7 +71,7 @@ class logger
   private:
     const int     verbosity{};
     std::ostream& os;
-    no_stream     nos{};
+    no_stream     nos;
 };
 
 #endif  // MNT_SIQAD_PLUGINS_LOGGER_HPP
