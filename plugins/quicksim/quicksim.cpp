@@ -8,79 +8,88 @@
 #include <fmt/format.h>
 
 #include <cstdlib>
+#include <exception>
 #include <iostream>
 #include <string_view>
 #include <vector>
 
 int main(int argc, char* argv[])
 {
-    std::cout << "QuickSim invoked" << std::endl;
-
-    const std::vector<std::string_view> cml_args(argv, argv + argc);
-
-    std::cout << "*** Argument Parsing ***" << std::endl;
-
-    if (argc < 3)
+    try
     {
-        std::cerr << "Error: Too few arguments. Expected input and output file names.\n";
+        std::cout << "QuickSim invoked" << std::endl;
 
-        return EXIT_FAILURE;
-    }
+        const std::vector<std::string_view> cml_args(argv, argv + argc);
 
-    const std::string_view if_name = cml_args[1];
-    const std::string_view of_name = cml_args[2];
+        std::cout << "*** Argument Parsing ***" << std::endl;
 
-    bool verbose   = false;
-    auto log_level = logger::DBG;
-
-    for (const auto& arg : cml_args)
-    {
-        if (arg == "--debug")
+        if (argc < 3)
         {
-            // show additional debug information
-            std::cout << "--debug: Showing additional outputs." << std::endl;
-            verbose   = true;
-            log_level = logger::DBG;
+            std::cerr << "Error: Too few arguments. Expected input and output file names.\n";
+
+            return EXIT_FAILURE;
         }
-        else
+
+        const std::string_view if_name = cml_args[1];
+        const std::string_view of_name = cml_args[2];
+
+        bool verbose   = false;
+        auto log_level = logger::DBG;
+
+        for (const auto& arg : cml_args)
         {
-            std::cout << fmt::format("Unrecognized command-line argument: {}", arg) << std::endl;
+            if (arg == "--debug")
+            {
+                // show additional debug information
+                std::cout << "--debug: Showing additional outputs." << std::endl;
+                verbose   = true;
+                log_level = logger::DBG;
+            }
+            else
+            {
+                std::cout << fmt::format("Unrecognized command-line argument: {}", arg) << std::endl;
+            }
         }
+
+        logger log{log_level};
+
+        simglobal::stopwatch stopwatch;
+
+        log.echo() << "In File: " << if_name << std::endl;
+        log.echo() << "Out File: " << of_name << std::endl;
+
+        log.echo() << "\n*** Initiate QuickSim interface ***" << std::endl;
+        log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
+        auto qs_interface =
+            siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb::simulation::engine::QUICKSIM};
+
+        if (qs_interface.get_auto_fail() < qs_interface.get_cell_num())
+        {
+            log.warning() << "Problem size > autofail threshold, exiting." << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        log.echo() << "\n*** Invoke simulation ***" << std::endl;
+        stopwatch.start();
+        if (qs_interface.run_simulation() != EXIT_SUCCESS)
+        {
+            log.critical() << "Simulation produced no charge distributions." << std::endl;
+            return EXIT_FAILURE;
+        }
+        stopwatch.end();
+
+        log.echo() << "\n*** Write simulation results ***" << std::endl;
+        qs_interface.write_simulation_results();
+
+        log.echo() << "\n*** QuickSim Finished ***" << std::endl;
+
+        stopwatch.print_stopwatch(log_level);
+
+        return EXIT_SUCCESS;
     }
-
-    logger log{log_level};
-
-    simglobal::stopwatch stopwatch;
-
-    log.echo() << "In File: " << if_name << std::endl;
-    log.echo() << "Out File: " << of_name << std::endl;
-
-    log.echo() << "\n*** Initiate QuickSim interface ***" << std::endl;
-    log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
-    auto qs_interface =
-        siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb::simulation::engine::QUICKSIM};
-
-    if (qs_interface.get_auto_fail() < qs_interface.get_cell_num())
+    catch (const std::exception& error)
     {
-        log.warning() << "Problem size > autofail threshold, exiting." << std::endl;
+        std::cerr << "Exception caught: " << error.what() << std::endl;
         return EXIT_FAILURE;
     }
-
-    log.echo() << "\n*** Invoke simulation ***" << std::endl;
-    stopwatch.start();
-    if (qs_interface.run_simulation() != EXIT_SUCCESS)
-    {
-        log.critical() << "Simulation produced no charge distributions." << std::endl;
-        return EXIT_FAILURE;
-    }
-    stopwatch.end();
-
-    log.echo() << "\n*** Write simulation results ***" << std::endl;
-    qs_interface.write_simulation_results();
-
-    log.echo() << "\n*** QuickSim Finished ***" << std::endl;
-
-    stopwatch.print_stopwatch(log_level);
-
-    return EXIT_SUCCESS;
 }

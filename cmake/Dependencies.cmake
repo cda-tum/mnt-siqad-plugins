@@ -46,6 +46,10 @@ FetchContent_MakeAvailable(siqadconn)
 
 # C++20 requires Layer to be complete when getLayers copies its vector. Generate
 # a compatible copy and keep the fetched sources unchanged.
+set_property(
+  DIRECTORY
+  APPEND
+  PROPERTY CMAKE_CONFIGURE_DEPENDS "${siqadconn_SOURCE_DIR}/src/siqadconn.h")
 file(READ "${siqadconn_SOURCE_DIR}/src/siqadconn.h" SIQADCONN_HEADER)
 string(FIND "${SIQADCONN_HEADER}"
             "std::vector<Layer> getLayers(void){return layers;}"

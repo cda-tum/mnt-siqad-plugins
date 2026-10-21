@@ -6,7 +6,8 @@ target_compile_definitions(
 )# make catch2 ignore SIGTERMs sent to applications when timeouts are reached
 target_compile_definitions(
   mnt-siqad-plugins-testlib
-  INTERFACE "TEST_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/\"")
+  INTERFACE "TEST_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/\""
+            "TEST_OUTPUT_PATH=\"${CMAKE_CURRENT_BINARY_DIR}/\"")
 
 foreach(FILE IN LISTS FILENAMES)
   get_filename_component(NAME ${FILE} NAME_WE)
@@ -29,15 +30,30 @@ foreach(FILE IN LISTS FILENAMES)
   endif()
 endforeach()
 
-# A failed heuristic search must reach the caller as a nonzero plugin exit.
-file(READ "${CMAKE_CURRENT_SOURCE_DIR}/quicksim_problem_0.xml"
-     NO_RESULT_PROBLEM)
+# Check both the exit status and diagnostic from the actual plugin.
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/quicksim_problem_0.xml" QUICKSIM_PROBLEM)
 string(REPLACE "<iteration_steps>70</iteration_steps>"
                "<iteration_steps>0</iteration_steps>" NO_RESULT_PROBLEM
-               "${NO_RESULT_PROBLEM}")
+               "${QUICKSIM_PROBLEM}")
 file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results.xml"
      CONTENT "${NO_RESULT_PROBLEM}" @ONLY)
-add_test(NAME quicksim_no_results
-         COMMAND quicksim "${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results.xml"
-                 "${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results_out.xml")
-set_tests_properties(quicksim_no_results PROPERTIES WILL_FAIL TRUE)
+string(REPLACE "l=\"0\"" "l=\"256\"" INVALID_BASIS_PROBLEM
+               "${QUICKSIM_PROBLEM}")
+file(CONFIGURE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/quicksim_invalid_basis.xml"
+     CONTENT "${INVALID_BASIS_PROBLEM}" @ONLY)
+add_test(
+  NAME quicksim_no_results
+  COMMAND
+    ${CMAKE_COMMAND} "-DPLUGIN=$<TARGET_FILE:quicksim>"
+    "-DINPUT=${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results.xml"
+    "-DOUTPUT=${CMAKE_CURRENT_BINARY_DIR}/quicksim_no_results_out.xml"
+    "-DEXPECTED_MESSAGE=Simulation produced no charge distributions" -P
+    "${CMAKE_CURRENT_SOURCE_DIR}/check_plugin_failure.cmake")
+add_test(
+  NAME quicksim_invalid_basis
+  COMMAND
+    ${CMAKE_COMMAND} "-DPLUGIN=$<TARGET_FILE:quicksim>"
+    "-DINPUT=${CMAKE_CURRENT_BINARY_DIR}/quicksim_invalid_basis.xml"
+    "-DOUTPUT=${CMAKE_CURRENT_BINARY_DIR}/quicksim_invalid_basis_out.xml"
+    "-DEXPECTED_MESSAGE=Invalid SiQAD lattice basis index" -P
+    "${CMAKE_CURRENT_SOURCE_DIR}/check_plugin_failure.cmake")

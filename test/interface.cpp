@@ -12,11 +12,11 @@
 #include <fiction/technology/sidb/simulation/engines/quickexact.hpp>
 #include <fiction/utils/math/math_utils.hpp>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 #include <fmt/format.h>
 
 #include <filesystem>
-#include <fstream>
-#include <iterator>
 #include <thread>
 
 /**
@@ -27,14 +27,20 @@ void check_simulation_xml(const siqad_plugin_interface& sim_interface)
 {
     const auto&                 result = sim_interface.get_simulation_results();
     boost::property_tree::ptree xml{};
-    boost::property_tree::read_xml(fmt::format("{}/sim_result_0.xml", TEST_PATH), xml);
+    boost::property_tree::read_xml(fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH), xml);
     const auto& locations = xml.get_child("sim_out.physloc");
     REQUIRE(locations.size() == result.lyt.num_dots());
     std::size_t i = 0;
     for (const auto& [name, location] : locations)
     {
         CHECK(name == "dbdot");
-        const auto [x, y] = result.lyt.get_lattice().nm_position(result.lyt.sidbs()[i++]);
+        const auto& site  = result.lyt.sidbs()[i++];
+        const auto [x, y] = result.lyt.get_lattice().nm_position(site);
+        if (site == fiction::sidb::lattice_site{60, 23, 0})
+        {
+            CHECK_THAT(location.get<double>("<xmlattr>.x"), Catch::Matchers::WithinAbs(230.4, 0.000001));
+            CHECK_THAT(location.get<double>("<xmlattr>.y"), Catch::Matchers::WithinAbs(176.64, 0.000001));
+        }
         CHECK_THAT(location.get<double>("<xmlattr>.x"), Catch::Matchers::WithinAbs(x * 10, 0.000001));
         CHECK_THAT(location.get<double>("<xmlattr>.y"), Catch::Matchers::WithinAbs(y * 10, 0.000001));
     }
@@ -62,8 +68,8 @@ void check_simulation_xml(const siqad_plugin_interface& sim_interface)
 TEST_CASE("Test if reading, simulating, and creating a result-file works for QuickSim", "[interface]")
 {
     auto sim_interface = siqad_plugin_interface{fmt::format("{}/quicksim_problem_0.xml", TEST_PATH),
-                                                fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG,
-                                                fiction::sidb::simulation::engine::QUICKSIM};
+                                                fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH), false,
+                                                logger::MSG, fiction::sidb::simulation::engine::QUICKSIM};
 
     const auto quicksim_params = sim_interface.get_quicksim_params();
 
@@ -88,14 +94,14 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
     sim_interface.write_simulation_results();
     check_simulation_xml(sim_interface);
 
-    CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_PATH)));
+    CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH)));
 }
 
 TEST_CASE("Test if reading, simulating, and creating a result-file works for QuickExact", "[interface]")
 {
     auto sim_interface = siqad_plugin_interface{fmt::format("{}/quickexact_problem_0.xml", TEST_PATH),
-                                                fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG,
-                                                fiction::sidb::simulation::engine::QUICKEXACT};
+                                                fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH), false,
+                                                logger::MSG, fiction::sidb::simulation::engine::QUICKEXACT};
 
     const auto quickexact_params = sim_interface.get_quickexact_params();
 
@@ -123,15 +129,15 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Qui
     sim_interface.write_simulation_results();
     check_simulation_xml(sim_interface);
 
-    CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_PATH)));
+    CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH)));
 }
 
 #if (FICTION_ALGLIB_ENABLED)
 TEST_CASE("Test if reading, simulating, and creating a result-file works for ClusterComplete", "[interface]")
 {
     auto sim_interface = siqad_plugin_interface{fmt::format("{}/clustercomplete_problem_0.xml", TEST_PATH),
-                                                fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG,
-                                                fiction::sidb::simulation::engine::CLUSTERCOMPLETE};
+                                                fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH), false,
+                                                logger::MSG, fiction::sidb::simulation::engine::CLUSTERCOMPLETE};
 
     const auto clustercomplete_params = sim_interface.get_clustercomplete_params();
 
@@ -162,7 +168,7 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Clu
     sim_interface.write_simulation_results();
     check_simulation_xml(sim_interface);
 
-    CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_PATH)));
+    CHECK(std::filesystem::exists(fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH)));
 }
 
 #endif  // FICTION_ALGLIB_ENABLED
@@ -170,8 +176,8 @@ TEST_CASE("Test if reading, simulating, and creating a result-file works for Clu
 TEST_CASE("QuickSim reports an exhausted search", "[interface]")
 {
     auto sim_interface = siqad_plugin_interface{fmt::format("{}/quicksim_problem_0.xml", TEST_PATH),
-                                                fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG,
-                                                fiction::sidb::simulation::engine::QUICKSIM};
+                                                fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH), false,
+                                                logger::MSG, fiction::sidb::simulation::engine::QUICKSIM};
     REQUIRE(sim_interface.run_simulation() == EXIT_SUCCESS);
     sim_interface.get_quicksim_params().iteration_steps = 0;
     CHECK(sim_interface.run_simulation() == EXIT_FAILURE);
@@ -197,10 +203,10 @@ TEST_CASE("Export preserves distinct charge states beyond 64 SiDBs", "[interface
             }
         }
     }
-    const auto input_path = fmt::format("{}/large_problem.xml", TEST_PATH);
+    const auto input_path = fmt::format("{}/large_problem.xml", TEST_OUTPUT_PATH);
     boost::property_tree::write_xml(input_path, input);
     auto sim_interface =
-        siqad_plugin_interface{input_path, fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG};
+        siqad_plugin_interface{input_path, fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH), false, logger::MSG};
     std::filesystem::remove(input_path);
     REQUIRE(sim_interface.run_simulation() == EXIT_SUCCESS);
     REQUIRE(sim_interface.get_simulation_results().charge_distributions.size() == 2);
@@ -210,17 +216,22 @@ TEST_CASE("Export preserves distinct charge states beyond 64 SiDBs", "[interface
 
 TEST_CASE("SiQAD basis indices are validated before narrowing", "[interface]")
 {
-    std::ifstream source{fmt::format("{}/quickexact_problem_0.xml", TEST_PATH)};
-    std::string   xml{std::istreambuf_iterator<char>{source}, std::istreambuf_iterator<char>{}};
-    const auto    basis = xml.find("l=\"0\"");
-    REQUIRE(basis != std::string::npos);
-    xml.replace(basis, 5, "l=\"256\"");
-    const auto input_path = fmt::format("{}/invalid_basis.xml", TEST_PATH);
+    boost::property_tree::ptree input{};
+    boost::property_tree::read_xml(fmt::format("{}/quickexact_problem_0.xml", TEST_PATH), input);
+    bool updated = false;
+    for (auto& [name, layer] : input.get_child("siqad.design"))
     {
-        std::ofstream output{input_path};
-        output << xml;
+        if (name == "layer" && layer.get<std::string>("<xmlattr>.type", "") == "DB")
+        {
+            layer.put("dbdot.latcoord.<xmlattr>.l", 256);
+            updated = true;
+            break;
+        }
     }
-    CHECK_THROWS_AS((siqad_plugin_interface{input_path, fmt::format("{}/sim_result_0.xml", TEST_PATH), false}),
+    REQUIRE(updated);
+    const auto input_path = fmt::format("{}/invalid_basis.xml", TEST_OUTPUT_PATH);
+    boost::property_tree::write_xml(input_path, input);
+    CHECK_THROWS_AS((siqad_plugin_interface{input_path, fmt::format("{}/sim_result_0.xml", TEST_OUTPUT_PATH), false}),
                     std::out_of_range);
     std::filesystem::remove(input_path);
 }
