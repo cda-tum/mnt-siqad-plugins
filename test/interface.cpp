@@ -175,3 +175,33 @@ TEST_CASE("QuickSim reports an exhausted search", "[interface]")
     CHECK(sim_interface.run_simulation() == EXIT_FAILURE);
     CHECK_THROWS_AS(sim_interface.write_simulation_results(), std::runtime_error);
 }
+
+TEST_CASE("Export preserves distinct charge states beyond 64 SiDBs", "[interface]")
+{
+    boost::property_tree::ptree input{};
+    boost::property_tree::read_xml(fmt::format("{}/quickexact_problem_0.xml", TEST_PATH), input);
+    for (auto& [name, layer] : input.get_child("siqad.design"))
+    {
+        if (name == "layer" && layer.get<std::string>("<xmlattr>.type", "") == "DB")
+        {
+            layer.erase("dbdot");
+            for (int i = 0; i < 66; ++i)
+            {
+                boost::property_tree::ptree dot{};
+                dot.put("latcoord.<xmlattr>.n", i < 2 ? i : i * 1000);
+                dot.put("latcoord.<xmlattr>.m", 0);
+                dot.put("latcoord.<xmlattr>.l", 0);
+                layer.add_child("dbdot", dot);
+            }
+        }
+    }
+    const auto input_path = fmt::format("{}/large_problem.xml", TEST_PATH);
+    boost::property_tree::write_xml(input_path, input);
+    auto sim_interface =
+        siqad_plugin_interface{input_path, fmt::format("{}/sim_result_0.xml", TEST_PATH), false, logger::MSG};
+    std::filesystem::remove(input_path);
+    REQUIRE(sim_interface.run_simulation() == EXIT_SUCCESS);
+    REQUIRE(sim_interface.get_simulation_results().charge_distributions.size() == 2);
+    sim_interface.write_simulation_results();
+    check_simulation_xml(sim_interface);
+}

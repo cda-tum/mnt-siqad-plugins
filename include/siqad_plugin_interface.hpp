@@ -24,7 +24,6 @@
 #include <cstdlib>
 #include <map>
 #include <memory>
-#include <set>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -104,28 +103,22 @@ class siqad_plugin_interface
         std::vector<std::vector<std::string>> db_dist_data{};
         db_dist_data.reserve(simulation_results.charge_distributions.size());
 
-        std::set<uint64_t> unique_index{};
-        for (const auto& lyt : simulation_results.charge_distributions)
+        std::map<std::vector<fiction::sidb::model::charge_state>, const fiction::sidb::charge_distribution*>
+            unique_distributions{};
+        for (const auto& distribution : simulation_results.charge_distributions)
         {
-            unique_index.insert(lyt.charge_index(simulation_results.sim_params.base));
+            unique_distributions.emplace(distribution.charge_states(), &distribution);
         }
 
-        for (const auto& index : unique_index)
+        for (const auto& [charges, distribution] : unique_distributions)
         {
-            for (const auto& lyt : simulation_results.charge_distributions)
-            {
-                if (lyt.charge_index(simulation_results.sim_params.base) == index)
-                {
-                    db_dist_data.push_back({{
-                        fiction::sidb::model::charge_configuration_to_string(lyt.charge_states()),  // config
-                        std::to_string(lyt.energy()),                                               // energy
-                        std::to_string(1),                                                          // occurrence freq
-                        "1",                                                                        // metastability
-                        "3"  // 3-state (GUI still does not work for 2)
-                    }});
-                    break;
-                }
-            }
+            db_dist_data.push_back({{
+                fiction::sidb::model::charge_configuration_to_string(charges),  // config
+                std::to_string(distribution->energy()),                         // energy
+                "1",                                                            // occurrence freq
+                "1",                                                            // metastability
+                "3"  // 3-state (GUI still does not work for 2)
+            }});
         }
 
         sqconn->setExport("db_charge", db_dist_data);
