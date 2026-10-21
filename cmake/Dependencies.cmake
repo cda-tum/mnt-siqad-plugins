@@ -14,7 +14,7 @@ include(FetchContent)
 
 # fiction
 set(FICTION_REV
-    005d10ca3373ca292161c7013fa5764058923a5c
+    f43da37e8b9c62e37e3de08ea7d0a428d18b5f61
     CACHE STRING "fiction revision -- head of the main branch")
 set(FICTION_CLI
     OFF
@@ -49,6 +49,30 @@ FetchContent_Declare(
   GIT_TAG ${SIQADCONN_REV}
   SOURCE_SUBDIR do-not-build)
 FetchContent_MakeAvailable(siqadconn)
+
+# C++20 requires Layer to be complete when getLayers copies its vector. Generate
+# a compatible copy and keep the fetched sources unchanged.
+file(READ "${siqadconn_SOURCE_DIR}/src/siqadconn.h" SIQADCONN_HEADER)
+string(FIND "${SIQADCONN_HEADER}"
+            "std::vector<Layer> getLayers(void){return layers;}"
+            SIQADCONN_GET_LAYERS)
+if(SIQADCONN_GET_LAYERS EQUAL -1)
+  message(FATAL_ERROR "The siqadconn C++20 compatibility patch needs updating")
+endif()
+string(REPLACE "std::vector<Layer> getLayers(void){return layers;}"
+               "std::vector<Layer> getLayers(void);" SIQADCONN_HEADER
+               "${SIQADCONN_HEADER}")
+string(
+  REGEX
+  REPLACE
+    "#endif[ \r\n]*$"
+    "inline std::vector<phys::Layer> phys::SiQADConnector::getLayers(void) { return layers; }\n\n#endif\n"
+    SIQADCONN_HEADER
+    "${SIQADCONN_HEADER}")
+file(MAKE_DIRECTORY "${siqadconn_BINARY_DIR}")
+file(WRITE "${siqadconn_BINARY_DIR}/siqadconn.h" "${SIQADCONN_HEADER}")
+configure_file("${siqadconn_SOURCE_DIR}/src/siqadconn.cc"
+               "${siqadconn_BINARY_DIR}/siqadconn.cc" COPYONLY)
 
 # Catch2 (test-only). Pinned to the release commit's own SHA rather than its
 # `vX.Y.Z` tag name: an annotated tag is a separate, mutable ref that could in

@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
         log.echo() << "\n*** Initiate QuickExact interface ***" << std::endl;
         log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
         auto quickexact_interface =
-            siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb_simulation_engine::QUICKEXACT};
+            siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb::simulation::engine::QUICKEXACT};
 
         if (quickexact_interface.get_auto_fail() < quickexact_interface.get_cell_num())
         {
@@ -74,7 +74,11 @@ int main(int argc, char* argv[])
 
         log.echo() << "\n*** Invoke simulation ***" << std::endl;
         stopwatch.start();
-        quickexact_interface.run_simulation();
+        if (quickexact_interface.run_simulation() != EXIT_SUCCESS)
+        {
+            log.critical() << "Simulation produced no charge distributions." << std::endl;
+            return EXIT_FAILURE;
+        }
         stopwatch.end();
 
         log.echo() << "\n*** Write simulation results ***" << std::endl;

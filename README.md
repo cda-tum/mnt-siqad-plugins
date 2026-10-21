@@ -66,7 +66,7 @@ layout.
 
 ## Quick Start
 
-All you need is a `git` client, `cmake`, the [`Boost`](https://www.boost.org/) libraries, and a modern C++ compiler.
+All you need is a `git` client, CMake 3.23 or newer, the [`Boost`](https://www.boost.org/) libraries, and a C++20 compiler.
 
 ### Building the Plugins
 

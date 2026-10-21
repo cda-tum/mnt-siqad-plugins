@@ -8,7 +8,7 @@ target_link_libraries(mnt-siqad-plugins-dependencies INTERFACE libfiction)
 
 # Include SiQADConn
 target_include_directories(mnt-siqad-plugins-dependencies SYSTEM
-                           INTERFACE ${siqadconn_SOURCE_DIR}/src)
+                           INTERFACE ${siqadconn_BINARY_DIR})
 
 # Require the Boost package
 find_package(Boost 1.70.0 REQUIRED)

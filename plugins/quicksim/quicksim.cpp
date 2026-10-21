@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     log.echo() << "\n*** Initiate QuickSim interface ***" << std::endl;
     log.echo() << "\n*** Read Simulation parameters ***" << std::endl;
     auto qs_interface =
-        siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb_simulation_engine::QUICKSIM};
+        siqad_plugin_interface{if_name, of_name, verbose, log_level, fiction::sidb::simulation::engine::QUICKSIM};
 
     if (qs_interface.get_auto_fail() < qs_interface.get_cell_num())
     {
@@ -68,7 +68,11 @@ int main(int argc, char* argv[])
 
     log.echo() << "\n*** Invoke simulation ***" << std::endl;
     stopwatch.start();
-    qs_interface.run_simulation();
+    if (qs_interface.run_simulation() != EXIT_SUCCESS)
+    {
+        log.critical() << "Simulation produced no charge distributions." << std::endl;
+        return EXIT_FAILURE;
+    }
     stopwatch.end();
 
     log.echo() << "\n*** Write simulation results ***" << std::endl;
