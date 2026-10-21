@@ -1,25 +1,15 @@
-cmake_minimum_required(VERSION 3.21...4.2)
+cmake_minimum_required(VERSION 3.23...4.2)
 
-# Only set the CMAKE_CXX_STANDARD if it is not set by someone else
+# fiction requires C++20.
 if(NOT DEFINED CMAKE_CXX_STANDARD)
-  # Set C++ standard; at least C++17 is required.
-  #
-  # fiction itself has since raised its own minimum to C++20, and this value
-  # must not be lower than fiction's own standard: fiction's CMakeLists.txt only
-  # sets CMAKE_CXX_STANDARD if it is not already defined, so staying at 17 will
-  # silently downgrade fiction's own build the next time its FetchContent pin
-  # (cmake/Dependencies.cmake) is bumped. Bumping this to 20 was tried and
-  # reverted: it broke the macOS build with `invalid application of 'sizeof' to
-  # an incomplete type 'phys::Layer'` in siqadconn's siqadconn.h, a pre-existing
-  # forward-declaration issue in the (third-party, unpinned by us beyond its own
-  # FetchContent commit) siqadconn dependency that C++20's stricter libc++
-  # allocator only newly exposes. Revisit once siqadconn is fixed upstream or
-  # the fiction FetchContent pin actually advances past C++17.
-  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD 20)
+elseif(CMAKE_CXX_STANDARD LESS 20)
+  message(FATAL_ERROR "mnt-siqad-plugins requires C++20 or newer")
 endif()
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # strongly encouraged to enable this globally to avoid conflicts between
-# -Wpedantic being enabled and -std=c++17 and -std=gnu++17 for example
+# -Wpedantic being enabled and -std=c++20 and -std=gnu++20 for example
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # With the Ninja generator, CMake >= 3.28 enables C++20 module dependency

@@ -13,15 +13,7 @@ include(FetchContent)
 # is pinned to a released version instead via `<DEP>_VERSION`.
 
 # fiction
-set(FICTION_REV
-    005d10ca3373ca292161c7013fa5764058923a5c
-    CACHE STRING "fiction revision -- head of the main branch")
-set(FICTION_CLI
-    OFF
-    CACHE BOOL "" FORCE)
-set(FICTION_PROGRESS_BARS
-    OFF
-    CACHE BOOL "" FORCE)
+set(FICTION_REV 9f9b072566737665184578de7567e0fbb3af4dd8)
 set(FICTION_ALGLIB
     ON
     CACHE BOOL "" FORCE) # Enable ALGLIB by default to support ClusterComplete
@@ -31,8 +23,8 @@ FetchContent_Declare(
   GIT_TAG ${FICTION_REV})
 FetchContent_MakeAvailable(fiction)
 
-# siqadconn is used as headers only (see libs/CMakeLists.txt). Its own
-# CMakeLists.txt does real work we don't want here (a separate project(),
+# siqadconn uses this project's build settings (see libs/CMakeLists.txt). Its
+# own CMakeLists.txt does real work we don't want here (a separate project(),
 # forcing CXX_STANDARD 11 on its own library target, requiring Boost/SWIG), so
 # it must never be add_subdirectory()'d. Pointing SOURCE_SUBDIR at a path that
 # doesn't exist in the populated source tree is CMake's documented way to make
@@ -49,6 +41,49 @@ FetchContent_Declare(
   GIT_TAG ${SIQADCONN_REV}
   SOURCE_SUBDIR do-not-build)
 FetchContent_MakeAvailable(siqadconn)
+
+# C++20 requires Layer to be complete when getLayers copies its vector. Generate
+# a compatible copy and keep the fetched sources unchanged.
+set_property(
+  DIRECTORY
+  APPEND
+  PROPERTY CMAKE_CONFIGURE_DEPENDS "${siqadconn_SOURCE_DIR}/src/siqadconn.h"
+           "${siqadconn_SOURCE_DIR}/src/siqadconn.cc")
+file(READ "${siqadconn_SOURCE_DIR}/src/siqadconn.h" SIQADCONN_HEADER)
+string(FIND "${SIQADCONN_HEADER}"
+            "std::vector<Layer> getLayers(void){return layers;}"
+            SIQADCONN_GET_LAYERS)
+if(SIQADCONN_GET_LAYERS EQUAL -1)
+  message(FATAL_ERROR "The siqadconn C++20 compatibility patch needs updating")
+endif()
+string(REPLACE "std::vector<Layer> getLayers(void){return layers;}"
+               "std::vector<Layer> getLayers(void);" SIQADCONN_HEADER
+               "${SIQADCONN_HEADER}")
+string(
+  REGEX
+  REPLACE
+    "#endif[ \r\n]*$"
+    "inline std::vector<phys::Layer> phys::SiQADConnector::getLayers(void) { return layers; }\n\n#endif\n"
+    SIQADCONN_HEADER
+    "${SIQADCONN_HEADER}")
+file(MAKE_DIRECTORY "${siqadconn_BINARY_DIR}")
+file(CONFIGURE OUTPUT "${siqadconn_BINARY_DIR}/siqadconn.h" CONTENT
+     "${SIQADCONN_HEADER}" @ONLY)
+# Export only through write_simulation_results; destruction can follow failure.
+file(READ "${siqadconn_SOURCE_DIR}/src/siqadconn.cc" SIQADCONN_SOURCE)
+string(
+  REGEX
+    MATCH
+    "  if \\(output_path != \"\"( && !results_written)?\\)[ \r\n]*writeResultsXml\\(\\);"
+    SIQADCONN_AUTO_EXPORT
+    "${SIQADCONN_SOURCE}")
+if(SIQADCONN_AUTO_EXPORT STREQUAL "")
+  message(FATAL_ERROR "The siqadconn explicit-export patch needs updating")
+endif()
+string(REPLACE "${SIQADCONN_AUTO_EXPORT}" "" SIQADCONN_SOURCE
+               "${SIQADCONN_SOURCE}")
+file(CONFIGURE OUTPUT "${siqadconn_BINARY_DIR}/siqadconn.cc" CONTENT
+     "${SIQADCONN_SOURCE}" @ONLY)
 
 # Catch2 (test-only). Pinned to the release commit's own SHA rather than its
 # `vX.Y.Z` tag name: an annotated tag is a separate, mutable ref that could in

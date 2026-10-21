@@ -66,7 +66,7 @@ layout.
 
 ## Quick Start
 
-All you need is a `git` client, `cmake`, the [`Boost`](https://www.boost.org/) libraries, and a modern C++ compiler.
+All you need is a `git` client, CMake 3.23 or newer, the [`Boost`](https://www.boost.org/) libraries, and a C++20 compiler.
 
 ### Building the Plugins
 
@@ -83,6 +83,9 @@ cmake . -B build
 cd build
 cmake --build . -j4  # replace "4" with the number of CPU cores you want to use for the build process
 ```
+
+The fiction revision is fixed by the project and updates when an existing build tree is reconfigured.
+To build against a local fiction checkout, pass `-DFETCHCONTENT_SOURCE_DIR_FICTION=/path/to/fiction` to CMake.
 
 #### Building a faster _ClusterComplete_ binary
 
