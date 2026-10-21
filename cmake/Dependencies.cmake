@@ -73,11 +73,15 @@ file(CONFIGURE OUTPUT "${siqadconn_BINARY_DIR}/siqadconn.h" CONTENT
 file(READ "${siqadconn_SOURCE_DIR}/src/siqadconn.cc" SIQADCONN_SOURCE)
 string(
   REGEX
-  REPLACE
+    MATCH
     "  if \\(output_path != \"\"( && !results_written)?\\)[ \r\n]*writeResultsXml\\(\\);"
-    ""
-    SIQADCONN_SOURCE
+    SIQADCONN_AUTO_EXPORT
     "${SIQADCONN_SOURCE}")
+if(SIQADCONN_AUTO_EXPORT STREQUAL "")
+  message(FATAL_ERROR "The siqadconn explicit-export patch needs updating")
+endif()
+string(REPLACE "${SIQADCONN_AUTO_EXPORT}" "" SIQADCONN_SOURCE
+               "${SIQADCONN_SOURCE}")
 file(CONFIGURE OUTPUT "${siqadconn_BINARY_DIR}/siqadconn.cc" CONTENT
      "${SIQADCONN_SOURCE}" @ONLY)
 

@@ -11,6 +11,8 @@ if(NOT status STREQUAL "${EXPECTED_EXIT}" OR NOT "${output}${error}" MATCHES
       "Expected exit ${EXPECTED_EXIT} and '${EXPECTED_MESSAGE}', got ${status}:\n${output}${error}"
   )
 endif()
-if(NOT EXPECTED_EXIT EQUAL 0 AND EXISTS "${OUTPUT}")
+if(EXPECTED_EXIT EQUAL 0 AND NOT EXISTS "${OUTPUT}")
+  message(FATAL_ERROR "Successful simulation did not write an output XML file")
+elseif(NOT EXPECTED_EXIT EQUAL 0 AND EXISTS "${OUTPUT}")
   message(FATAL_ERROR "Failed simulation wrote an output XML file")
 endif()
